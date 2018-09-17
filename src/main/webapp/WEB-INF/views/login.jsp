@@ -8,9 +8,48 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>登录</title>
+    <%@ include file="common/tag.jsp" %>
+    <%@ include file="common/head.jsp" %>
 </head>
-<body>
-<p>login view</p>
+<body class="login-bg">
+
+<div class="login layui-anim layui-anim-up">
+    <div class="message">x-admin2.0-管理登录</div>
+    <div id="darkbannerwrap"></div>
+
+    <form method="post" class="layui-form" name="admins" enctype="multipart/form-data"  >
+        <input name="Code" placeholder="账号" type="text" lay-verify="required" class="layui-input">
+        <hr class="hr15">
+        <input name="Pwds" lay-verify="required" placeholder="密码" type="password" class="layui-input">
+        <hr class="hr15">
+        <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
+        <hr class="hr20">
+    </form>
+
+    <div>
+        <a href="#"> <font style="color:black;text-align:right;">技术支持 ©MoondanceZ</font></a>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        layui.use('form', function(){
+            var form = layui.form;
+
+            // layer.msg('玩命卖萌中', function(){
+            //   //关闭后的操作
+            //   });
+            //监听提交
+            //form.on('submit(login)', function(data){
+            //  // alert(888)
+            //  layer.msg(JSON.stringify(data.field),function(){
+            //      location.href='index.html'
+            //  });
+            //  return false;
+            //});
+        });
+    })
+</script>
 </body>
 </html>

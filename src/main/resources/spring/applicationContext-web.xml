@@ -8,7 +8,8 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+">
 
     <!--配置spring mvc-->
     <!--1,开启springmvc注解模式
@@ -22,6 +23,12 @@
         1).加入对静态资源处理：js,gif,png
         2).允许使用 "/" 做整体映射
     -->
+    <mvc:resources location="/resources/css/" mapping="/css/**"/>
+    <mvc:resources location="/resources/images/" mapping="/images/**"/>
+    <mvc:resources location="/resources/js/" mapping="/js/**"/>
+    <mvc:resources location="/resources/lib/" mapping="/lib/**"/>
+
+    <!--<mvc:resources location="/resources/" mapping="/**"/>-->
     <mvc:default-servlet-handler/>
 
     <!--解析返回JSON -->
@@ -49,6 +56,7 @@
         <property name="prefix" value="/WEB-INF/views/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
+
 
     <!--4:扫描web相关的controller-->
     <context:component-scan base-package="com.rk.controller"/>
