@@ -19,12 +19,14 @@ public class ReturnResult<T> implements Serializable {
     }
 
     public ReturnResult(boolean success, T data, String message) {
+        super();
         this.success = success;
         this.data = data;
         this.message = message;
     }
 
     public ReturnResult(boolean success, String message) {
+        super();
         this.success = success;
         this.data = null;
         this.message = message;
