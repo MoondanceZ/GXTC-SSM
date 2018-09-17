@@ -14,3 +14,4 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.js"></script>
 <script src="${pageContext.request.contextPath}/lib/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/xadmin.js"></script>
+<% String path = request.getContextPath(); %>

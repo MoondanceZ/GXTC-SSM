@@ -15,7 +15,7 @@
 <body class="login-bg">
 
 <div class="login layui-anim layui-anim-up">
-    <div class="message">x-admin2.0-管理登录</div>
+    <div class="message">管理登录</div>
     <div id="darkbannerwrap"></div>
 
     <form method="post" class="layui-form" name="admins" enctype="multipart/form-data"  >
@@ -41,13 +41,19 @@
             //   //关闭后的操作
             //   });
             //监听提交
-            //form.on('submit(login)', function(data){
-            //  // alert(888)
-            //  layer.msg(JSON.stringify(data.field),function(){
-            //      location.href='index.html'
-            //  });
-            //  return false;
-            //});
+            form.on('submit(login)', function(data){
+                $.post('/user/signin', JSON.stringify(data.field), function (data) {
+                    if(data.success){
+                        layer.msg("登录成功", function(){
+                            location.href='index.html'
+                        });
+                    }else{
+                        layer.msg(data.message);
+                    }
+                })
+
+              return false;
+            });
         });
     })
 </script>

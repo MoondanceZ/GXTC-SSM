@@ -1,49 +1,56 @@
 package com.rk.dto;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
+import org.apache.commons.collections.BagUtils;
+
+import java.io.Serializable;
 
 /**
  * Created by Qin_Yikai on 2018-09-16.
  */
-public class ReturnResult<T> {
+public class ReturnResult<T> implements Serializable {
     //请求是否成功
     private boolean success;
     private T data;
     private String message;
 
-    public ReturnResult(){
+    public ReturnResult() {
+        super();
         data = null;
     }
 
-    public static<T> ReturnResult Success(String message, T data){
-        ReturnResult returnResult = new ReturnResult();
-        returnResult.setData(data);
-        returnResult.setMessage(message);
-        returnResult.setSuccess(true);
+    public ReturnResult(boolean success, T data, String message) {
+        this.success = success;
+        this.data = data;
+        this.message = message;
+    }
+
+    public ReturnResult(boolean success, String message) {
+        this.success = success;
+        this.data = null;
+        this.message = message;
+    }
+
+
+    public static <T> ReturnResult Success(String message, T data) {
+        ReturnResult returnResult = new ReturnResult(true, data, message);
+
+        return returnResult;
+    }
+
+    public static ReturnResult Success(String message) {
+        ReturnResult returnResult = new ReturnResult(true, message);
+
+        return returnResult;
+    }
+
+    public static <T> ReturnResult Error(String message, T data) {
+        ReturnResult returnResult = new ReturnResult(false, data, message);
 
         return  returnResult;
     }
-    public static<T> ReturnResult Success(String message){
-        ReturnResult returnResult = new ReturnResult();
-        returnResult.setMessage(message);
-        returnResult.setSuccess(true);
 
-        return  returnResult;
-    }
-
-    public static<T> ReturnResult Error(String message, T data){
-        ReturnResult returnResult = new ReturnResult();
-        returnResult.setData(data);
-        returnResult.setMessage(message);
-        returnResult.setSuccess(false);
-
-        return  returnResult;
-    }
-
-    public static<T> ReturnResult Error(String message){
-        ReturnResult returnResult = new ReturnResult();
-        returnResult.setMessage(message);
-        returnResult.setSuccess(false);
+    public static ReturnResult Error(String message) {
+        ReturnResult returnResult = new ReturnResult(false, message);
 
         return  returnResult;
     }
