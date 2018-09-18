@@ -1,8 +1,10 @@
 package com.rk.dao;
 
 import com.rk.entity.UserInfo;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,4 +13,8 @@ import java.util.List;
 
 public interface UserInfoMapper {
     List<UserInfo> queryAll();
+
+    UserInfo queryByAccount(@Param("account") String account);
+
+    int updateUserLoginDate(@Param("id") long id, @Param("date") Date date);
 }

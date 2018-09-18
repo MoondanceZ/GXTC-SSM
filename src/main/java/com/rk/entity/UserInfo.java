@@ -7,11 +7,17 @@ import java.util.Date;
  * Created by Qin_Yikai on 2018-09-16.
  */
 public class UserInfo implements Serializable {
-    private long id;
-    private String account;
-    private String name;
-    private String password;
-    private Date createDate;
+    public UserInfo() {
+    }
+
+    public UserInfo(long id, String account, String name, String password, Date createDate, Date lastLoginDate) {
+        this.id = id;
+        this.account = account;
+        this.name = name;
+        this.password = password;
+        this.createDate = createDate;
+        this.lastLoginDate = lastLoginDate;
+    }
 
     public long getId() {
         return id;
@@ -52,4 +58,20 @@ public class UserInfo implements Serializable {
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
+
+    public Date getLastLoginDate() {
+        return lastLoginDate;
+    }
+
+    public void setLastLoginDate(Date lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
+    }
+
+    private long id;
+    private String account;
+    private String name;
+    private String password;
+    private Date createDate;
+    private Date lastLoginDate;
+
 }

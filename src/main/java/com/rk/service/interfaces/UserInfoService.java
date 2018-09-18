@@ -1,7 +1,9 @@
 package com.rk.service.interfaces;
 
 import com.rk.entity.UserInfo;
+import sun.rmi.runtime.Log;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -9,4 +11,6 @@ import java.util.List;
  */
 public interface UserInfoService {
     List<UserInfo> getAllUsers();
+    UserInfo getUser(String account);
+    boolean updateUserLoginDate(long id, Date date);
 }

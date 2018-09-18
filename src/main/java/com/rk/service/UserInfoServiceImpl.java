@@ -3,9 +3,11 @@ package com.rk.service;
 import com.rk.dao.UserInfoMapper;
 import com.rk.entity.UserInfo;
 import com.rk.service.interfaces.UserInfoService;
+import com.rk.util.EncryptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,11 +20,20 @@ public class UserInfoServiceImpl implements UserInfoService {
 
 
     /**
-     *
      * @return
      */
     @Override
     public List<UserInfo> getAllUsers() {
         return userInfoMapper.queryAll();
+    }
+
+    @Override
+    public UserInfo getUser(String account) {
+        return userInfoMapper.queryByAccount(account);
+    }
+
+    @Override
+    public boolean updateUserLoginDate(long id, Date date) {
+        return userInfoMapper.updateUserLoginDate(id, date) > 0;
     }
 }
