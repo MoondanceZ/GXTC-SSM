@@ -13,4 +13,9 @@ public class AdminController {
     public String Main() {
         return "main";
     }
+
+    @RequestMapping("/product")
+    public String Product() {
+        return "admin/product";
+    }
 }
