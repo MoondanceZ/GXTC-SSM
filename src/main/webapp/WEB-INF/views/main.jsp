@@ -267,7 +267,7 @@
 <!-- 中部结束 -->
 <!-- 底部开始 -->
 <div class="footer">
-    <div class="copyright" style="text-align:center;"><a href="http://gxzmr.com"> <font style="color:white;">技术支持
+    <div class="copyright" style="text-align:center;"><a href="#"> <font style="color:white;">技术支持
         ©MoondanceZ</font></a></div>
 </div>
 <!-- 底部结束 -->
