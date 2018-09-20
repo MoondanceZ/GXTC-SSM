@@ -15,7 +15,7 @@
 <body>
 <!-- 顶部开始 -->
 <div class="container">
-    <div class="logo"><a href="/">X-admin v2.0</a></div>
+    <div class="logo"><a href="javascript:;">后台管理</a></div>
     <div class="left_open">
         <i title="展开左侧栏" class="iconfont">&#xe699;</i>
     </div>
@@ -109,13 +109,13 @@
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a _href="/chen_goods_cate/Index">
+                        <a _href="/admin/productType">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>商品分类</cite>
                         </a>
                     </li>
                     <li>
-                        <a _href="/chen_goods/Index">
+                        <a _href="/admin/product">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>商品列表</cite>
                         </a>

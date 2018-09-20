@@ -1,0 +1,12 @@
+.mt0 {
+    margin-top: 0;
+}
+
+.layui-table-view {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.laytable-cell-checkbox {
+    padding: 6px 15px;
+}
