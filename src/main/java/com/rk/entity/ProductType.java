@@ -16,7 +16,7 @@ public class ProductType {
    /**
      * parentTypeId
      */ 
-	private int parentTypeId;
+	private Integer parentTypeId;
 
    /**
      * typeName
@@ -40,11 +40,11 @@ public class ProductType {
 		this.id = id;
 	}
 
-	public int getParentTypeId(){
+	public Integer getParentTypeId(){
 		return parentTypeId;
 	}
 
-	public void setParentTypeId(int parentTypeId){
+	public void setParentTypeId(Integer parentTypeId){
 		this.parentTypeId = parentTypeId;
 	}
 

@@ -104,26 +104,26 @@
             <li>
                 <a href="javascript:;">
                     <i class="iconfont">&#xe723;</i>
-                    <cite>商品管理</cite>
+                    <cite>产品管理</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
                 <ul class="sub-menu">
                     <li>
                         <a _href="/admin/productType">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>商品分类</cite>
+                            <cite>产品分类</cite>
                         </a>
                     </li>
                     <li>
                         <a _href="/admin/product">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>商品列表</cite>
+                            <cite>产品列表</cite>
                         </a>
                     </li>
                     <li>
                         <a _href="/chen_points/Index">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>积分商品列表</cite>
+                            <cite>积分产品列表</cite>
                         </a>
                     </li>
                 </ul>

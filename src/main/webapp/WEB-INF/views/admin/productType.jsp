@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>商品种类</title>
+    <title>产品分类</title>
     <%@ include file="../common/tag.jsp" %>
     <%@ include file="../common/head.jsp" %>
 </head>
@@ -50,11 +50,12 @@
         layui.use('table', function () {
             var table = layui.table;
 
-            table.render({
+            var tableIns = table.render({
                 elem: '#pt'
+                ,id: 'pt'
                 , toolbar: '#toolbar'
                 , height: 'full-10'
-                ,id: 'ptid'
+                //, id: 'ptid'
                 , url: '/productType/pageList'
                 , cellMinWidth: 80
                 , cols: [[
@@ -67,48 +68,57 @@
                 ]]
                 , page: true
             });
-        });
 
-         //头工具栏事件
-         table.on('toolbar(pt)', function (obj) {
-             console.log(obj)
-             var checkStatus = table.checkStatus(obj.config.id);
-             switch (obj.event) {
-                 case 'addNew':
-                     var data = checkStatus.data;
-                     layer.alert(JSON.stringify(data));
-                     break;
-                 case 'delChecked':
-                     var data = checkStatus.data;
-                     layer.msg('选中了：' + data.length + ' 个');
-                     break;
-                 case 'isAll':
-                     layer.msg(checkStatus.isAll ? '全选' : '未全选');
-                     break;
-             }
-             ;
-         });
 
-        //监听行工具事件
-        table.on('tool(pt)', function (obj) {
-            var data = obj.data;
-            console.log(obj)
-            if (obj.event === 'del') {
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del();
-                    layer.close(index);
-                });
-            } else if (obj.event === 'edit') {
-                layer.prompt({
-                    formType: 2
-                    , value: data.email
-                }, function (value, index) {
-                    obj.update({
-                        email: value
+            //头工具栏事件
+            table.on('toolbar(pt)', function (obj) {
+                //console.log(obj)
+                var checkStatus = table.checkStatus(obj.config.id);
+                switch (obj.event) {
+                    case 'addNew':
+                        var data = checkStatus.data;
+                        layer.alert(JSON.stringify(data));
+                        break;
+                    case 'delChecked':
+                        var data = checkStatus.data;
+                        layer.msg('选中了：' + data.length + ' 个');
+                        break;
+                    case 'isAll':
+                        layer.msg(checkStatus.isAll ? '全选' : '未全选');
+                        break;
+                }
+                ;
+            });
+
+            //监听行工具事件
+            table.on('tool(pt)', function (obj) {
+                var data = obj.data;
+                //console.log(obj)
+                if (obj.event === 'del') {
+                    layer.confirm('真的删除行么', function (index) {
+                        obj.del();
+                        layer.close(index);
                     });
-                    layer.close(index);
-                });
-            }
+                } else if (obj.event === 'edit') {
+                    layer.open({
+                        type: 2
+                        , title: '编辑分类'
+                        , area: ['600px', '300px']
+                        , fixed: true
+                        , shade: 0
+                        /*,offset: [ //为了演示，随机坐标
+                         Math.random()*($(window).height()-300)
+                         ,Math.random()*($(window).width()-390)
+                         ]*/
+                        , maxmin: true
+                        , content: '/productType/edit?id=' + data.id
+                        , end: function () {
+                            //layer.msg("关闭了");
+                            //tableIns.reload();
+                        }
+                    });
+                }
+            });
         });
     });
 </script>

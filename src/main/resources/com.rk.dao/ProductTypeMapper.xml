@@ -14,4 +14,27 @@
     <select id="getPageListTotalCount" resultType="int">
         SELECT count(*) FROM product_type
     </select>
+
+    <select id="getProductTypeById" resultMap="BaseResultMap">
+        SELECT * FROM product_type WHERE id = #{id}
+    </select>
+
+    <update id="update" parameterType="com.rk.entity.ProductType">
+        UPDATE product_type AS p SET p.typeName = #{typeName}, p.typeCode = #{typeCode}, p.parentTypeId = #{parentTypeId},
+        p.status = #{status} WHERE p.id = #{id}
+    </update>
+
+    <select id="getProductTypeByNameOrCode" resultMap="BaseResultMap">
+        SELECT * FROM product_type AS p WHERE p.typeName = #{typeName} OR p.typeCode = #{typeCode}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM product_type WHERE id = #{id}
+    </delete>
+
+    <insert id="insert">
+        INSERT INTO product_type(typeName, typeCode, parentTypeId, status) VALUES (#{typeName}, #{typeCode}, NULL, #{statu
+        })
+    </insert>
+
 </mapper>
