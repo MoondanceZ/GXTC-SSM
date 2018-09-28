@@ -30,15 +30,25 @@ public class ProductTypeController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String editProductType(@RequestParam("id") int id, Model model) {
-        ProductType productType = productTypeService.getProductType(id);
-        model.addAttribute("productType", productType);
+    public String editProductType(@RequestParam(value = "id", required = false) Integer id, Model model) {
+        if (id != null) {
+            ProductType productType = productTypeService.getProductType(id);
+            model.addAttribute("productType", productType);
+        }else{
+            model.addAttribute("productType", new ProductType());
+        }
         return "admin/productType/edit";
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody()
     public ReturnResult Save(@RequestBody ProductType productType) {
-        return productTypeService.update(productType);
+        return productTypeService.updateOrAdd(productType);
+    }
+
+    @RequestMapping(value = "/delete")
+    @ResponseBody()
+    public ReturnResult Delete(@RequestParam("ids[]") Integer[] ids) {
+        return productTypeService.delete(ids);
     }
 }

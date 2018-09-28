@@ -23,7 +23,11 @@ public class ProductType {
      */ 
 	private String typeName;
 
-   /**
+	public ProductType() {
+		//this.status = 1;
+	}
+
+	/**
      * typeCode
      */ 
 	private String typeCode;

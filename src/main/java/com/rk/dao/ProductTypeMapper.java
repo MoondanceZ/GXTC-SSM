@@ -20,7 +20,7 @@ public interface ProductTypeMapper {
 
     ProductType getProductTypeByNameOrCode(@Param("typeName") String typeName, @Param("typeCode") String typeCode);
 
-    int delete(int id);
+    int delete(Integer[] ids);
 
     int insert(ProductType productType);
 }

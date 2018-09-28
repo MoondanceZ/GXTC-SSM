@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ProductTypeService {
     LayPage<List<ProductType>> getPageList(PageRequest pageRequest);
-    List<ProductType> getIndexPageList();
     ProductType getProductType(int id);
-    ReturnResult update(ProductType productType);
+    ReturnResult updateOrAdd(ProductType productType);
+    ReturnResult delete(Integer[] ids);
 }

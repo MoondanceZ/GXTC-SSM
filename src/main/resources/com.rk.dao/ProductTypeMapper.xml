@@ -8,7 +8,7 @@
 
     
     <select id="getPageList" resultMap="BaseResultMap">
-        SELECT * FROM product_type LIMIT #{skip}, #{limit}
+        SELECT * FROM product_type ORDER BY id LIMIT #{skip}, #{limit}
     </select>
 
     <select id="getPageListTotalCount" resultType="int">
@@ -25,15 +25,18 @@
     </update>
 
     <select id="getProductTypeByNameOrCode" resultMap="BaseResultMap">
-        SELECT * FROM product_type AS p WHERE p.typeName = #{typeName} OR p.typeCode = #{typeCode}
+        SELECT * FROM product_type AS p WHERE p.typeName = #{typeName} OR p.typeCode = #{typeCode} LIMIT 1
     </select>
 
     <delete id="delete">
-        DELETE FROM product_type WHERE id = #{id}
+        DELETE FROM product_type WHERE id IN 
+        <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
     </delete>
 
     <insert id="insert">
-        INSERT INTO product_type(typeName, typeCode, parentTypeId, status) VALUES (#{typeName}, #{typeCode}, NULL, #{statu
+        INSERT INTO product_type(typeName, typeCode, parentTypeId, status) VALUES (#{typeName}, #{typeCode}, NULL, #{status
         })
     </insert>
 

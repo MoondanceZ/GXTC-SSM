@@ -38,7 +38,7 @@
             <div class="layui-input-block">
                 <input type="checkbox" name="status"
                        value="${productType.status}" ${productType.status == 1 ? "checked" : ""} lay-skin="switch"
-                       lay-text="ON|OFF">
+                       lay-text="ON|OFF" lay-filter="status">
             </div>
         </div>
 
@@ -83,10 +83,10 @@
                     if (data.success) {
                         //parent 是 JS 自带的全局对象，可用于操作父页面
                         var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-                        layer.msg(data.message, function () {
-                            parent.layer.close(index);
-                            parent.layui.table.reload('pt')
-                        });
+
+                        layer.msg(data.message);
+                        parent.layer.close(index);
+                        parent.layui.table.reload('pt')
                     } else {
                         layer.msg(data.message);
                     }
@@ -105,6 +105,14 @@
             return false;
         });
 
+        //监听指定开关
+        form.on('switch(status)', function(data){
+            if(this.checked){
+                $('input[name=status]').val(1);
+            }else{
+                $('input[name=status]').val(0);
+            }
+        });
     })
 
 </script>
