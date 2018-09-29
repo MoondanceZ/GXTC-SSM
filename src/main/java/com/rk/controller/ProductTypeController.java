@@ -6,7 +6,7 @@ import com.rk.dto.request.PageRequest;
 import com.rk.entity.ProductType;
 import com.rk.service.interfaces.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by Qin_Yikai on 2018-09-20.
  */
-@Component
+@Controller
 @RequestMapping("/productType")
 public class ProductTypeController {
 

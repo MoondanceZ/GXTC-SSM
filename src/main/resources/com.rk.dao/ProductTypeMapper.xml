@@ -19,13 +19,14 @@
 
     <select id="getPageList" resultMap="BaseResultMap">
         <bind name="queryStringPattern" value="'%' + queryString + '%'"></bind>
+        <bind name="offest" value="(page-1)*limit"></bind>
         SELECT * FROM product_type
         <where>
             <if test="queryString != null and queryString != ''">
                 typeCode LIKE #{queryStringPattern} OR typeName LIKE #{queryStringPattern}
             </if>
         </where>
-        ORDER BY id LIMIT #{skip}, #{limit}
+        ORDER BY id LIMIT #{offest}, #{limit}
     </select>
 
     <select id="getPageListTotalCount" resultType="int">

@@ -6,10 +6,8 @@ import com.rk.entity.UserInfo;
 import com.rk.service.interfaces.UserInfoService;
 import com.rk.util.EncryptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.ui.Model;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import sun.management.counter.Variability;
 
 import javax.servlet.http.HttpSession;
 import java.util.Date;
@@ -17,7 +15,7 @@ import java.util.Date;
 /**
  * Created by Qin_Yikai on 2018-09-16.
  */
-@Component
+@Controller
 @RequestMapping("/user")
 public class UserController {
     @Autowired

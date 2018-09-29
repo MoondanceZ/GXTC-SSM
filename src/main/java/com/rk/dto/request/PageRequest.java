@@ -6,7 +6,6 @@ package com.rk.dto.request;
 public class PageRequest {
     private int page;
     private int limit;
-    private int skip;
     private String queryString;
 
     public String getQueryString() {
@@ -17,18 +16,9 @@ public class PageRequest {
         this.queryString = queryString;
     }
 
-    public int getSkip() {
-        return skip;
-    }
-
-    public void setSkip(int skip) {
-        this.skip = skip;
-    }
-
     public PageRequest(int page, int limit, String queryString) {
         this.page = page;
         this.limit = limit;
-        this.skip = (page - 1) * limit;
 /*        if (queryString == null || queryString.length() == 0)
             this.queryString = null;
         else*/
@@ -38,7 +28,6 @@ public class PageRequest {
     public PageRequest(int page, int limit) {
         this.page = page;
         this.limit = limit;
-        this.skip = (page - 1) * limit;
     }
 
     public PageRequest() {
