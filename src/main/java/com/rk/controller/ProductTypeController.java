@@ -24,8 +24,8 @@ public class ProductTypeController {
 
     @RequestMapping(value = "/pageList", method = RequestMethod.GET)
     @ResponseBody
-    public LayPage<List<ProductType>> ProductType(@RequestParam("page") int page, @RequestParam("limit") int limit, @RequestParam(value = "queryString", required = false) String queryString) {
-        LayPage<List<ProductType>> productTypes = productTypeService.getPageList(new PageRequest(page, limit, queryString));
+    public LayPage<List<ProductType>> ProductType(PageRequest pageRequest) {
+        LayPage<List<ProductType>> productTypes = productTypeService.getPageList(pageRequest);
         return productTypes;
     }
 
