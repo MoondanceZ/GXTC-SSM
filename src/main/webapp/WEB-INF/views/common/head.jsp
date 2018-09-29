@@ -8,5 +8,6 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.js"></script>
 <script src="${pageContext.request.contextPath}/lib/layui/layui.js" charset="utf-8"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/xadmin.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/gxtc.js"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 <% String path = request.getContextPath(); %>

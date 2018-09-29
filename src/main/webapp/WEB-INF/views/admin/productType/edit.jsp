@@ -8,7 +8,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>产品分类编辑</title>
     <%@ include file="../../common/tag.jsp" %>
     <%@ include file="../../common/head.jsp" %>
 </head>

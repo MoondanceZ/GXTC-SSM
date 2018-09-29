@@ -16,8 +16,10 @@
 
 <script type="text/html" id="toolbar">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="addNew">+添加</button>
-        <button class="layui-btn layui-btn-sm" lay-event="delChecked">删除</button>
+        <button class="layui-btn layui-btn-sm" lay-event="addNew"><i class="layui-icon layui-icon-add-circle"></i> 添加
+        </button>
+        <button class="layui-btn layui-btn-sm" lay-event="delChecked"><i class="layui-icon layui-icon-delete"></i>删除
+        </button>
     </div>
 </script>
 
@@ -33,19 +35,21 @@
     {{ "启用" }}
     {{#  } }}
 </script>
+<div class="x-body">
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so" id="searchForm">
+            <input type="text" name="queryString" placeholder="请输入名称或代码" autocomplete="off" class="layui-input">
+            <button class="layui-btn" lay-submit lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+        </form>
+    </div>
 
-<%--<xblock>
-    <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-    <button class="layui-btn" onclick="x_admin_show('添加用户','./admin-add.html')"><i class="layui-icon"></i>添加</button>
-    <span class="x-right" style="line-height:40px">共有数据：88 条</span>
-</xblock>--%>
+    <table class="layui-hide" id="pt" lay-filter="pt"></table>
 
-<table class="layui-hide" id="pt" lay-filter="pt"></table>
-
-
+</div>
 <script>
-    layui.use('table', function () {
+    layui.use(['table', 'form'], function () {
         var table = layui.table;
+        var form = layui.form;
 
         layui.use('table', function () {
             var table = layui.table;
@@ -54,9 +58,10 @@
                 elem: '#pt'
                 , id: 'pt'
                 , toolbar: '#toolbar'
-                , height: 'full-10'
+                //, height: 'full-10'
                 //, id: 'ptid'
                 , url: '/productType/pageList'
+                , where: getFormObj('#searchForm')
                 , cellMinWidth: 80
                 , cols: [[
                     {type: 'checkbox'}
@@ -72,7 +77,7 @@
 
             //头工具栏事件
             table.on('toolbar(pt)', function (obj) {
-                console.log(obj)
+                //console.log(obj)
                 var checkStatus = table.checkStatus(obj.config.id);
                 console.log(checkStatus)
                 switch (obj.event) {
@@ -151,6 +156,20 @@
                     });
                 }
             });
+
+            //监听提交
+            form.on('submit(sreach)', function (data) {
+                //layer.alert(JSON.stringify(data.field))
+                tableIns.reload({
+                    where: {
+                        queryString: data.field.queryString
+                    },
+                    page: {
+                        curr: 1
+                    }
+                });
+                return false;
+            })
         });
     });
 </script>

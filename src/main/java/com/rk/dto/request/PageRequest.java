@@ -7,6 +7,15 @@ public class PageRequest {
     private int page;
     private int limit;
     private int skip;
+    private String queryString;
+
+    public String getQueryString() {
+        return queryString;
+    }
+
+    public void setQueryString(String queryString) {
+        this.queryString = queryString;
+    }
 
     public int getSkip() {
         return skip;
@@ -14,6 +23,16 @@ public class PageRequest {
 
     public void setSkip(int skip) {
         this.skip = skip;
+    }
+
+    public PageRequest(int page, int limit, String queryString) {
+        this.page = page;
+        this.limit = limit;
+        this.skip = (page - 1) * limit;
+/*        if (queryString == null || queryString.length() == 0)
+            this.queryString = null;
+        else*/
+        this.queryString = queryString;
     }
 
     public PageRequest(int page, int limit) {

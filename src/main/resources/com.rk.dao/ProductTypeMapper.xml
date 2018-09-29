@@ -6,9 +6,26 @@
         <!--<result column="account" property="account" jdbcType="VARCHAR" />-->
     </resultMap>
 
-    
+
+    <!--    <select id="getPageList" resultMap="BaseResultMap">
+            SELECT * FROM product_type
+             <where>
+                 <if test="queryString != null">
+                     typeCode LIKE CONCAT('%', #{queryString}, '%') OR typeName LIKE CONCAT('%', #{queryString}, '%')
+                 </if>
+             </where>
+            ORDER BY id LIMIT #{skip}, #{limit}
+        </select>-->
+
     <select id="getPageList" resultMap="BaseResultMap">
-        SELECT * FROM product_type ORDER BY id LIMIT #{skip}, #{limit}
+        <bind name="queryStringPattern" value="'%' + queryString + '%'"></bind>
+        SELECT * FROM product_type
+        <where>
+            <if test="queryString != null and queryString != ''">
+                typeCode LIKE #{queryStringPattern} OR typeName LIKE #{queryStringPattern}
+            </if>
+        </where>
+        ORDER BY id LIMIT #{skip}, #{limit}
     </select>
 
     <select id="getPageListTotalCount" resultType="int">
@@ -29,7 +46,7 @@
     </select>
 
     <delete id="delete">
-        DELETE FROM product_type WHERE id IN 
+        DELETE FROM product_type WHERE id IN
         <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
             #{item}
         </foreach>
