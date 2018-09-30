@@ -107,7 +107,7 @@
                 <label class="layui-form-label">产品类型</label>
                 <div class="layui-input-inline">
                     <select name="typeId" lay-verify="required">
-                        <option>请选择类型</option>
+                        <option value>请选择类型</option>
                         <c:forEach var="item" items="${enableTypes}">
                             <option value="${item.id}" ${product.typeId==item.id?"selected":""}>${item.typeName}</option>
                         </c:forEach>

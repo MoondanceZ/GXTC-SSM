@@ -3,7 +3,7 @@ package com.rk.service;
 import com.rk.dao.ProductMapper;
 
 import com.rk.dto.LayPage;
-import com.rk.dto.request.PageRequest;
+import com.rk.dto.request.ProductPageRequest;
 import com.rk.entity.Product;
 import com.rk.service.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public LayPage<List<Product>> getPageList(PageRequest pageRequest) {
-        return null;
+    public LayPage<List<Product>> getPageList(ProductPageRequest pageRequest) {
+        List<Product> products = productMapper.getPageList(pageRequest);
+        int totalCount = productMapper.getPageListTotalCount(pageRequest);
+        return new LayPage<>("", "", totalCount, products);
     }
 }

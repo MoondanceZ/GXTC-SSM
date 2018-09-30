@@ -1,12 +1,14 @@
 package com.rk.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
 
 /**
  * product 实体类
  * Sat Sep 29 22:51:00 CST 2018 Qin_Yikai
- */ 
-
+ */
+@JsonIgnoreProperties(value = { "handler" })
 public class Product {
 
    /**

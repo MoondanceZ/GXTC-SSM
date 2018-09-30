@@ -22,4 +22,36 @@
         SELECT *
         FROM product
     </select>
+
+    <sql id="pageWhere">
+        <where>
+            <![CDATA[status <> -1]]>
+            <if test="queryString != null and queryString != ''">
+                AND name LIKE #{queryStringPattern}
+            </if>
+            <if test="minPrice != null">
+                AND <![CDATA[price >= #{minPrice}]]>
+            </if>
+            <if test="maxPrice != null">
+                AND <![CDATA[price <= #{maxPrice}]]>
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+    </sql>
+
+    <select id="getPageList" resultMap="BaseResultMap">
+        <bind name="queryStringPattern" value="'%' + queryString + '%'"></bind>
+        <bind name="offest" value="(page-1)*limit"></bind>
+        SELECT * FROM product
+        <include refid="pageWhere"></include>
+        ORDER BY id LIMIT #{offest}, #{limit}
+    </select>
+
+    <select id="getPageListTotalCount" resultType="int">
+        <bind name="queryStringPattern" value="'%' + queryString + '%'"></bind>
+        SELECT count(*) FROM product
+        <include refid="pageWhere"></include>
+    </select>
 </mapper>

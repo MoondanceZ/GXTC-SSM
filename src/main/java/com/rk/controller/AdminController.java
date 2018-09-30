@@ -24,7 +24,6 @@ public class AdminController {
 
     @RequestMapping("/product")
     public String Product() {
-        List<Product> products = productService.getAllProduct();
         return "admin/product";
     }
 

@@ -11,7 +11,10 @@
         <setting name="useColumnLabel" value="true"/>
         <!--开启驼峰命名的转换-->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--延迟加载配置-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
         <!--日志监控-->
-        <setting name="logImpl" value="STDOUT_LOGGING" />
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
     </settings>
 </configuration>

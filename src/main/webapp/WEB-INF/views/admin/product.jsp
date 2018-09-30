@@ -20,7 +20,7 @@
             <input type="text" name="maxPrice" placeholder="￥最高价格" autocomplete="off" class="layui-input">
             <div class="layui-input-inline">
                 <select name="status">
-                    <option>产品状态</option>
+                    <option value>产品状态</option>
                     <option value="1">在售</option>
                     <option value="2">下架</option>
                 </select>
@@ -69,14 +69,14 @@
                 , toolbar: '#toolbar'
                 //, height: 'full-10'
                 //, id: 'ptid'
-                , url: '/productType/pageList'
+                , url: '/product/pageList'
                 , where: getFormObj('#searchForm')
                 , cellMinWidth: 80
                 , cols: [[
                     {type: 'checkbox'}
                     , {field: 'id', title: 'ID', sort: true}
-                    , {field: 'typeName', title: '类型名称'}
-                    , {field: 'typeCode', title: '类型代码'}
+                    , {field: 'name', title: '产品名称'}
+                    , {field: 'originPlace', title: '产品产地'}
                     , {field: 'status', title: '状态', templet: '#statusTpl'}
                     , {title: '操作', toolbar: '#operate'}
                 ]]
@@ -158,7 +158,7 @@
                         , fixed: true
                         , shade: 0.4
                         , maxmin: true
-                        , content: '/productType/edit?id=' + objData.id
+                        , content: '/product/edit?id=' + objData.id
                         , end: function () {
                             //layer.msg("关闭了");
                             //tableIns.reload();

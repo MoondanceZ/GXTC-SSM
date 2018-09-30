@@ -2,7 +2,7 @@ package com.rk.service.interfaces;
 
 
 import com.rk.dto.LayPage;
-import com.rk.dto.request.PageRequest;
+import com.rk.dto.request.ProductPageRequest;
 import com.rk.entity.Product;
 
 import java.util.List;
@@ -12,5 +12,5 @@ import java.util.List;
  */
 public interface ProductService {
     List<Product> getAllProduct();
-    LayPage<List<Product>> getPageList(PageRequest pageRequest);
+    LayPage<List<Product>> getPageList(ProductPageRequest pageRequest);
 }

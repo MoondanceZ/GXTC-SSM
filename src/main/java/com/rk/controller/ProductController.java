@@ -3,6 +3,7 @@ package com.rk.controller;
 import com.rk.dto.LayPage;
 import com.rk.dto.ReturnResult;
 import com.rk.dto.request.PageRequest;
+import com.rk.dto.request.ProductPageRequest;
 import com.rk.entity.Product;
 import com.rk.entity.ProductType;
 import com.rk.service.interfaces.ProductService;
@@ -31,7 +32,7 @@ public class ProductController {
 
     @RequestMapping(value = "/pageList", method = RequestMethod.GET)
     @ResponseBody
-    public LayPage<List<Product>> ProductType(PageRequest pageRequest) {
+    public LayPage<List<Product>> ProductType(ProductPageRequest pageRequest) {
         LayPage<List<Product>> productTypes = productService.getPageList(pageRequest);
         return productTypes;
     }
