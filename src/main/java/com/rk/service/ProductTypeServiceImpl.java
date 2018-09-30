@@ -22,7 +22,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @Override
     public LayPage<List<ProductType>> getPageList(PageRequest pageRequest) {
         List<ProductType> productTypes = productTypeMapper.getPageList(pageRequest);
-        int totalCount = productTypeMapper.getPageListTotalCount();
+        int totalCount = productTypeMapper.getPageListTotalCount(pageRequest);
         return new LayPage<>("", "", totalCount, productTypes);
     }
 
@@ -66,5 +66,10 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         } else {
             return ReturnResult.Error("删除失败");
         }
+    }
+
+    @Override
+    public List<ProductType> getEnableTypes() {
+        return productTypeMapper.getEnableTypes();
     }
 }

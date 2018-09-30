@@ -12,7 +12,7 @@ import java.util.List;
 public interface ProductTypeMapper {
     List<ProductType> getPageList(PageRequest pageRequest);
 
-    int getPageListTotalCount();
+    int getPageListTotalCount(PageRequest pageRequest);
 
     ProductType getProductTypeById(int id);
 
@@ -23,4 +23,6 @@ public interface ProductTypeMapper {
     int delete(Integer[] ids);
 
     int insert(ProductType productType);
+
+    List<ProductType> getEnableTypes();
 }

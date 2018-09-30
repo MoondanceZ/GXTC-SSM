@@ -12,7 +12,7 @@
     <%@ include file="../../common/head.jsp" %>
 </head>
 <body>
-<div class="editPt">
+<div class="edit-div">
     <form class="layui-form" id="editPtForm" action="" lay-filter="pt">
         <input type="hidden" name="id" value="${productType.id}">
         <input type="hidden" name="parentTypeId" value="${productType.parentTypeId}">

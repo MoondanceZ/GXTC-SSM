@@ -15,4 +15,5 @@ public interface ProductTypeService {
     ProductType getProductType(int id);
     ReturnResult updateOrAdd(ProductType productType);
     ReturnResult delete(Integer[] ids);
+    List<ProductType> getEnableTypes();
 }

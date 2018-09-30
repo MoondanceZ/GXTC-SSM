@@ -28,6 +28,7 @@
     <mvc:resources location="/resources/js/" mapping="/js/**"/>
     <mvc:resources location="/resources/lib/" mapping="/lib/**"/>
     <mvc:resources location="/resources/fonts/" mapping="/fonts/**"/>
+    <mvc:resources location="/resources/upload/" mapping="/upload/**"/>
 
     <!--<mvc:resources location="/resources/" mapping="/**"/>-->
     <mvc:default-servlet-handler/>
@@ -36,8 +37,8 @@
     <!--  <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"> -->
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">
-            <list >
-                <ref bean="mappingJacksonHttpMessageConverter" />
+            <list>
+                <ref bean="mappingJacksonHttpMessageConverter"/>
             </list>
         </property>
     </bean>
@@ -50,6 +51,15 @@
             </list>
         </property>
     </bean>
+
+    <!--文件上传-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 设定默认编码 -->
+        <property name="defaultEncoding" value="UTF-8"></property>
+        <!-- 设定文件上传的最大值5MB，5*1024*1024 -->
+        <property name="maxUploadSize" value="5242880"></property>
+    </bean>
+
 
     <!--3：配置JSP 显示ViewResolver-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

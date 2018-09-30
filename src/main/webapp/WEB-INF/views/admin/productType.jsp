@@ -38,7 +38,7 @@
 <div class="x-body">
     <div class="layui-row">
         <form class="layui-form layui-col-md12 x-so" id="searchForm">
-            <input type="text" name="queryString" placeholder="请输入名称或代码" autocomplete="off" class="layui-input">
+            <input type="text" name="queryString" placeholder="输入名称或代码" autocomplete="off" class="layui-input">
             <button class="layui-btn" lay-submit lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>
@@ -87,7 +87,7 @@
                             , title: '添加分类'
                             , area: ['600px', '300px']
                             , fixed: true
-                            , shade: 0
+                            , shade: 0.4
                             , maxmin: true
                             , content: '/productType/edit'
                             , end: function () {
@@ -126,7 +126,6 @@
             //监听行工具事件
             table.on('tool(pt)', function (obj) {
                 var objData = obj.data;
-                console.log(obj)
                 if (obj.event === 'del') {
                     layer.confirm('真的删除行么', function (index) {
                         var param = {ids: [objData.id]};
@@ -146,7 +145,7 @@
                         , title: '编辑分类'
                         , area: ['600px', '300px']
                         , fixed: true
-                        , shade: 0
+                        , shade: 0.4
                         , maxmin: true
                         , content: '/productType/edit?id=' + objData.id
                         , end: function () {

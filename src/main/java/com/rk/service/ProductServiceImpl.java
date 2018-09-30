@@ -2,6 +2,8 @@ package com.rk.service;
 
 import com.rk.dao.ProductMapper;
 
+import com.rk.dto.LayPage;
+import com.rk.dto.request.PageRequest;
 import com.rk.entity.Product;
 import com.rk.service.interfaces.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +26,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> getAllProduct() {
         return productMapper.queryAll();
+    }
+
+    @Override
+    public LayPage<List<Product>> getPageList(PageRequest pageRequest) {
+        return null;
     }
 }

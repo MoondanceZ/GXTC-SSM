@@ -1,5 +1,6 @@
 package com.rk.dao;
 
+import com.rk.dto.request.PageRequest;
 import com.rk.entity.Product;
 
 import java.util.List;
@@ -9,4 +10,6 @@ import java.util.List;
  */
 public interface ProductMapper {
     List<Product> queryAll();
+    List<Product> getPageList(PageRequest pageRequest);
+    int getPageListTotalCount(PageRequest pageRequest);
 }

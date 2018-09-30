@@ -4,7 +4,7 @@ import java.util.Date;
 
 /**
  * product 实体类
- * Thu Sep 20 14:58:30 CST 2018 Qin_Yikai
+ * Sat Sep 29 22:51:00 CST 2018 Qin_Yikai
  */ 
 
 public class Product {
@@ -20,69 +20,74 @@ public class Product {
 	private String name;
 
    /**
-     * image1
+     * 封面1
      */ 
 	private String image1;
 
    /**
-     * image2
+     * 封面2
      */ 
 	private String image2;
 
    /**
-     * image3
+     * 封面3
      */ 
 	private String image3;
 
    /**
-     * description
+     * 产地
+     */ 
+	private String originPlace;
+
+   /**
+     * 描述
      */ 
 	private String description;
 
    /**
-     * price
+     * 价格
      */ 
-	private double price;
+	private Double price;
 
    /**
-     * oldPrice
+     * 旧价格
      */ 
-	private double oldPrice;
+	private Double oldPrice;
 
    /**
-     * count
+     * 数量
      */ 
-	private int count;
+	private Integer count;
 
    /**
-     * typeId
+     * 商品类型
      */ 
 	private int typeId;
 
    /**
-     * createDate
+     * 创建时间
      */ 
 	private Date createDate;
 
    /**
-     * modifyDate
+     * 修改时间
      */ 
 	private Date modifyDate;
 
    /**
-     * deleteDate
+     * 删除时间
      */ 
 	private Date deleteDate;
 
    /**
-     * 0: 删除，1: 在售， 2: 下架
+     * -1: 删除，0: 下架， 1: 在售
      */ 
 	private short status;
-
-    /**
-     * productType
-     */
+	/**
+	 * productType
+	 */
 	private ProductType productType;
+
 	public long getId(){
 		return id;
 	}
@@ -123,6 +128,14 @@ public class Product {
 		this.image3 = image3;
 	}
 
+	public String getOriginPlace(){
+		return originPlace;
+	}
+
+	public void setOriginPlace(String originPlace){
+		this.originPlace = originPlace;
+	}
+
 	public String getDescription(){
 		return description;
 	}
@@ -131,27 +144,27 @@ public class Product {
 		this.description = description;
 	}
 
-	public double getPrice(){
+	public Double getPrice(){
 		return price;
 	}
 
-	public void setPrice(double price){
+	public void setPrice(Double price){
 		this.price = price;
 	}
 
-	public double getOldPrice(){
+	public Double getOldPrice(){
 		return oldPrice;
 	}
 
-	public void setOldPrice(double oldPrice){
+	public void setOldPrice(Double oldPrice){
 		this.oldPrice = oldPrice;
 	}
 
-	public int getCount(){
+	public Integer getCount(){
 		return count;
 	}
 
-	public void setCount(int count){
+	public void setCount(Integer count){
 		this.count = count;
 	}
 
@@ -195,12 +208,12 @@ public class Product {
 		this.status = status;
 	}
 
-    public ProductType getProductType() {
-        return productType;
-    }
+	public ProductType getProductType() {
+		return productType;
+	}
 
-    public void setProductType(ProductType productType) {
-        this.productType = productType;
-    }
+	public void setProductType(ProductType productType) {
+		this.productType = productType;
+	}
 }
 

@@ -30,7 +30,13 @@
     </select>
 
     <select id="getPageListTotalCount" resultType="int">
+        <bind name="queryStringPattern" value="'%' + queryString + '%'"></bind>
         SELECT count(*) FROM product_type
+        <where>
+            <if test="queryString != null and queryString != ''">
+                typeCode LIKE #{queryStringPattern} OR typeName LIKE #{queryStringPattern}
+            </if>
+        </where>
     </select>
 
     <select id="getProductTypeById" resultMap="BaseResultMap">
@@ -57,5 +63,9 @@
         INSERT INTO product_type(typeName, typeCode, parentTypeId, status) VALUES (#{typeName}, #{typeCode}, NULL, #{status
         })
     </insert>
+
+    <select id="getEnableTypes" resultMap="BaseResultMap">
+        SELECT * FROM product_type WHERE status = 1
+    </select>
 
 </mapper>
