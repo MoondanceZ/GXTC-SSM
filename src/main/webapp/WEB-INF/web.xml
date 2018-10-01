@@ -1,8 +1,17 @@
 <!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+        "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
+    <filter>
+        <filter-name>exceptionHandlerFilter</filter-name>
+        <filter-class>com.rk.common.filter.ExceptionHandlerFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>exceptionHandlerFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <!--配置DispatcherServlet-->
     <servlet>
         <servlet-name>gxtc-dispatcher</servlet-name>
@@ -22,7 +31,22 @@
         <!--默认匹配所有请求-->
         <url-pattern>/</url-pattern>
     </servlet-mapping>
-<welcome-file-list>
-    <welcome-file>/</welcome-file>
-</welcome-file-list>
+
+    <welcome-file-list>
+        <welcome-file>/</welcome-file>
+    </welcome-file-list>
+
+    <!-- 错误页面 -->
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/error.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404.jsp</location>
+    </error-page>
 </web-app>

@@ -20,7 +20,7 @@ public class UserController {
     @Autowired
     private UserInfoService userInfoService;
 
-    @RequestMapping(value = "/",method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String Login() {
         return "login";
     }
@@ -31,7 +31,7 @@ public class UserController {
         UserInfo userInfo = userInfoService.getUser(request.getAccount());
         //密码校验
         if (userInfo != null && userInfo.getPassword().equals(EncryptionUtil.encryptAES(request.getPassword()))) {
-            session.setAttribute("user", userInfo);
+            session.setAttribute("USER", userInfo);
             userInfoService.updateUserLoginDate(userInfo.getId(), new Date());
             return ReturnResult.Success("登录成功");
         }

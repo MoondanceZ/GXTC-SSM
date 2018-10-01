@@ -42,6 +42,9 @@
             //   });
             //监听提交
             form.on('submit(login)', function (data) {
+                var index = layer.load(1, {
+                    shade: [0.6, '#fff'] //0.1透明度的白色背景
+                });
                 $.ajax({
                     type: "POST",
                     url: "/user/signin",
@@ -49,9 +52,10 @@
                     dataType: "json",
                     contentType: "application/json",
                     success: function (data) {
+                        layer.close(index);
                         if (data.success) {
                             layer.msg(data.message, {
-                                time: 800 //2秒关闭（如果不配置，默认是3秒）
+                                time: 1000 //2秒关闭（如果不配置，默认是3秒）
                             }, function () {
                                 location.href = '/admin/main';
                             });
@@ -59,6 +63,9 @@
                         } else {
                             layer.msg(data.message);
                         }
+                    },
+                    complete: function () {
+                        layer.close(index);
                     }
                 });
 

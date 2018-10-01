@@ -1,6 +1,6 @@
-package com.rk.common.Validation;
+package com.rk.common.validation;
 
-import com.rk.common.Validation.Impl.MaxLengthImpl;
+import com.rk.common.validation.Impl.MaxLengthImpl;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -26,7 +26,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface MaxLength {
     int value() default Integer.MAX_VALUE;
 
-    String message() default "{com.rk.common.Validation.MaxLength.message}";
+    String message() default "{com.rk.common.validation.MaxLength.message}";
 
     Class<?>[] groups() default {};
 

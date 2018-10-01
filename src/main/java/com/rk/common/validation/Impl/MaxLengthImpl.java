@@ -1,6 +1,6 @@
-package com.rk.common.Validation.Impl;
+package com.rk.common.validation.Impl;
 
-import com.rk.common.Validation.MaxLength;
+import com.rk.common.validation.MaxLength;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintValidator;

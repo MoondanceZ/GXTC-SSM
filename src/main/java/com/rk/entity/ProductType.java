@@ -1,10 +1,8 @@
 package com.rk.entity;
 
 
-import com.rk.common.Validation.MaxLength;
+import com.rk.common.validation.MaxLength;
 import org.hibernate.validator.constraints.NotBlank;
-
-import javax.validation.constraints.Max;
 
 /**
  * product_type 实体类
