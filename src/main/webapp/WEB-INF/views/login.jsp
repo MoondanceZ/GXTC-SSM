@@ -50,9 +50,12 @@
                     contentType: "application/json",
                     success: function (data) {
                         if (data.success) {
-                            layer.msg("登录成功", function () {
-                                // location.href = 'index.html'
+                            layer.msg(data.message, {
+                                time: 800 //2秒关闭（如果不配置，默认是3秒）
+                            }, function () {
+                                location.href = '/admin/main';
                             });
+
                         } else {
                             layer.msg(data.message);
                         }

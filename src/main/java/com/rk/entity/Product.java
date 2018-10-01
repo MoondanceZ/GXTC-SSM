@@ -1,6 +1,7 @@
 package com.rk.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.rk.common.Validation.MaxLength;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -23,7 +24,7 @@ public class Product {
      * name
      */
     @NotBlank(message = "产品名称不能为空。")
-    @Length(min = 1, max = 100, message = "产品名称只能包含1~100个字符。")
+    @MaxLength(value = 100, message = "产品名称不能超过100个字符。")
     private String name;
 
     /**
@@ -44,6 +45,7 @@ public class Product {
     /**
      * 产地
      */
+    @MaxLength(value = 40, message = "产地不能超过40个字符。")
     private String originPlace;
 
     /**

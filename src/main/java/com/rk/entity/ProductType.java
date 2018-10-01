@@ -1,6 +1,7 @@
 package com.rk.entity;
 
 
+import com.rk.common.Validation.MaxLength;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Max;
@@ -26,14 +27,14 @@ public class ProductType {
      * typeName
      */
     @NotBlank(message = "类型名称不能为空。")
-    @Max(value = 12, message = "类型名称不能超过12个字符。")
+    @MaxLength(value = 12, message = "类型名称不能超过12个字符。")
     private String typeName;
 
     /**
      * typeCode
      */
     @NotBlank(message = "类型代码不能为空。")
-    @Max(value = 12, message = "类型代码不能超过12个字符。")
+    @MaxLength(value = 12, message = "类型代码不能超过12个字符。")
     private String typeCode;
 
     /**

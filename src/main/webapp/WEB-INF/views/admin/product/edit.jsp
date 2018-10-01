@@ -219,9 +219,12 @@
                             //parent 是 JS 自带的全局对象，可用于操作父页面
                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 
-                            layer.msg(data.message);
-                            parent.layer.close(index);
-                            parent.layui.table.reload('p')
+                            layer.msg(data.message, {
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                            }, function () {
+                                parent.layer.close(index);
+                                parent.layui.table.reload('p')
+                            });
                         } else {
                             layer.msg(data.message);
                         }

@@ -19,7 +19,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">类型名称</label>
             <div class="layui-input-block">
-                <input type="text" name="typeName" lay-verify="notempty" lay-vertype="tips" autocomplete="off" placeholder="请输入类型名称"
+                <input type="text" name="typeName" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
+                       placeholder="请输入类型名称"
                        class="layui-input" value="${productType.typeName}">
             </div>
         </div>
@@ -27,7 +28,8 @@
         <div class="layui-form-item">
             <label class="layui-form-label">类型代码</label>
             <div class="layui-input-block">
-                <input type="text" name="typeCode" lay-verify="notempty" lay-vertype="tips" autocomplete="off" placeholder="请输入类型代码"
+                <input type="text" name="typeCode" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
+                       placeholder="请输入类型代码"
                        class="layui-input" value="${productType.typeCode}">
             </div>
         </div>
@@ -83,32 +85,26 @@
                         //parent 是 JS 自带的全局对象，可用于操作父页面
                         var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 
-                        layer.msg(data.message);
-                        parent.layer.close(index);
-                        parent.layui.table.reload('pt')
+                        layer.msg(data.message, {
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        }, function () {
+                            parent.layer.close(index);
+                            parent.layui.table.reload('pt')
+                        });
+
                     } else {
                         layer.msg(data.message);
                     }
                 }
             });
-
-//            console.log(parent.layui.table);
-//            if(data.success){
-//                layer.msg('提交成功', function () {
-//                    var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-//                    console.log(parent.table);
-//                });
-//            }else{
-//
-//            }
             return false;
         });
 
         //监听指定开关
-        form.on('switch(status)', function(data){
-            if(this.checked){
+        form.on('switch(status)', function (data) {
+            if (this.checked) {
                 $('input[name=status]').val(1);
-            }else{
+            } else {
                 $('input[name=status]').val(0);
             }
         });

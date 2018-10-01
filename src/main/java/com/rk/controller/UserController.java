@@ -16,23 +16,16 @@ import java.util.Date;
  * Created by Qin_Yikai on 2018-09-16.
  */
 @Controller
-@RequestMapping("/user")
 public class UserController {
     @Autowired
     private UserInfoService userInfoService;
 
-    @RequestMapping("/login")
+    @RequestMapping(value = "/",method = RequestMethod.GET)
     public String Login() {
         return "login";
     }
 
-/*    @ModelAttribute
-    public void userLoginModel(String account, String password, Model model) {
-        model.addAttribute("account", account);
-        model.addAttribute("password", password);
-    }*/
-
-    @RequestMapping(value = "/signin", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    @RequestMapping(value = "/user/signin", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody()
     public ReturnResult<UserInfo> SignIn(@RequestBody SignInRequest request, HttpSession session) {
         UserInfo userInfo = userInfoService.getUser(request.getAccount());
