@@ -31,7 +31,14 @@
                 <label class="layui-form-label">封面一</label>
                 <button type="button" class="layui-btn" id="btnFile1">上传图片</button>
                 <div class="layui-upload-list">
-                    <img class="layui-upload-img" id="img-file-1" src="/upload/images/${product.image1}">
+                    <c:choose>
+                        <c:when test="${product.image1 != null }">
+                            <img class="layui-upload-img" id="img-file-1" src="/upload/images/${product.image1}">
+                        </c:when>
+                        <c:otherwise>
+                            <img class="layui-upload-img" id="img-file-1">
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </div>
@@ -41,7 +48,14 @@
                 <label class="layui-form-label">封面二</label>
                 <button type="button" class="layui-btn" id="btnFile2">上传图片</button>
                 <div class="layui-upload-list">
-                    <img class="layui-upload-img" id="img-file-2" src="/upload/images/${product.image2}">
+                    <c:choose>
+                        <c:when test="${product.image2 != null }">
+                            <img class="layui-upload-img" id="img-file-2" src="/upload/images/${product.image2}">
+                        </c:when>
+                        <c:otherwise>
+                            <img class="layui-upload-img" id="img-file-2">
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </div>
@@ -51,7 +65,14 @@
                 <label class="layui-form-label">封面三</label>
                 <button type="button" class="layui-btn" id="btnFile3">上传图片</button>
                 <div class="layui-upload-list">
-                    <img class="layui-upload-img" id="img-file-3" src="/upload/images/${product.image3}">
+                    <c:choose>
+                        <c:when test="${product.image3 != null }">
+                            <img class="layui-upload-img" id="img-file-3" src="/upload/images/${product.image3}">
+                        </c:when>
+                        <c:otherwise>
+                            <img class="layui-upload-img" id="img-file-3">
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </div>
         </div>
