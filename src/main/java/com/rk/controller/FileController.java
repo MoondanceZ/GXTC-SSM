@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -21,24 +22,20 @@ public class FileController {
 
     @RequestMapping("uploadImage")
     @ResponseBody
-    public HashMap<String, Object> UploadImage(HttpServletRequest request, MultipartFile imgFile) {
+    public HashMap<String, Object> UploadImage(HttpServletRequest request, MultipartFile imgFile)
+            throws IOException {
         HashMap<String, Object> hashMap = new HashMap<>();
-        try {
-            String fileUrl = FileUtil.SaveImage(request, imgFile);
-            if (fileUrl != null) {
-                hashMap.put("error", 0);
-                hashMap.put("url", fileUrl);
+        String fileUrl = FileUtil.SaveImage(request, imgFile);
+        if (fileUrl != null) {
+            hashMap.put("error", 0);
+            hashMap.put("url", fileUrl);
 
-                return hashMap;
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            logger.info("上传图片失败:" + ex.getMessage(), ex);
+            return hashMap;
+        } else {
+            hashMap.put("error", 1);
+            hashMap.put("message", "上传失败");
+
+            return hashMap;
         }
-
-        hashMap.put("error", 1);
-        hashMap.put("message", "上传失败");
-
-        return hashMap;
     }
 }

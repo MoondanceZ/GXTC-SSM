@@ -19,7 +19,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">类型名称</label>
             <div class="layui-input-block">
-                <input type="text" name="typeName" lay-verify="notempty" autocomplete="off" placeholder="请输入类型名称"
+                <input type="text" name="typeName" lay-verify="notempty" lay-vertype="tips" autocomplete="off" placeholder="请输入类型名称"
                        class="layui-input" value="${productType.typeName}">
             </div>
         </div>
@@ -27,7 +27,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">类型代码</label>
             <div class="layui-input-block">
-                <input type="text" name="typeCode" lay-verify="notempty" autocomplete="off" placeholder="请输入类型代码"
+                <input type="text" name="typeCode" lay-verify="notempty" lay-vertype="tips" autocomplete="off" placeholder="请输入类型代码"
                        class="layui-input" value="${productType.typeCode}">
             </div>
         </div>

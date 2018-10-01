@@ -197,6 +197,13 @@
             <version>3.3.2</version>
         </dependency>
 
+        <!--hibernate-validator 校验-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.4.1.Final</version>
+        </dependency>
+
     </dependencies>
 
     <build>

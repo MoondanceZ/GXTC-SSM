@@ -15,6 +15,8 @@ public interface ProductMapper {
 
     int getPageListTotalCount(ProductPageRequest pageRequest);
 
+    Product getProductById(long id);
+
     int insert(Product product);
 
     int update(Product product);

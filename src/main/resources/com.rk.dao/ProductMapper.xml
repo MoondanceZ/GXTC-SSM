@@ -3,24 +3,24 @@
 <mapper namespace="com.rk.dao.ProductMapper">
     <resultMap id="BaseResultMap" type="com.rk.entity.Product">
         <id column="id" property="id" jdbcType="BIGINT"/>
-        <!--<result column="account" property="account" jdbcType="VARCHAR" />-->
+        <result column="typeId" property="typeId" jdbcType="INTEGER" />
         <!--<result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>-->
         <!--<result property="number" column="number" javaType="Integer" jdbcType="VARCHAR"/>-->
         <!--<result property="startTime" column="start_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>-->
         <!--<result property="endTime" column="end_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>-->
         <!--<result property="createTIme" column="create_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>-->
         <association property="productType" column="typeId" javaType="com.rk.entity.ProductType"
-                     select="selectPrdTypeWithId"></association>
+                     select="com.rk.dao.ProductTypeMapper.getProductTypeById"></association>
     </resultMap>
 
-    <!--根据typeId查询分类-->
-    <select id="selectPrdTypeWithId" resultType="com.rk.entity.ProductType">
-        SELECT * FROM product_type WHERE id = #{id}
-    </select>
     <!--查询所有产品-->
     <select id="queryAll" resultMap="BaseResultMap">
         SELECT *
         FROM product
+    </select>
+
+    <select id="getProductById" resultMap="BaseResultMap">
+        SELECT * FROM product WHERE id = #{id}
     </select>
 
     <sql id="pageWhere">
@@ -54,4 +54,64 @@
         SELECT count(*) FROM product
         <include refid="pageWhere"></include>
     </select>
+
+    <insert id="insert">
+        INSERT INTO product (
+            name,
+            image1,
+            image2,
+            image3,
+            originPlace,
+            description,
+            price,
+            oldPrice,
+            count,
+            typeId,
+            createDate,
+            status
+        )
+        VALUES
+        (
+            #{name},
+            #{image1},
+            #{image2},
+            #{image3},
+            #{originPlace},
+            #{description},
+            #{price},
+            #{oldPrice},
+            #{count},
+            #{typeId},
+            #{createDate},
+            #{status}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE product
+        <set>
+            name = #{name},
+            <if test="image1 != null">
+                image1 = #{image1},
+            </if>
+            <if test="image2 != null">
+                image2 = #{image2},
+            </if>
+            <if test="image3 != null">
+                image3 = #{image3},
+            </if>
+            originPlace = #{originPlace},
+            description = #{description},
+            price = #{price},
+            oldPrice = #{oldPrice},
+            count = #{count},
+            typeId = #{typeId},
+            modifyDate = #{modifyDate},
+            status = #{status}
+        </set>
+        WHERE
+        id = #{id}
+
+
+    </update>
 </mapper>

@@ -14,8 +14,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    @Autowired
-    private ProductService productService;
 
     @RequestMapping("/main")
     public String Main() {

@@ -1,80 +1,85 @@
 package com.rk.entity;
 
 
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.Max;
+
 /**
  * product_type 实体类
  * Thu Sep 20 15:49:27 CST 2018 Qin_Yikai
- */ 
+ */
 
 public class ProductType {
 
-   /**
+    /**
      * id
-     */ 
-	private int id;
+     */
+    private int id;
 
-   /**
+    /**
      * parentTypeId
-     */ 
-	private Integer parentTypeId;
+     */
+    private Integer parentTypeId;
 
-   /**
+    /**
      * typeName
-     */ 
-	private String typeName;
+     */
+    @NotBlank(message = "类型名称不能为空。")
+    @Max(value = 12, message = "类型名称不能超过12个字符。")
+    private String typeName;
 
-	public ProductType() {
-		//this.status = 1;
-	}
-
-	/**
+    /**
      * typeCode
-     */ 
-	private String typeCode;
+     */
+    @NotBlank(message = "类型代码不能为空。")
+    @Max(value = 12, message = "类型代码不能超过12个字符。")
+    private String typeCode;
 
-   /**
-     * 0:停用， 1: 正常 
-     */ 
-	private short status;
-	public int getId(){
-		return id;
-	}
+    /**
+     * 0:停用， 1: 正常
+     */
+    private short status;
 
-	public void setId(int id){
-		this.id = id;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public Integer getParentTypeId(){
-		return parentTypeId;
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public void setParentTypeId(Integer parentTypeId){
-		this.parentTypeId = parentTypeId;
-	}
+    public Integer getParentTypeId() {
+        return parentTypeId;
+    }
 
-	public String getTypeName(){
-		return typeName;
-	}
+    public void setParentTypeId(Integer parentTypeId) {
+        this.parentTypeId = parentTypeId;
+    }
 
-	public void setTypeName(String typeName){
-		this.typeName = typeName;
-	}
+    public String getTypeName() {
+        return typeName;
+    }
 
-	public String getTypeCode(){
-		return typeCode;
-	}
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
 
-	public void setTypeCode(String typeCode){
-		this.typeCode = typeCode;
-	}
+    public String getTypeCode() {
+        return typeCode;
+    }
 
-	public short getStatus(){
-		return status;
-	}
+    public void setTypeCode(String typeCode) {
+        this.typeCode = typeCode;
+    }
 
-	public void setStatus(short status){
-		this.status = status;
-	}
+    public short getStatus() {
+        return status;
+    }
+
+    public void setStatus(short status) {
+        this.status = status;
+    }
 
 }
 

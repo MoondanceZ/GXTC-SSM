@@ -5,11 +5,14 @@ import com.rk.dto.ReturnResult;
 import com.rk.dto.request.PageRequest;
 import com.rk.entity.ProductType;
 import com.rk.service.interfaces.ProductTypeService;
+import com.rk.util.ValidatorHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -34,7 +37,7 @@ public class ProductTypeController {
         if (id != null) {
             ProductType productType = productTypeService.getProductType(id);
             model.addAttribute("productType", productType);
-        }else{
+        } else {
             model.addAttribute("productType", new ProductType());
         }
         return "admin/productType/edit";
@@ -42,7 +45,11 @@ public class ProductTypeController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody()
-    public ReturnResult Save(@RequestBody ProductType productType) {
+    public ReturnResult Save(@RequestBody @Valid ProductType productType, Errors errors) {
+        //校验
+        ReturnResult errorReturnResult = ValidatorHelper.GetErrorReturnResult(errors);
+        if (errorReturnResult != null) return errorReturnResult;
+
         return productTypeService.updateOrAdd(productType);
     }
 

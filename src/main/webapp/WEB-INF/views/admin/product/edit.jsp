@@ -31,7 +31,7 @@
                 <label class="layui-form-label">封面一</label>
                 <button type="button" class="layui-btn" id="btnFile1">上传图片</button>
                 <div class="layui-upload-list">
-                    <img class="layui-upload-img" id="img-file-1">
+                    <img class="layui-upload-img" id="img-file-1" src="/upload/images/${product.image1}">
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
                 <label class="layui-form-label">封面二</label>
                 <button type="button" class="layui-btn" id="btnFile2">上传图片</button>
                 <div class="layui-upload-list">
-                    <img class="layui-upload-img" id="img-file-2">
+                    <img class="layui-upload-img" id="img-file-2" src="/upload/images/${product.image2}">
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@
                 <label class="layui-form-label">封面三</label>
                 <button type="button" class="layui-btn" id="btnFile3">上传图片</button>
                 <div class="layui-upload-list">
-                    <img class="layui-upload-img" id="img-file-3">
+                    <img class="layui-upload-img" id="img-file-3" src="/upload/images/${product.image3}">
                 </div>
             </div>
         </div>
@@ -67,7 +67,7 @@
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">产品描述</label>
             <div class="layui-input-block">
-                <textarea placeholder="请输入产品描述" id="description"
+                <textarea placeholder="请输入产品描述" id="description" name="description"
                           class="layui-textarea">${product.description}</textarea>
             </div>
         </div>
@@ -106,7 +106,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">产品类型</label>
                 <div class="layui-input-inline">
-                    <select name="typeId" lay-verify="required">
+                    <select name="typeId" lay-verify="required" lay-vertype="tips">
                         <option value>请选择类型</option>
                         <c:forEach var="item" items="${enableTypes}">
                             <option value="${item.id}" ${product.typeId==item.id?"selected":""}>${item.typeName}</option>
@@ -137,7 +137,7 @@
 
 <script>
     KindEditor.ready(function (K) {
-        CreateEditor('textarea#description');
+        var descriptionEditor = CreateEditor('textarea#description');
 
         function CreateEditor(sel) {
             var editor = K.create(sel, {
@@ -150,7 +150,7 @@
                 /*afterCreate: function () {
                  this.loadPlugin('autoheight');
                  },*/
-                showRemote : false,
+                showRemote: false,
                 //allowImageRemote: false,
                 uploadJson: '/file/uploadImage',
                 allowFileManager: false,
@@ -162,111 +162,112 @@
             });
             return editor;
         };
-    });
 
-    layui.use(['form', 'upload'], function () {
-        var form = layui.form
-            , upload = layui.upload
-        //自定义验证规则
-        form.verify({
-            notempty: function (value) {
-                if (value.match(/^\s*$/)) {
-                    return '不能为空';
-                }
-            }
-            /*    ,pass: [/(.+){6,12}$/, '密码必须6到12位']
-             ,content: function(value){
-             layedit.sync(editIndex);
-             }*/
-        });
-
-        //监听提交
-        form.on('submit(submit)', function (data) {
-            var formData = new FormData($('#editForm')[0]);
-            //console.log(formData);
-            //console.log(data);
-            //layer.msg(JSON.stringify(data.field));
-            $.ajax({
-                type: "POST",
-                url: "/product/save",
-                data: formData,
-                //dataType: 'json',
-                processData: false,  //必须false才会避开jQuery对 formdata 的默认处理
-                contentType: false,  //必须false才会自动加上正确的Content-Type
-                success: function (data) {
-                    //layer.alert(JSON.stringify(data.field));
-                    if (data.success) {
-                        //parent 是 JS 自带的全局对象，可用于操作父页面
-                        var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
-
-                        layer.msg(data.message);
-                        parent.layer.close(index);
-                        parent.layui.table.reload('p')
-                    } else {
-                        layer.msg(data.message);
+        layui.use(['form', 'upload'], function () {
+            var form = layui.form
+                , upload = layui.upload
+            //自定义验证规则
+            form.verify({
+                notempty: function (value) {
+                    if (value.match(/^\s*$/)) {
+                        return '不能为空';
                     }
                 }
+                /*    ,pass: [/(.+){6,12}$/, '密码必须6到12位']
+                 ,content: function(value){
+                 layedit.sync(editIndex);
+                 }*/
             });
-            return false;
-        });
 
-        //监听指定开关
-        form.on('switch(status)', function (data) {
-            if (this.checked) {
-                $('input[name=status]').val(1);
-            } else {
-                $('input[name=status]').val(0);
-            }
-        });
+            //监听提交
+            form.on('submit(submit)', function (data) {
+                //console.log(descriptionEditor.html());
+                descriptionEditor.sync();
+                var formData = new FormData($('#editForm')[0]);
 
+                $.ajax({
+                    type: "POST",
+                    url: "/product/save",
+                    data: formData,
+                    //dataType: 'json',
+                    processData: false,  //必须false才会避开jQuery对 formdata 的默认处理
+                    contentType: false,  //必须false才会自动加上正确的Content-Type
+                    success: function (data) {
+                        //layer.alert(JSON.stringify(data.field));
+                        if (data.success) {
+                            //parent 是 JS 自带的全局对象，可用于操作父页面
+                            var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
 
-        //普通图片上传
-        upload.render({
-            elem: '#btnFile1'
-            , auto: false
-            , accept: 'images'
-            , field: 'imgFile1'
-            , acceptMime: 'image/*'
-            , size: '5120'
-            //,exts : 'jpg|png|gif|bmp|jpeg'
-            , choose: function (obj) {
-                //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
-                obj.preview(function (index, file, result) {
-                    $('#img-file-1').attr('src', result); //图片链接（base64）
+                            layer.msg(data.message);
+                            parent.layer.close(index);
+                            parent.layui.table.reload('p')
+                        } else {
+                            layer.msg(data.message);
+                        }
+                    }
                 });
-            }
+                return false;
+            });
+
+            //监听指定开关
+            form.on('switch(status)', function (data) {
+                if (this.checked) {
+                    $('input[name=status]').val(1);
+                } else {
+                    $('input[name=status]').val(0);
+                }
+            });
+
+
+            //普通图片上传
+            upload.render({
+                elem: '#btnFile1'
+                , auto: false
+                , accept: 'images'
+                , field: 'imgFile1'
+                , acceptMime: 'image/*'
+                , size: '5120'
+                //,exts : 'jpg|png|gif|bmp|jpeg'
+                , choose: function (obj) {
+                    //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
+                    obj.preview(function (index, file, result) {
+                        $('#img-file-1').attr('src', result); //图片链接（base64）
+                    });
+                }
+            });
+
+            upload.render({
+                elem: '#btnFile2'
+                , auto: false
+                , accept: 'images'
+                , field: 'imgFile2'
+                , acceptMime: 'image/*'
+                , size: '5120'
+                , choose: function (obj) {
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function (index, file, result) {
+                        $('#img-file-2').attr('src', result); //图片链接（base64）
+                    });
+                }
+            });
+
+            upload.render({
+                elem: '#btnFile3'
+                , auto: false
+                , accept: 'images'
+                , field: 'imgFile3'
+                , acceptMime: 'image/*'
+                , size: '5120'
+                , choose: function (obj) {
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function (index, file, result) {
+                        $('#img-file-3').attr('src', result); //图片链接（base64）
+                    });
+                }
+            });
         });
 
-        upload.render({
-            elem: '#btnFile2'
-            , auto: false
-            , accept: 'images'
-            , field: 'imgFile2'
-            , acceptMime: 'image/*'
-            , size: '5120'
-            , choose: function (obj) {
-                //预读本地文件示例，不支持ie8
-                obj.preview(function (index, file, result) {
-                    $('#img-file-2').attr('src', result); //图片链接（base64）
-                });
-            }
-        });
-
-        upload.render({
-            elem: '#btnFile3'
-            , auto: false
-            , accept: 'images'
-            , field: 'imgFile3'
-            , acceptMime: 'image/*'
-            , size: '5120'
-            , choose: function (obj) {
-                //预读本地文件示例，不支持ie8
-                obj.preview(function (index, file, result) {
-                    $('#img-file-3').attr('src', result); //图片链接（base64）
-                });
-            }
-        });
-    })
+    });
 
 </script>
 </body>
