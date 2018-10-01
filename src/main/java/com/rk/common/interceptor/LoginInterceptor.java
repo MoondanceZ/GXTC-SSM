@@ -1,11 +1,14 @@
 package com.rk.common.interceptor;
 
+import com.rk.dto.ReturnResult;
+import com.rk.util.JsonUtil;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.OutputStream;
 
 /**
  * Created by Qin_Yikai on 2018-10-01.
@@ -17,19 +20,32 @@ public class LoginInterceptor implements HandlerInterceptor {
         // 返回false则不执行拦截
         HttpSession session = request.getSession();
         String uri = request.getRequestURI();
-        // 获取登录的uri，这个是不进行拦截的
-        if (session.getAttribute("USER") != null || uri.indexOf("system/login") != -1) {
-            // 说明登录成功 或者 执行登录功能
-            if (session.getAttribute("USER") != null) {
-                // 登录成功不拦截
-                return true;
-            } else {
-                // 拦截后进入登录页面
-                response.sendRedirect(request.getContextPath() + "/system/login");
-                return false;
-            }
+        //System.out.println(request.getContextPath() + uri);
+        if (uri.equals("/") || uri.equals("/user/signin") || session.getAttribute("USER") != null)
+            return true;
+
+
+        //如果是ajax请求响应头会有x-requested-with 
+        if (request.getHeader("x-requested-with") != null
+                && request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
+            // 自定义异常的类，用户返回给客户端相应的JSON格式的信息
+            ReturnResult returnResult = ReturnResult.Error("未登录或登录已超时, 请重新登录");
+
+            response.setContentType("application/json; charset=utf-8");
+            response.setCharacterEncoding("UTF-8");
+
+            String userJson = JsonUtil.ConvertObjectToJson(returnResult);
+            OutputStream out = response.getOutputStream();
+            out.write(userJson.getBytes("UTF-8"));
+            out.close();
+            out.flush();
+
+            return false;
+        } else {
+            //request.getRequestDispatcher("/").forward(request, response);  //转发到登录界面
+            response.sendRedirect("/");
+            return false;
         }
-        return false;
     }
 
     @Override

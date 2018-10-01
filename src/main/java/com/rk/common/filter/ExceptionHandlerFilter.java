@@ -1,11 +1,10 @@
 package com.rk.common.filter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rk.common.exception.GxtcException;
 import com.rk.common.exception.NotFoundException;
 import com.rk.controller.FileController;
 import com.rk.dto.ReturnResult;
+import com.rk.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -60,9 +59,10 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
                     httpServletResponse.setContentType("application/json; charset=utf-8");
                     httpServletResponse.setCharacterEncoding("UTF-8");
 
-                    String userJson = convertObjectToJson(returnResult);
+                    String userJson = JsonUtil.ConvertObjectToJson(returnResult);
                     OutputStream out = httpServletResponse.getOutputStream();
                     out.write(userJson.getBytes("UTF-8"));
+                    out.close();
                     out.flush();
                 } else {
                     if (isNotFoundError)
@@ -74,11 +74,4 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
         }
     }
 
-    private String convertObjectToJson(Object object) throws JsonProcessingException {
-        if (object == null) {
-            return null;
-        }
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.writeValueAsString(object);
-    }
 }
