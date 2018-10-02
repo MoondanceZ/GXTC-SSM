@@ -1,5 +1,6 @@
 package com.rk.controller;
 
+import com.rk.common.exception.NotFoundException;
 import com.rk.dto.LayPage;
 import com.rk.dto.ReturnResult;
 import com.rk.dto.request.ProductPageRequest;
@@ -39,11 +40,12 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String editProduct(@RequestParam(value = "id", required = false) Long id, Model model) {
+    public String editProduct(@RequestParam(value = "id", required = false) Long id, Model model) throws NotFoundException {
         if (id != null) {
             Product product = productService.getProduct(id);
+            if (product == null)
+                throw new NotFoundException();
             model.addAttribute("product", product);
-            //TODO:校验是否为null, 返回404
         } else {
             model.addAttribute("product", new Product());
         }

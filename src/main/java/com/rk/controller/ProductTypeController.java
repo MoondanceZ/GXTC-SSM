@@ -1,5 +1,6 @@
 package com.rk.controller;
 
+import com.rk.common.exception.NotFoundException;
 import com.rk.dto.LayPage;
 import com.rk.dto.ReturnResult;
 import com.rk.dto.request.PageRequest;
@@ -33,9 +34,11 @@ public class ProductTypeController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String editProductType(@RequestParam(value = "id", required = false) Integer id, Model model) {
+    public String editProductType(@RequestParam(value = "id", required = false) Integer id, Model model) throws NotFoundException {
         if (id != null) {
             ProductType productType = productTypeService.getProductType(id);
+            if (productType == null)
+                throw new NotFoundException();
             model.addAttribute("productType", productType);
         } else {
             model.addAttribute("productType", new ProductType());

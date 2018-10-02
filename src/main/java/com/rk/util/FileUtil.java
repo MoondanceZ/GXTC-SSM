@@ -52,7 +52,7 @@ public class FileUtil {
      * @Description: 压缩图片, 通过压缩图片质量，保持原图大小
      */
     private static byte[] compressPic(byte[] imageByte, float quality) throws IOException {
-        byte[] inByte = null;
+        byte[] inByte;
         ByteArrayInputStream byteInput = new ByteArrayInputStream(imageByte);
         Image img = ImageIO.read(byteInput);
         float newWidth = img.getWidth(null);
@@ -72,6 +72,7 @@ public class FileUtil {
         encoder.encode(tag, jep);
         inByte = out.toByteArray();
         out.close();
+        out.flush();
         return inByte;
     }
 
