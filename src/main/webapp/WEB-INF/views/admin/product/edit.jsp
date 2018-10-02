@@ -97,7 +97,8 @@
             <div class="layui-inline">
                 <label class="layui-form-label">产品价格</label>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="price" value="${product.price}" placeholder="￥产品价格" autocomplete="off"
+                    <input type="text" name="price" lay-verify="price" lay-vertype="tips" value="${product.price}"
+                           placeholder="￥产品价格" autocomplete="off"
                            class="layui-input">
                 </div>
             </div>
@@ -107,7 +108,8 @@
             <div class="layui-inline">
                 <label class="layui-form-label">产品原价</label>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="oldPrice" value="${product.oldPrice}" placeholder="￥产品原价"
+                    <input type="text" name="oldPrice" lay-verify="price" lay-vertype="tips" value="${product.oldPrice}"
+                           placeholder="￥产品原价"
                            autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -117,7 +119,8 @@
             <div class="layui-inline">
                 <label class="layui-form-label">数量</label>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="count" value="${product.count}" placeholder="数量" autocomplete="off"
+                    <input type="text" name="count" lay-verify="number" lay-vertype="tips" value="${product.count}"
+                           placeholder="数量" autocomplete="off"
                            class="layui-input">
                 </div>
             </div>
@@ -192,6 +195,11 @@
                 notempty: function (value) {
                     if (value.match(/^\s*$/)) {
                         return '不能为空';
+                    }
+                },
+                price: function (value) {
+                    if (value.match(/^d*(?:.d{0,2})?$/)) {
+                        return '只能输入数字, 小数点后只能保留2位小数'
                     }
                 }
                 /*    ,pass: [/(.+){6,12}$/, '密码必须6到12位']

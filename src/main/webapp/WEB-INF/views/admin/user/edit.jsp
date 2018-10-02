@@ -18,18 +18,36 @@
         <div class="layui-form-item">
             <label class="layui-form-label">名称</label>
             <div class="layui-input-block">
-                <input type="text" name="typeName" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
-                       placeholder="请输入类型名称"
-                       class="layui-input" value="${userInfo.Name}">
+                <input type="text" name="name" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
+                       placeholder="请输入类型名称" maxlength="12"
+                       class="layui-input" value="${userInfo.name}">
             </div>
         </div>
 
         <div class="layui-form-item">
             <label class="layui-form-label">密码</label>
             <div class="layui-input-block">
-                <input type="text" name="typeCode" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
-                       placeholder="请输入类型代码"
+                <input type="text" name="password" lay-verify="notempty|pass" lay-vertype="tips" autocomplete="off"
+                       placeholder="请输入密码" maxlength="12" minlength="6"
                        class="layui-input" value="${userInfo.password}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-block">
+                <input type="text" name="email" lay-verify="email" lay-vertype="tips" autocomplete="off"
+                       placeholder="请输入邮箱" maxlength="12"
+                       class="layui-input" value="${userInfo.email}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">电话</label>
+            <div class="layui-input-block">
+                <input type="text" name="phoneNumber" lay-verify="phone" lay-vertype="tips" autocomplete="off"
+                       placeholder="请输入电话"
+                       class="layui-input" value="${userInfo.phoneNumber}">
             </div>
         </div>
 
@@ -54,10 +72,7 @@
                     return '不能为空';
                 }
             }
-            /*    ,pass: [/(.+){6,12}$/, '密码必须6到12位']
-             ,content: function(value){
-             layedit.sync(editIndex);
-             }*/
+            , pass: [/(.+){6,12}$/, '密码必须6到12位']
         });
 
         //监听提交
