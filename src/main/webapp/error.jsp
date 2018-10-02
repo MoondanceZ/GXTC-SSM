@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Gxtc - 出错啦</title>
+    <title>GXTC - 出错啦</title>
     <meta charset="utf-8"/>
     <style type="text/css">
         body, code, dd, div, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, input, legend, li, ol, p, pre, td, textarea, th, ul {

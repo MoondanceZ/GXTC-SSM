@@ -38,4 +38,10 @@ public class UserController {
 
         return ReturnResult.Error("登录失败");
     }
+
+    @RequestMapping(value = "/user/signout", method = RequestMethod.GET)
+    public String SignOut(HttpSession session) {
+        session.invalidate();
+        return ("redirect:/");
+    }
 }

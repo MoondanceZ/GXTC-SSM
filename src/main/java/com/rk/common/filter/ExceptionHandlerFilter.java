@@ -63,7 +63,7 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
                     OutputStream out = httpServletResponse.getOutputStream();
                     out.write(userJson.getBytes("UTF-8"));
                     out.close();
-                    out.flush();
+                    //out.flush();
                 } else {
                     if (isNotFoundError)
                         httpServletResponse.sendRedirect("/404.jsp");

@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>登录</title>
+    <title>GXTC - 登录</title>
     <%@ include file="common/tag.jsp" %>
     <%@ include file="common/head.jsp" %>
 </head>
@@ -49,7 +49,7 @@
                     dataType: "json",
                     contentType: "application/json",
                     success: function (data) {
-                        layer.close(index);
+                        //layer.close(index);
                         if (data.success) {
                             layer.msg(data.message, {
                                 time: 1000 //2秒关闭（如果不配置，默认是3秒）
@@ -62,7 +62,7 @@
                         }
                     },
                     complete: function () {
-                        layer.close(index);
+                        //layer.close(index);
                     }
                 });
 

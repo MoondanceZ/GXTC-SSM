@@ -72,7 +72,6 @@ public class FileUtil {
         encoder.encode(tag, jep);
         inByte = out.toByteArray();
         out.close();
-        out.flush();
         return inByte;
     }
 

@@ -37,8 +37,8 @@ public class LoginInterceptor implements HandlerInterceptor {
             String userJson = JsonUtil.ConvertObjectToJson(returnResult);
             OutputStream out = response.getOutputStream();
             out.write(userJson.getBytes("UTF-8"));
-            out.close();
-            out.flush();
+            out.close(); //close()关闭流对象，但是先刷新一次缓冲区，关闭之后，流对象不可以继续再使用了
+            //out.flush(); //flush()仅仅是刷新缓冲区(一般写字符时要用,因为字符是先进入的缓冲区)，流对象还可以继续使用
 
             return false;
         } else {

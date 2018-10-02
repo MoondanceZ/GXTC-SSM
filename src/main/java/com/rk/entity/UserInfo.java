@@ -1,5 +1,8 @@
 package com.rk.entity;
 
+import com.rk.common.validation.MaxLength;
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -7,17 +10,18 @@ import java.util.Date;
  * Created by Qin_Yikai on 2018-09-16.
  */
 public class UserInfo implements Serializable {
-    public UserInfo() {
-    }
-
-    public UserInfo(long id, String account, String name, String password, Date createDate, Date lastLoginDate) {
-        this.id = id;
-        this.account = account;
-        this.name = name;
-        this.password = password;
-        this.createDate = createDate;
-        this.lastLoginDate = lastLoginDate;
-    }
+    private long id;
+    /*@NotBlank(message = "帐号不能为空", groups = "")
+    @MaxLength(value = 12, message = "帐号长度不能超过12个字符")*/
+    private String account;
+    private String name;
+    private String password;
+    private String email;
+    private String phoneNumber;
+    private int adminType;
+    private Date createDate;
+    private Date lastLoginDate;
+    private short status;
 
     public long getId() {
         return id;
@@ -51,6 +55,30 @@ public class UserInfo implements Serializable {
         this.password = password;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public int getAdminType() {
+        return adminType;
+    }
+
+    public void setAdminType(int adminType) {
+        this.adminType = adminType;
+    }
+
     public Date getCreateDate() {
         return createDate;
     }
@@ -67,11 +95,11 @@ public class UserInfo implements Serializable {
         this.lastLoginDate = lastLoginDate;
     }
 
-    private long id;
-    private String account;
-    private String name;
-    private String password;
-    private Date createDate;
-    private Date lastLoginDate;
+    public short getStatus() {
+        return status;
+    }
 
+    public void setStatus(short status) {
+        this.status = status;
+    }
 }

@@ -1,4 +1,4 @@
-<%--
+<%@ page import="com.rk.entity.UserInfo" %><%--
   Created by IntelliJ IDEA.
   User: Qin_Yikai
   Date: 2018/9/19
@@ -23,16 +23,16 @@
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
 
-            <a href="javascript:;" class="iconfont">@Model.code</a>
+            <a href="javascript:;" class="iconfont">
+                <%= ((UserInfo) session.getAttribute("USER")).getName() %>
+            </a>
             <dl class="layui-nav-child">
                 <!-- 二级菜单 -->
-                <!--
-                <dd><a _href="/chen_menber/Index">个人信息</a></dd>
-                -->
-                <!--
-                <dd><a _href="/chen_menber/Index">切换帐号</a></dd>
-                -->
-                <dd><a href="/">退出</a></dd>
+                <dd><a _href="/user/edit">修改信息</a></dd>
+                <c:if test="${sessionScope.USER.adminType == 1}">
+                    <dd><a _href="/user/list">帐号列表</a></dd>
+                </c:if>
+                <dd><a href="/user/signout">退出</a></dd>
             </dl>
         </li>
         <!--
