@@ -20,7 +20,7 @@ import java.util.Base64;
  * 加密工具类
  */
 @SuppressWarnings("restriction")
-public final class EncryptionUtil {
+public final class EncryptionUtils {
 
     public static final String AES_ENCRYPT_KEY = "MOONDANCEZ";
 

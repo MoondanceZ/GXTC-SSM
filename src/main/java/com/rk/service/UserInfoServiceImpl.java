@@ -3,7 +3,6 @@ package com.rk.service;
 import com.rk.dao.UserInfoMapper;
 import com.rk.entity.UserInfo;
 import com.rk.service.interfaces.UserInfoService;
-import com.rk.util.EncryptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

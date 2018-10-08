@@ -15,7 +15,7 @@ import java.util.UUID;
 /**
  * Created by Qin_Yikai on 2018-09-30.
  */
-public class FileUtil {
+public class FileUtils {
     private static final String UPLOAD_IMAGE_PATH = "/resources/upload/images/";
 
     public static String saveImage(HttpServletRequest request, MultipartFile imgFile) throws IOException {
@@ -51,7 +51,7 @@ public class FileUtil {
      * @Title: compressPic 
      * @Description: 压缩图片, 通过压缩图片质量，保持原图大小
      */
-    private static byte[] compressPic(byte[] imageByte, float quality) throws IOException {
+    public static byte[] compressPic(byte[] imageByte, float quality) throws IOException {
         byte[] inByte;
         ByteArrayInputStream byteInput = new ByteArrayInputStream(imageByte);
         Image img = ImageIO.read(byteInput);

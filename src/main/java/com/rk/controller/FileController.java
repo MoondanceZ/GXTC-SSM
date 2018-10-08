@@ -1,6 +1,6 @@
 package com.rk.controller;
 
-import com.rk.util.FileUtil;
+import com.rk.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -25,7 +25,7 @@ public class FileController {
     public HashMap<String, Object> UploadImage(HttpServletRequest request, MultipartFile imgFile)
             throws IOException {
         HashMap<String, Object> hashMap = new HashMap<>();
-        String fileUrl = FileUtil.saveImage(request, imgFile);
+        String fileUrl = FileUtils.saveImage(request, imgFile);
         if (fileUrl != null) {
             hashMap.put("error", 0);
             hashMap.put("url", fileUrl);

@@ -45,7 +45,7 @@ public class AjaxUtils {
             response.setContentType("application/json; charset=utf-8");
             response.setCharacterEncoding("UTF-8");
 
-            String userJson = JsonUtil.ConvertObjectToJson(value);
+            String userJson = JsonUtils.ConvertObjectToJson(value);
             OutputStream out = response.getOutputStream();
             out.write(userJson.getBytes("UTF-8"));
             out.close();

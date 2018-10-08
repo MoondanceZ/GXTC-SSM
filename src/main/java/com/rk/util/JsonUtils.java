@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Created by Qin_Yikai on 2018-10-02.
  */
-public class JsonUtil {
+public class JsonUtils {
     public static String ConvertObjectToJson(Object object) throws JsonProcessingException {
         if (object == null) {
             return null;

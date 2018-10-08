@@ -7,7 +7,7 @@ import com.rk.dto.request.ProductPageRequest;
 import com.rk.entity.Product;
 import com.rk.service.interfaces.ProductService;
 import com.rk.service.interfaces.ProductTypeService;
-import com.rk.util.FileUtil;
+import com.rk.util.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -67,7 +67,7 @@ public class ProductController {
         //if (validateResult != null) return validateResult;
 
         if (!imgFile1.isEmpty()) {
-            String imgFile1Name = FileUtil.saveImage(request, imgFile1);
+            String imgFile1Name = FileUtils.saveImage(request, imgFile1);
             if (imgFile1Name != null) {
                 String[] nameStrings = imgFile1Name.split("/");
                 product.setImage1(nameStrings[nameStrings.length - 1]);
@@ -75,7 +75,7 @@ public class ProductController {
         }
 
         if (!imgFile2.isEmpty()) {
-            String imgFile2Name = FileUtil.saveImage(request, imgFile2);
+            String imgFile2Name = FileUtils.saveImage(request, imgFile2);
             if (imgFile2Name != null) {
                 String[] nameStrings = imgFile2Name.split("/");
                 product.setImage2(nameStrings[nameStrings.length - 1]);
@@ -83,7 +83,7 @@ public class ProductController {
         }
 
         if (!imgFile3.isEmpty()) {
-            String imgFile3Name = FileUtil.saveImage(request, imgFile3);
+            String imgFile3Name = FileUtils.saveImage(request, imgFile3);
             if (imgFile3Name != null) {
                 String[] nameStrings = imgFile3Name.split("/");
                 product.setImage3(nameStrings[nameStrings.length - 1]);

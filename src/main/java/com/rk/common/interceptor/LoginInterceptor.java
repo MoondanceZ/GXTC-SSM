@@ -2,14 +2,12 @@ package com.rk.common.interceptor;
 
 import com.rk.dto.ReturnResult;
 import com.rk.util.AjaxUtils;
-import com.rk.util.JsonUtil;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.OutputStream;
 
 /**
  * Created by Qin_Yikai on 2018-10-01.
