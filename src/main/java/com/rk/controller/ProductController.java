@@ -1,6 +1,6 @@
 package com.rk.controller;
 
-import com.rk.common.exception.NotFoundException;
+import com.rk.common.exception.DataNotFoundException;
 import com.rk.dto.LayPage;
 import com.rk.dto.ReturnResult;
 import com.rk.dto.request.ProductPageRequest;
@@ -8,7 +8,6 @@ import com.rk.entity.Product;
 import com.rk.service.interfaces.ProductService;
 import com.rk.service.interfaces.ProductTypeService;
 import com.rk.util.FileUtil;
-import com.rk.util.ValidatorHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
@@ -40,11 +40,11 @@ public class ProductController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String editProduct(@RequestParam(value = "id", required = false) Long id, Model model) throws NotFoundException {
+    public String editProduct(@RequestParam(value = "id", required = false) Long id, Model model) throws DataNotFoundException {
         if (id != null) {
             Product product = productService.getProduct(id);
             if (product == null)
-                throw new NotFoundException();
+                throw new DataNotFoundException();
             model.addAttribute("product", product);
         } else {
             model.addAttribute("product", new Product());
@@ -56,18 +56,18 @@ public class ProductController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ResponseBody()
-    public ReturnResult Save(HttpServletRequest request, Product product,
+    public ReturnResult Save(HttpServletRequest request, @Valid Product product,
                              @RequestParam(value = "imgFile1", required = false) MultipartFile imgFile1,
                              @RequestParam(value = "imgFile2", required = false) MultipartFile imgFile2,
                              @RequestParam(value = "imgFile3", required = false) MultipartFile imgFile3)
             throws IOException {
 
         //采用这种校验方式是因为前段为 multipart/form-data 方式提交时, 添加 @Valid 会报400错误, 暂时无法解决
-        ReturnResult validateResult = ValidatorHelper.Validate(product);
-        if (validateResult != null) return validateResult;
+        //ReturnResult validateResult = ValidatorHelper.validate(product);
+        //if (validateResult != null) return validateResult;
 
         if (!imgFile1.isEmpty()) {
-            String imgFile1Name = FileUtil.SaveImage(request, imgFile1);
+            String imgFile1Name = FileUtil.saveImage(request, imgFile1);
             if (imgFile1Name != null) {
                 String[] nameStrings = imgFile1Name.split("/");
                 product.setImage1(nameStrings[nameStrings.length - 1]);
@@ -75,7 +75,7 @@ public class ProductController {
         }
 
         if (!imgFile2.isEmpty()) {
-            String imgFile2Name = FileUtil.SaveImage(request, imgFile2);
+            String imgFile2Name = FileUtil.saveImage(request, imgFile2);
             if (imgFile2Name != null) {
                 String[] nameStrings = imgFile2Name.split("/");
                 product.setImage2(nameStrings[nameStrings.length - 1]);
@@ -83,7 +83,7 @@ public class ProductController {
         }
 
         if (!imgFile3.isEmpty()) {
-            String imgFile3Name = FileUtil.SaveImage(request, imgFile3);
+            String imgFile3Name = FileUtil.saveImage(request, imgFile3);
             if (imgFile3Name != null) {
                 String[] nameStrings = imgFile3Name.split("/");
                 product.setImage3(nameStrings[nameStrings.length - 1]);

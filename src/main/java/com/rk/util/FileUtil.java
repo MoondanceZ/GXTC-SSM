@@ -18,7 +18,7 @@ import java.util.UUID;
 public class FileUtil {
     private static final String UPLOAD_IMAGE_PATH = "/resources/upload/images/";
 
-    public static String SaveImage(HttpServletRequest request, MultipartFile imgFile) throws IOException {
+    public static String saveImage(HttpServletRequest request, MultipartFile imgFile) throws IOException {
         if (!imgFile.isEmpty()) {
             byte[] imageData = imgFile.getBytes();
             byte[] compressFileData = compressPic(imageData, 1);

@@ -25,7 +25,7 @@ public class FileController {
     public HashMap<String, Object> UploadImage(HttpServletRequest request, MultipartFile imgFile)
             throws IOException {
         HashMap<String, Object> hashMap = new HashMap<>();
-        String fileUrl = FileUtil.SaveImage(request, imgFile);
+        String fileUrl = FileUtil.saveImage(request, imgFile);
         if (fileUrl != null) {
             hashMap.put("error", 0);
             hashMap.put("url", fileUrl);

@@ -1,6 +1,7 @@
 package com.rk.common.interceptor;
 
 import com.rk.dto.ReturnResult;
+import com.rk.util.AjaxUtils;
 import com.rk.util.JsonUtil;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,22 +25,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (uri.equals("/") || uri.equals("/user/signin") || session.getAttribute("USER") != null)
             return true;
 
-
-        //如果是ajax请求响应头会有x-requested-with 
-        if (request.getHeader("x-requested-with") != null
-                && request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
-            // 自定义异常的类，用户返回给客户端相应的JSON格式的信息
-            ReturnResult returnResult = ReturnResult.Error("未登录或登录已超时, 请重新登录");
-
-            response.setContentType("application/json; charset=utf-8");
-            response.setCharacterEncoding("UTF-8");
-
-            String userJson = JsonUtil.ConvertObjectToJson(returnResult);
-            OutputStream out = response.getOutputStream();
-            out.write(userJson.getBytes("UTF-8"));
-            out.close(); //close()关闭流对象，但是先刷新一次缓冲区，关闭之后，流对象不可以继续再使用了
-            //out.flush(); //flush()仅仅是刷新缓冲区(一般写字符时要用,因为字符是先进入的缓冲区)，流对象还可以继续使用
-
+        if (AjaxUtils.isAjaxRequest(request)){
+            AjaxUtils.writeJson(ReturnResult.Error("未登录或登录已超时, 请重新登录"), response);
             return false;
         } else {
             //request.getRequestDispatcher("/").forward(request, response);  //转发到登录界面

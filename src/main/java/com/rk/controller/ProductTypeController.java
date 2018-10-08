@@ -1,16 +1,14 @@
 package com.rk.controller;
 
-import com.rk.common.exception.NotFoundException;
+import com.rk.common.exception.DataNotFoundException;
 import com.rk.dto.LayPage;
 import com.rk.dto.ReturnResult;
 import com.rk.dto.request.PageRequest;
 import com.rk.entity.ProductType;
 import com.rk.service.interfaces.ProductTypeService;
-import com.rk.util.ValidatorHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,11 +32,11 @@ public class ProductTypeController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String editProductType(@RequestParam(value = "id", required = false) Integer id, Model model) throws NotFoundException {
+    public String editProductType(@RequestParam(value = "id", required = false) Integer id, Model model) throws DataNotFoundException {
         if (id != null) {
             ProductType productType = productTypeService.getProductType(id);
             if (productType == null)
-                throw new NotFoundException();
+                throw new DataNotFoundException();
             model.addAttribute("productType", productType);
         } else {
             model.addAttribute("productType", new ProductType());
@@ -48,10 +46,10 @@ public class ProductTypeController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody()
-    public ReturnResult Save(@RequestBody @Valid ProductType productType, Errors errors) {
-        //校验
-        ReturnResult errorReturnResult = ValidatorHelper.GetErrorReturnResult(errors);
-        if (errorReturnResult != null) return errorReturnResult;
+    public ReturnResult Save(@RequestBody @Valid ProductType productType) {
+/*        //校验
+        ReturnResult errorReturnResult = ValidatorHelper.getErrorReturnResult(errors);
+        if (errorReturnResult != null) return errorReturnResult;*/
 
         return productTypeService.updateOrAdd(productType);
     }

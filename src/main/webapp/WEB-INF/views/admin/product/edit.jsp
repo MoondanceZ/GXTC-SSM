@@ -20,7 +20,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">产品名称</label>
             <div class="layui-input-block">
-                <input type="text" name="name" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
+                <input type="text" name="name" lay-verify="notempty11" lay-vertype="tips" autocomplete="off"
                        placeholder="请输入类型名称"
                        class="layui-input" value="${product.name}">
             </div>
@@ -192,15 +192,17 @@
                 , upload = layui.upload
             //自定义验证规则
             form.verify({
-                notempty: function (value) {
+                notempty: function (value, obj) {
+                    var vname = $(obj).parent().prev().text();
                     if (value.match(/^\s*$/)) {
-                        return '不能为空';
+                        return vname + '不能为空';
                     }
                 },
-                price: function (value) {
-                    if (value.match(/^d*(?:.d{0,2})?$/)) {
-                        return '只能输入数字, 小数点后只能保留2位小数'
-                    }
+                price: function (value, obj) {
+                   /* if (!/(^[1-9]\d*$)|(^[1-9]\d*[.][0-9]{1,2}$)/.test(value)) {
+                        var vname = $(obj).parent().prev().text();
+                        return vname + '只能输入数字, 小数点后只能保留2位小数'
+                    }*/
                 }
                 /*    ,pass: [/(.+){6,12}$/, '密码必须6到12位']
                  ,content: function(value){

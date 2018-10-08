@@ -20,7 +20,7 @@ public class ValidatorHelper {
 
     private static Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    public static ReturnResult GetErrorReturnResult(Errors errors) {
+    public static ReturnResult getErrorReturnResult(Errors errors) {
         ReturnResult returnResult = null;
 
         if (errors.hasErrors()) {
@@ -34,7 +34,7 @@ public class ValidatorHelper {
         return returnResult;
     }
 
-    public static <T> ReturnResult Validate(T obj) {
+    public static <T> ReturnResult validate(T obj) {
         Map<String, StringBuffer> errorMap = null;
         Set<ConstraintViolation<T>> set = validator.validate(obj, Default.class);
         if (set != null && set.size() > 0) {

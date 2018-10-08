@@ -95,5 +95,13 @@
         </bean>-->
 
     <!--扫描web相关的controller-->
-    <context:component-scan base-package="com.rk.controller"/>
+<!--    <context:component-scan base-package="com.rk.controller"/>-->
+    <context:component-scan base-package="com.rk.controller" use-default-filters="false">
+       <!-- base-package 如果多个，用“,”分隔 -->
+       <context:include-filter type="annotation"
+                               expression="org.springframework.stereotype.Controller"/>
+       <!--控制器增强，使一个Contoller成为全局的异常处理类，类中用@ExceptionHandler方法注解的方法可以处理所有Controller发生的异常-->
+       <context:include-filter type="annotation"
+                               expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+   </context:component-scan>
 </beans>

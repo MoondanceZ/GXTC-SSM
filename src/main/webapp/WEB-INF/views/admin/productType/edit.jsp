@@ -59,9 +59,10 @@
 
         //自定义验证规则
         form.verify({
-            notempty: function (value) {
+            notempty: function (value, obj) {
+                var vname = $(obj).parent().prev().text();
                 if (value.match(/^\s*$/)) {
-                    return '不能为空';
+                    return vname + '不能为空';
                 }
             }
             /*    ,pass: [/(.+){6,12}$/, '密码必须6到12位']
