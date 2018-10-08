@@ -54,6 +54,7 @@
                             layer.msg(data.message, {
                                 time: 1000 //2秒关闭（如果不配置，默认是3秒）
                             }, function () {
+                                layer.msg('正在跳转...', {time: 5000});
                                 location.href = '/admin/main';
                             });
 
