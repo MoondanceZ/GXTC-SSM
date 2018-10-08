@@ -63,7 +63,7 @@ public class ProductController {
             throws IOException {
 
         //采用这种校验方式是因为前段为 multipart/form-data 方式提交时, 添加 @Valid 会报400错误, 暂时无法解决
-        ReturnResult validateResult = ValidatorHelper.validate(product);
+        ReturnResult validateResult = ValidatorHelper.Validate(product);
         if (validateResult != null) return validateResult;
 
         if (!imgFile1.isEmpty()) {

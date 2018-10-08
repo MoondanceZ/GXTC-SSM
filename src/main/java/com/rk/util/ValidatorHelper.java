@@ -34,7 +34,7 @@ public class ValidatorHelper {
         return returnResult;
     }
 
-    public static <T> ReturnResult validate(T obj) {
+    public static <T> ReturnResult Validate(T obj) {
         Map<String, StringBuffer> errorMap = null;
         Set<ConstraintViolation<T>> set = validator.validate(obj, Default.class);
         if (set != null && set.size() > 0) {
