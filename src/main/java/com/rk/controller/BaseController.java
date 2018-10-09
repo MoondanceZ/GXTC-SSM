@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 
 import java.beans.PropertyEditorSupport;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Qin_Yikai on 2018-10-09.
@@ -20,7 +21,7 @@ public class BaseController {
         binder.registerCustomEditor(String.class, new PropertyEditorSupport() {
             @Override
             public void setAsText(String text) {
-                setValue(text == null ? null : StringEscapeUtils.escapeHtml4(text.trim()));
+                setValue(text == null ? null : StringEscapeUtils.escapeHtml4(text));
             }
 
             @Override
@@ -31,7 +32,7 @@ public class BaseController {
         });
 
         //日期类型转换
-        /*binder.registerCustomEditor(String.class,
-                new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));*/
+        binder.registerCustomEditor(Date.class,
+                new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
     }
 }
