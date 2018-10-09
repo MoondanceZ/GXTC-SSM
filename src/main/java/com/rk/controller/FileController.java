@@ -17,7 +17,7 @@ import java.util.HashMap;
  */
 @RequestMapping("file")
 @Controller
-public class FileController {
+public class FileController extends BaseController {
     private static final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @RequestMapping("uploadImage")

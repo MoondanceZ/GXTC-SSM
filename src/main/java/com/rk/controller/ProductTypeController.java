@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/productType")
-public class ProductTypeController {
+public class ProductTypeController extends BaseController  {
 
     @Autowired
     private ProductTypeService productTypeService;

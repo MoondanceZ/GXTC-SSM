@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/product")
-public class ProductController {
+public class ProductController extends BaseController {
     @Autowired
     private ProductService productService;
 

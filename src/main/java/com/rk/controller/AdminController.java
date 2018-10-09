@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/admin")
-public class AdminController {
+public class AdminController extends BaseController {
 
     @RequestMapping("/main")
     public String Main() {
