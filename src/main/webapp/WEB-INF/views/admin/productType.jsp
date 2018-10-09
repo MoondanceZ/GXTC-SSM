@@ -160,9 +160,7 @@
             form.on('submit(sreach)', function (data) {
                 //layer.alert(JSON.stringify(data.field))
                 tableIns.reload({
-                    where: {
-                        queryString: data.field.queryString
-                    },
+                    where: getFormObj('#searchForm'),
                     page: {
                         curr: 1
                     }

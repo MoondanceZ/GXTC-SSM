@@ -18,7 +18,7 @@
 
         body {
             font: 14px/1.5 'Microsoft YaHei', '微软雅黑', Helvetica, Sans-serif;
-            min-width: 1200px;
+            /*min-width: 1200px;*/
             background: #f0f1f3;
         }
 
@@ -64,7 +64,7 @@
         .error-page-main:before {
             content: '';
             display: block;
-            background: url(/Helper/StaticPage/errorPageBorder.png);
+            /*background: url(/Helper/StaticPage/errorPageBorder.png);*/
             height: 7px;
             position: absolute;
             top: -7px;

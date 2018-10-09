@@ -36,6 +36,9 @@
             <if test="maxPrice != null">
                 AND <![CDATA[price <= #{maxPrice}]]>
             </if>
+            <if test="originPlace != null">
+                AND originPlace = #{originPlace}>
+            </if>
             <if test="status != null">
                 AND status = #{status}
             </if>

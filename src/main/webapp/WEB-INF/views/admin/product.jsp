@@ -25,6 +25,7 @@
                     <option value="2">下架</option>
                 </select>
             </div>
+            <input type="text" name="originPlace" placeholder="输入产品产地" autocomplete="off" class="layui-input">
             <input type="text" name="queryString" placeholder="输入产品名称" autocomplete="off" class="layui-input">
             <button class="layui-btn" lay-submit lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
@@ -47,7 +48,8 @@
 
     <script type="text/html" id="toolbar">
         <div class="layui-btn-container">
-            <button class="layui-btn layui-btn-sm" lay-event="addNew"><i class="layui-icon layui-icon-add-circle"></i> 添加
+            <button class="layui-btn layui-btn-sm" lay-event="addNew"><i class="layui-icon layui-icon-add-circle"></i>
+                添加
             </button>
             <button class="layui-btn layui-btn-sm" lay-event="delChecked"><i class="layui-icon layui-icon-delete"></i>删除
             </button>
@@ -71,14 +73,17 @@
                 //, id: 'ptid'
                 , url: '/product/pageList'
                 , where: getFormObj('#searchForm')
-                , cellMinWidth: 80
+                //, cellMinWidth: 40
                 , cols: [[
                     {type: 'checkbox'}
-                    , {field: 'id', title: 'ID', sort: true}
+                    , {field: 'id', title: 'ID', sort: true, width: 80}
                     , {field: 'name', title: '产品名称'}
-                    , {field: 'originPlace', title: '产品产地'}
-                    , {field: 'status', title: '状态', templet: '#statusTpl'}
-                    , {title: '操作', toolbar: '#operate'}
+                    , {field: 'price', title: '价格', width: 80}
+                    , {field: 'oldPrice', title: '原价', width: 80}
+                    , {field: 'originPlace', title: '产地', width: 80}
+                    , {field: 'createDate', title: '创建日期', width: 160}
+                    , {field: 'status', title: '状态', templet: '#statusTpl', width: 60}
+                    , {title: '操作', toolbar: '#operate', fixed: 'right', width: 120}
                 ]]
                 , page: true
             });
@@ -94,7 +99,7 @@
                         layer.open({
                             type: 2
                             , title: '添加产品'
-                            , area: [($(window).width()*0.9), ($(window).height() - 50)]
+                            , area: [($(window).width() * 0.9), ($(window).height() - 50)]
                             , fixed: true
                             , shade: 0.4
                             , fix: true
@@ -154,7 +159,7 @@
                     layer.open({
                         type: 2
                         , title: '编辑产品'
-                        , area: [($(window).width()*0.9), ($(window).height() - 50)]
+                        , area: [($(window).width() * 0.9), ($(window).height() - 50)]
                         , fixed: true
                         , shade: 0.4
                         , maxmin: true
@@ -171,9 +176,7 @@
             form.on('submit(sreach)', function (data) {
                 //layer.alert(JSON.stringify(data.field))
                 tableIns.reload({
-                    where: {
-                        queryString: data.field.queryString
-                    },
+                    where: getFormObj('#searchForm'),
                     page: {
                         curr: 1
                     }
