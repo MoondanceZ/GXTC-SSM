@@ -18,12 +18,13 @@
         </select>-->
 
     <select id="getPageList" resultMap="BaseResultMap">
-        <bind name="queryStringPattern" value="'%' + queryString + '%'"></bind>
+        <!--<bind name="queryStringPattern" value="'%' + queryString + '%'"></bind>-->
         <bind name="offest" value="(page-1)*limit"></bind>
         SELECT * FROM product_type
         <where>
             <if test="queryString != null and queryString != ''">
-                typeCode LIKE #{queryStringPattern} OR typeName LIKE #{queryStringPattern}
+                <!--typeCode LIKE #{queryStringPattern} OR typeName LIKE #{queryStringPattern}-->
+                typeCode LIKE CONCAT('%', #{queryString}, '%') OR typeName LIKE CONCAT('%', #{queryString}, '%')
             </if>
         </where>
         ORDER BY id LIMIT #{offest}, #{limit}

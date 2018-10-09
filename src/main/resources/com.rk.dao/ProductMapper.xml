@@ -27,7 +27,8 @@
         <where>
             <![CDATA[status <> -1]]>
             <if test="queryString != null and queryString != ''">
-                AND name LIKE #{queryStringPattern}
+                <!--AND name LIKE #{queryStringPattern}-->
+                AND name LIKE CONCAT('%', #{queryString}, '%')
             </if>
             <if test="minPrice != null">
                 AND <![CDATA[price >= #{minPrice}]]>
@@ -42,7 +43,7 @@
     </sql>
 
     <select id="getPageList" resultMap="BaseResultMap">
-        <bind name="queryStringPattern" value="'%' + queryString + '%'"></bind>
+        <!--<bind name="queryStringPattern" value="'%' + queryString + '%'"></bind>-->
         <bind name="offest" value="(page-1)*limit"></bind>
         SELECT * FROM product
         <include refid="pageWhere"></include>
