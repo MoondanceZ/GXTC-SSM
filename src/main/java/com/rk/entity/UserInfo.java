@@ -1,15 +1,11 @@
 package com.rk.entity;
 
-import com.rk.common.validation.MaxLength;
-import org.hibernate.validator.constraints.NotBlank;
-
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by Qin_Yikai on 2018-09-16.
  */
-public class UserInfo extends BaseEntity<Long> implements Serializable {
+public class UserInfo extends BaseEntity<Long> {
     /*@NotBlank(message = "帐号不能为空", groups = "")
     @MaxLength(value = 12, message = "帐号长度不能超过12个字符")*/
     private String account;

@@ -5,14 +5,17 @@
 <configuration>
     <!--首先配置全局属性-->
     <settings>
+        <!-- 全局映射器启用缓存 *主要将此属性设置完成即可 -->
+        <setting name="cacheEnabled" value="true" />
         <!--开启自动填充主键功能，原理是通过jdbc的一个方法getGeneratekeys获取自增主键值-->
         <setting name="useGeneratedKeys" value="true"/>
         <!--使用别名替换列名，默认就是开启的-->
         <setting name="useColumnLabel" value="true"/>
         <!--开启驼峰命名的转换-->
         <setting name="mapUnderscoreToCamelCase" value="true"/>
-        <!--延迟加载配置-->
-        <setting name="lazyLoadingEnabled" value="true"/>
+        <!-- 查询时，关闭关联对象即时加载以提高性能 -->
+        <setting name="lazyLoadingEnabled" value="false"/>
+        <!-- 设置关联对象加载的形态，此处为按需加载字段(加载字段由SQL指 定)，不会加载关联表的所有字段，以提高性能 -->
         <setting name="aggressiveLazyLoading" value="false"/>
         <!--日志监控-->
         <setting name="logImpl" value="STDOUT_LOGGING"/>

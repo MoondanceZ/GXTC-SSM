@@ -7,7 +7,17 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <!-- 引入数据库配置文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties,classpath:redis.properties"/>
+    <!--    <bean id="propertyConfigurer"
+              class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+            <property name="locations">
+                <list>
+                    <value>classpath:jdbc.properties</value>
+                    <value>classpath:redis.properties</value>
+                </list>
+            </property>
+        </bean>-->
 
     <!--配置数据库连接池-->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
@@ -28,7 +38,7 @@
         <!--注入数据库连接池-->
         <property name="dataSource" ref="dataSource"/>
         <!--配置mybatis全局配置文件-->
-        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <property name="configLocation" value="classpath:spring/applicationContext-mybatis.xml"/>
         <!--配置entity包,也就是实体类包，自动扫描,用于别名配置-->
         <property name="typeAliasesPackage" value="com.rk.entity"/>
         <!--配置需要扫描的mapper.xml文件-->
@@ -40,7 +50,7 @@
         <!--注入sqlSessionFactory,请注意不要使用sqlSessionFactoryBean，否则会出现注入异常-->
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
         <!--给出要扫描的mapper接口-->
-        <property name="basePackage" value="com.rk.dao" />
+        <property name="basePackage" value="com.rk.dao"/>
     </bean>
 
     <!--注入redisDao-->
