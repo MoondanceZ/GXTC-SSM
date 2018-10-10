@@ -9,8 +9,7 @@ import java.util.Date;
 /**
  * Created by Qin_Yikai on 2018-09-16.
  */
-public class UserInfo implements Serializable {
-    private long id;
+public class UserInfo extends BaseEntity<Long> implements Serializable {
     /*@NotBlank(message = "帐号不能为空", groups = "")
     @MaxLength(value = 12, message = "帐号长度不能超过12个字符")*/
     private String account;
@@ -22,14 +21,6 @@ public class UserInfo implements Serializable {
     private Date createDate;
     private Date lastLoginDate;
     private short status;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getAccount() {
         return account;

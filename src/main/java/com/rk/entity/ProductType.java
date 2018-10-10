@@ -9,12 +9,7 @@ import org.hibernate.validator.constraints.NotBlank;
  * Thu Sep 20 15:49:27 CST 2018 Qin_Yikai
  */
 
-public class ProductType {
-
-    /**
-     * id
-     */
-    private int id;
+public class ProductType extends BaseEntity<Integer> {
 
     /**
      * parentTypeId
@@ -39,14 +34,6 @@ public class ProductType {
      * 0:停用， 1: 正常
      */
     private short status;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public Integer getParentTypeId() {
         return parentTypeId;

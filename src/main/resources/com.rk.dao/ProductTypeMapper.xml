@@ -41,7 +41,7 @@
         </where>
     </select>
 
-    <select id="getProductTypeById" resultMap="BaseResultMap">
+    <select id="getByPrimaryKey" resultMap="BaseResultMap">
         SELECT * FROM product_type WHERE id = #{id}
     </select>
 

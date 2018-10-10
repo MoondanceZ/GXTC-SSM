@@ -9,20 +9,9 @@ import java.util.List;
 /**
  * Created by Qin_Yikai on 2018-09-20.
  */
-public interface ProductTypeMapper {
-    List<ProductType> getPageList(PageRequest pageRequest);
-
-    int getPageListTotalCount(PageRequest pageRequest);
-
-    ProductType getProductTypeById(int id);
-
-    int update(ProductType productType);
+public interface ProductTypeMapper extends BaseMapper<ProductType, Integer> {
 
     ProductType getProductTypeByNameOrCode(@Param("typeName") String typeName, @Param("typeCode") String typeCode);
-
-    int delete(Integer[] ids);
-
-    int insert(ProductType productType);
 
     List<ProductType> getEnableTypes();
 }

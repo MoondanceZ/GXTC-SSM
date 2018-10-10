@@ -10,7 +10,6 @@ import java.util.List;
  * Created by Qin_Yikai on 2018-09-16.
  */
 public interface UserInfoService {
-    List<UserInfo> getAllUsers();
     UserInfo getUser(String account);
     boolean updateUserLoginDate(long id, Date date);
 }

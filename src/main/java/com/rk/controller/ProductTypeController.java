@@ -34,7 +34,7 @@ public class ProductTypeController extends BaseController  {
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editProductType(@RequestParam(value = "id", required = false) Integer id, Model model) throws DataNotFoundException {
         if (id != null) {
-            ProductType productType = productTypeService.getProductType(id);
+            ProductType productType = productTypeService.getByPrimaryKey(id);
             if (productType == null)
                 throw new DataNotFoundException();
             model.addAttribute("productType", productType);

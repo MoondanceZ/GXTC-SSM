@@ -11,8 +11,7 @@ import java.util.List;
  * Created by Qin_Yikai on 2018-09-16.
  */
 
-public interface UserInfoMapper {
-    List<UserInfo> queryAll();
+public interface UserInfoMapper extends BaseMapper<UserInfo, Integer> {
 
     UserInfo queryByAccount(@Param("account") String account);
 

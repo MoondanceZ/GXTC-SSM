@@ -11,10 +11,6 @@
         <!--<result property="endTime" column="end_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>-->
         <!--<result property="createTIme" column="create_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>-->
     </resultMap>
-    <select id="queryAll" resultMap="BaseResultMap">
-        SELECT *
-        FROM userInfo
-    </select>
 
     <select id="queryByAccount" resultMap="BaseResultMap" resultType="com.rk.entity.UserInfo"
             parameterType="java.lang.String">

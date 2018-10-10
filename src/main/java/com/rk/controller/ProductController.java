@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 
@@ -42,7 +43,7 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
     public String editProduct(@RequestParam(value = "id", required = false) Long id, Model model) throws DataNotFoundException {
         if (id != null) {
-            Product product = productService.getProduct(id);
+            Product product = productService.getByPrimaryKey(id);
             if (product == null)
                 throw new DataNotFoundException();
             model.addAttribute("product", product);
@@ -89,6 +90,11 @@ public class ProductController extends BaseController {
                 product.setImage3(nameStrings[nameStrings.length - 1]);
             }
         }
+
+        if (product.getId() != null)
+            product.setModifyDate(new Date());
+        else
+            product.setCreateDate(new Date());
 
         return productService.updateOrAdd(product);
     }

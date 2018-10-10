@@ -14,12 +14,7 @@ import java.util.Date;
  * Sat Sep 29 22:51:00 CST 2018 Qin_Yikai
  */
 @JsonIgnoreProperties(value = {"handler"})
-public class Product {
-
-    /**
-     * id
-     */
-    private Long id;
+public class Product extends BaseEntity<Long> {
 
     /**
      * name
@@ -105,14 +100,6 @@ public class Product {
      * productType
      */
     private ProductType productType;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

@@ -10,16 +10,10 @@
         <!--<result property="endTime" column="end_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>-->
         <!--<result property="createTIme" column="create_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>-->
         <association property="productType" column="typeId" javaType="com.rk.entity.ProductType"
-                     select="com.rk.dao.ProductTypeMapper.getProductTypeById"></association>
+                     select="com.rk.dao.ProductTypeMapper.getByPrimaryKey"></association>
     </resultMap>
 
-    <!--查询所有产品-->
-    <select id="queryAll" resultMap="BaseResultMap">
-        SELECT *
-        FROM product
-    </select>
-
-    <select id="getProductById" resultMap="BaseResultMap">
+    <select id="getByPrimaryKey" resultMap="BaseResultMap">
         SELECT * FROM product WHERE id = #{id}
     </select>
 
@@ -36,7 +30,7 @@
             <if test="maxPrice != null">
                 AND <![CDATA[price <= #{maxPrice}]]>
             </if>
-            <if test="originPlace != null">
+            <if test="originPlace != null and originPlace != ''">
                 AND originPlace = #{originPlace}>
             </if>
             <if test="status != null">
