@@ -18,13 +18,45 @@
         </property>
     </bean>-->
 
+    <context:component-scan base-package="com.rk.common.cache"/>
+
     <!-- redis数据源 -->
     <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <!-- 每次释放连接的最大数目 -->
         <property name="maxIdle" value="${redis.maxIdle}"/>
+        <!-- 释放连接的扫描间隔（毫秒） -->
         <property name="maxTotal" value="${redis.maxActive}"/>
+        <!-- 获取连接时的最大等待毫秒数,小于零:阻塞不确定的时间,默认-1 -->
         <property name="maxWaitMillis" value="${redis.maxWait}"/>
+        <!-- 在获取连接的时候检查有效性, 默认false -->
         <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+<!--
+
+        &lt;!&ndash; 每次释放连接的最大数目 &ndash;&gt;
+        <property  name="numTestsPerEvictionRun" value="${redis.numTestsPerEvictionRun}"/>
+        &lt;!&ndash; 释放连接的扫描间隔（毫秒） &ndash;&gt;
+        <property name="timeBetweenEvictionRunsMillis" value="${redis.timeBetweenEvictionRunsMillis}"/>
+        &lt;!&ndash; 连接最小空闲时间 &ndash;&gt;
+        <property name="minEvictableIdleTimeMillis" value="${redis.minEvictableIdleTimeMillis}"/>
+        &lt;!&ndash; 连接空闲多久后释放, 当空闲时间>该值且空闲连接>最大空闲连接数时直接释放 &ndash;&gt;
+        <property name="softMinEvictableIdleTimeMillis" value="10000"/>
+        &lt;!&ndash; 在空闲时检查有效性, 默认false &ndash;&gt;
+        <property name="testWhileIdle" value="${redis.testWhileIdle}"/>
+        &lt;!&ndash; 连接耗尽时是否阻塞, false报异常,ture阻塞直到超时, 默认true &ndash;&gt;
+        <property name="blockWhenExhausted" value="${redis.blockWhenExhausted}"/>
+-->
+
     </bean>
+
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+        <constructor-arg name="poolConfig" ref="poolConfig" />
+        <constructor-arg name="host" value="${redis.host}" />
+        <constructor-arg name="port" value="${redis.port}" type="int" />
+        <constructor-arg name="timeout" value="${redis.timeOut}" type="int" />
+        <constructor-arg name="password" value="${redis.pass}" />
+        <constructor-arg name="database" value="${redis.database}" type="int" />
+    </bean>
+
     <!-- Spring-redis连接池管理工厂 -->
     <bean id="jedisConnectionFactory"
           class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
