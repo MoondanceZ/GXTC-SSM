@@ -1,141 +1,145 @@
 package com.rk.common.cache;
 
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
-import org.apache.ibatis.cache.Cache;
+import com.rk.common.cache.Impl.RedisCacheImpl;
+import com.rk.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.connection.jedis.JedisConnection;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializer;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
-import redis.clients.jedis.exceptions.JedisConnectionException;
+import java.util.List;
 
 /**
- * 使用第三方内存数据库Redis作为二级缓存
  * Created by Qin_Yikai on 2018-10-10.
  */
 public class RedisCache implements Cache {
+    private static final Logger logger = LoggerFactory.getLogger(RedisCacheImpl.class);
+    /*
+        @Autowired
+        private JedisPool jedisPool;*/
+    private Jedis jedis;
+/*
+    public Jedis getJedis() {
+        if (jedis == null) {
+            jedis = jedisPool.getResource();
+        }
+        return jedis;
+    }*/
 
-    private static final Logger logger = LoggerFactory.getLogger(RedisCache.class);
-
-    private static JedisConnectionFactory jedisConnectionFactory;
-
-    private final String id;
+    public RedisCache(JedisPool jedisPool) {
+        jedis = jedisPool.getResource();
+    }
 
     /**
-     * The {@code ReadWriteLock}.
+     * 存入List集合中
+     *
+     * @param key
+     * @param value
+     * @return
      */
-    private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
-
-    public RedisCache(final String id) {
-        if (id == null) {
-            throw new IllegalArgumentException("Cache instances require an ID");
-        }
-        logger.debug("MybatisRedisCache:id=" + id);
-        this.id = id;
-    }
-
     @Override
-    public void clear() {
-        JedisConnection connection = null;
+    public long lpush(String key, String value) {
         try {
-            connection = jedisConnectionFactory.getConnection();
-            connection.flushDb();
-            connection.flushAll();
-        } catch (JedisConnectionException e) {
+            long result = jedis.lpush(key, value);
+            return result;
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            logger.error("Jedis lpush 异常 ：" + e.getMessage());
+            return 0;
         }
     }
 
+    /**
+     * 获取指定值
+     *
+     * @param timeout
+     * @param key
+     * @return
+     */
     @Override
-    public String getId() {
-        return this.id;
-    }
-
-    @Override
-    public Object getObject(Object key) {
-        Object result = null;
-        JedisConnection connection = null;
+    public List<String> brpop(int timeout, String key) {
         try {
-            connection = jedisConnectionFactory.getConnection();
-            RedisSerializer<Object> serializer = new JdkSerializationRedisSerializer();
-            result = serializer.deserialize(connection.get(serializer.serialize(key)));
-        } catch (JedisConnectionException e) {
+            return jedis.brpop(timeout, key);
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            logger.error("Jedis brpop 异常 ：" + e.getMessage());
+            return null;
         }
-        return result;
     }
 
+    /**
+     * 给Redis中Set集合中某个key值设值
+     *
+     * @param key
+     * @param value
+     */
     @Override
-    public ReadWriteLock getReadWriteLock() {
-        // TODO Auto-generated method stub
-        return this.readWriteLock;
-    }
-
-    @Override
-    public int getSize() {
-        int result = 0;
-        JedisConnection connection = null;
+    public void set(String key, String value) {
         try {
-            connection = jedisConnectionFactory.getConnection();
-            result = Integer.valueOf(connection.dbSize().toString());
-        } catch (JedisConnectionException e) {
+            jedis.set(key, value);
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (connection != null) {
-                connection.close();
-            }
+            logger.error("Jedis set 异常" + e.getMessage());
         }
-        return result;
+    }
+
+    /**
+     * 给Redis中Set集合中某个key值设值 过期时间
+     *
+     * @param key
+     * @param seconds
+     * @param value
+     */
+    @Override
+    public void setex(String key, int seconds, String value) {
+        try {
+            jedis.setex(key, seconds, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Jedis set 异常" + e.getMessage());
+        }
+    }
+
+    /**
+     * 从Redis中Set集合中获取key对应value值
+     *
+     * @param key
+     */
+    @Override
+    public String get(String key) {
+        try {
+            return jedis.get(key);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Jedis get 异常" + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * 序列化
+     *
+     * @param key
+     * @param t
+     */
+    @Override
+    public <T> void setObject(String key, T t) {
+        set(key, JsonUtils.Serialize(t));
     }
 
     @Override
-    public void putObject(Object key, Object value) {
-        JedisConnection connection = null;
-        try {
-            connection = jedisConnectionFactory.getConnection();
-            RedisSerializer<Object> serializer = new JdkSerializationRedisSerializer();
-            connection.set(serializer.serialize(key), serializer.serialize(value));
-        } catch (JedisConnectionException e) {
-            e.printStackTrace();
-        } finally {
-            if (connection != null) {
-                connection.close();
-            }
-        }
+    public <T> void setexObject(String key, int seconds, T t) {
+        setex(key, seconds, JsonUtils.Serialize(t));
     }
 
     @Override
-    public Object removeObject(Object key) {
-        JedisConnection connection = null;
-        Object result = null;
-        try {
-            connection = jedisConnectionFactory.getConnection();
-            RedisSerializer<Object> serializer = new JdkSerializationRedisSerializer();
-            result = connection.expire(serializer.serialize(key), 0);
-        } catch (JedisConnectionException e) {
-            e.printStackTrace();
-        } finally {
-            if (connection != null) {
-                connection.close();
-            }
-        }
-        return result;
-    }
+    public <T> T getObject(String key, Class<T> clazz) {
 
-    public static void setJedisConnectionFactory(JedisConnectionFactory jedisConnectionFactory) {
-        RedisCache.jedisConnectionFactory = jedisConnectionFactory;
+        String value = get(key);
+        if (value != null) {
+            return JsonUtils.Deserialize(value, clazz);
+        }
+        return null;
     }
 
 }

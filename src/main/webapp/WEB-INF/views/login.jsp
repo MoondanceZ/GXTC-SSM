@@ -63,7 +63,8 @@
                         }
                     },
                     complete: function () {
-                        layer.closeAll();
+                        //layer.closeAll();
+                        layer.close(index);
                     }
                 });
 
