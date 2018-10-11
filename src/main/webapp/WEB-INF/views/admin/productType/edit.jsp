@@ -73,7 +73,7 @@
 
         //监听提交
         form.on('submit(submit)', function (data) {
-            //layer.msg(JSON.stringify(data.field));
+            var loadIndex = layer.load(0);
             $.ajax({
                 type: "POST",
                 url: "/productType/save",
@@ -81,7 +81,7 @@
                 dataType: "json",
                 contentType: "application/json",
                 success: function (data) {
-                    //layer.alert(JSON.stringify(data.field));
+                    layer.close(loadIndex);
                     if (data.success) {
                         //parent 是 JS 自带的全局对象，可用于操作父页面
                         var index = parent.layer.getFrameIndex(window.name); //获取窗口索引

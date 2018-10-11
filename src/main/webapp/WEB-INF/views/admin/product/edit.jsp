@@ -20,7 +20,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">产品名称</label>
             <div class="layui-input-block">
-                <input type="text" name="name" lay-verify="notempty11" lay-vertype="tips" autocomplete="off"
+                <input type="text" name="name" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
                        placeholder="请输入类型名称"
                        class="layui-input" value="${product.name}">
             </div>
@@ -97,7 +97,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">产品价格</label>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="price" lay-verify="price" lay-vertype="tips" value="${product.price}"
+                    <input type="text" name="price" lay-verify="notempty|price" lay-vertype="tips" value="${product.price}"
                            placeholder="￥产品价格" autocomplete="off"
                            class="layui-input">
                 </div>
@@ -119,7 +119,7 @@
             <div class="layui-inline">
                 <label class="layui-form-label">数量</label>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="count" lay-verify="number" lay-vertype="tips" value="${product.count}"
+                    <input type="text" name="count" lay-verify="notempty|number" lay-vertype="tips" value="${product.count}"
                            placeholder="数量" autocomplete="off"
                            class="layui-input">
                 </div>
@@ -199,10 +199,10 @@
                     }
                 },
                 price: function (value, obj) {
-                   /* if (!/(^[1-9]\d*$)|(^[1-9]\d*[.][0-9]{1,2}$)/.test(value)) {
+                    if (!/(^[1-9]\d*$)|(^[1-9]\d*[.][0-9]{1,2}$)/.test(value)) {
                         var vname = $(obj).parent().prev().text();
                         return vname + '只能输入数字, 小数点后只能保留2位小数'
-                    }*/
+                    }
                 }
                 /*    ,pass: [/(.+){6,12}$/, '密码必须6到12位']
                  ,content: function(value){
@@ -215,7 +215,7 @@
                 //console.log(descriptionEditor.html());
                 descriptionEditor.sync();
                 var formData = new FormData($('#editForm')[0]);
-
+                var loadIndex = layer.load(0);
                 $.ajax({
                     type: "POST",
                     url: "/product/save",
@@ -224,7 +224,7 @@
                     processData: false,  //必须false才会避开jQuery对 formdata 的默认处理
                     contentType: false,  //必须false才会自动加上正确的Content-Type
                     success: function (data) {
-                        //layer.alert(JSON.stringify(data.field));
+                        layer.close(loadIndex);
                         if (data.success) {
                             //parent 是 JS 自带的全局对象，可用于操作父页面
                             var index = parent.layer.getFrameIndex(window.name); //获取窗口索引
