@@ -6,6 +6,8 @@ import com.rk.dto.ReturnResult;
 import com.rk.dto.request.PageRequest;
 import com.rk.entity.BaseEntity;
 import com.rk.service.interfaces.BaseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -14,11 +16,16 @@ import java.util.List;
  * Created by Qin_Yikai on 2018-10-10.
  */
 public class BaseServiceImpl<T extends BaseEntity, K> implements BaseService<T, K> {
+    private static final Logger logger = LoggerFactory.getLogger(BaseServiceImpl.class);
+
     @Autowired
-    private BaseMapper<T, K> baseMapper;
+    protected BaseMapper<T, K> baseMapper;
 
     @Override
     public ReturnResult delete(K[] keys) {
+        if (keys == null || keys.length == 0)
+            return ReturnResult.Error("没有提供需要删除的Id");
+
         if (baseMapper.delete(keys) > 0)
             return ReturnResult.Success("删除成功");
         else

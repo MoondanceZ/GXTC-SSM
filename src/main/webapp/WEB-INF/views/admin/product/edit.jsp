@@ -199,7 +199,7 @@
                     }
                 },
                 price: function (value, obj) {
-                    if (!/(^[1-9]\d*$)|(^[1-9]\d*[.][0-9]{1,2}$)/.test(value)) {
+                    if (!value.match(/^\s*$/) && !/(^[1-9]\d*$)|(^[1-9]\d*[.][0-9]{1,2}$)/.test(value)) {
                         var vname = $(obj).parent().prev().text();
                         return vname + '只能输入数字, 小数点后只能保留2位小数'
                     }

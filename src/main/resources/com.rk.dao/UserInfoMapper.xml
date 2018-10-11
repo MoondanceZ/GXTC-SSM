@@ -23,4 +23,11 @@
     <insert id="updateUserLoginDate">
         UPDATE userInfo SET lastLoginDate = #{date} WHERE id = #{id}
     </insert>
+
+    <delete id="delete">
+        DELETE FROM userInfo WHERE id IN
+        <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
 </mapper>

@@ -112,6 +112,21 @@
         WHERE
         id = #{id}
 
-
     </update>
+
+    <delete id="delete">
+        DELETE FROM product WHERE id IN
+        <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+
+    <select id="getByTypeIds" resultType="java.lang.Integer">
+        SELECT typeId FROM product WHERE <![CDATA[status <> -1]]> AND typeId IN
+        <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        GROUP BY typeId
+    </select>
 </mapper>

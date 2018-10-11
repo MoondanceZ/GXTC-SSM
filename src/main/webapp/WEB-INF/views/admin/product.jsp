@@ -145,7 +145,7 @@
                 if (obj.event === 'del') {
                     layer.confirm('真的删除行么', function (index) {
                         var param = {ids: [objData.id]};
-                        $.post("/productType/delete", param, function (result) {
+                        $.post("/product/delete", param, function (result) {
                             layer.close(index);
                             if (result.success) {
                                 layer.msg(result.message);

@@ -98,4 +98,10 @@ public class ProductController extends BaseController {
 
         return productService.updateOrAdd(product);
     }
+
+    @RequestMapping(value = "/delete")
+    @ResponseBody()
+    public ReturnResult Delete(@RequestParam("ids[]") Long[] ids) {
+        return productService.delete(ids);
+    }
 }
