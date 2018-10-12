@@ -5,8 +5,8 @@ import com.rk.common.exception.DataNotFoundException;
 import com.rk.controller.FileController;
 import com.rk.dto.ReturnResult;
 import com.rk.util.AjaxUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -19,7 +19,7 @@ import java.io.IOException;
  * Created by Qin_Yikai on 2018-10-01.
  */
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
-    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
+    private static final Logger logger = LogManager.getLogger(FileController.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {

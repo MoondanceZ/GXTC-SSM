@@ -1,8 +1,8 @@
 package com.rk.util;
 
 import com.rk.controller.WebExceptionHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +14,7 @@ import java.io.OutputStream;
  * Created by Qin_Yikai on 2018-10-09.
  */
 public class AjaxUtils {
-    private static final Logger logger = LoggerFactory.getLogger(WebExceptionHandler.class);
+    private static final Logger logger = LogManager.getLogger(WebExceptionHandler.class);
 
 
     /**

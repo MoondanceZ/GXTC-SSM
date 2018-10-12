@@ -22,6 +22,8 @@
         <jackson.version>2.8.5</jackson.version>
         <!--commons-text-->
         <commons-text.version>1.5</commons-text.version>
+        <!--durid.version-->
+        <durid.version>1.1.11</durid.version>
     </properties>
 
     <dependencies>
@@ -41,7 +43,7 @@
         </dependency>
 
         <!-- 实现slf4j接口并整合 -->
-        <dependency>
+     <!--   <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
             <version>1.5.8</version>
@@ -55,7 +57,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>1.5.8</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
@@ -100,6 +102,13 @@
             <groupId>com.mchange</groupId>
             <artifactId>c3p0</artifactId>
             <version>0.9.5.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>${durid.version}</version>
         </dependency>
 
         <!-- MyBatis -->

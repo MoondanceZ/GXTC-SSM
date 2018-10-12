@@ -1,8 +1,8 @@
 package com.rk.controller;
 
 import com.rk.util.FileUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 @RequestMapping("file")
 @Controller
 public class FileController extends BaseController {
-    private static final Logger logger = LoggerFactory.getLogger(FileController.class);
+    private static final Logger logger = LogManager.getLogger(FileController.class);
 
     @RequestMapping("uploadImage")
     @ResponseBody

@@ -5,7 +5,8 @@ import com.rk.common.exception.DataNotFoundException;
 import com.rk.dto.ReturnResult;
 import com.rk.util.AjaxUtils;
 import com.rk.util.ValidatorHelper;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
@@ -28,7 +29,7 @@ import java.io.IOException;
  */
 @ControllerAdvice()
 public class WebExceptionHandler {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(WebExceptionHandler.class);
+    private static final Logger logger = LogManager.getLogger(WebExceptionHandler.class);
 
     /**
      * @param exception UnexpectedTypeException

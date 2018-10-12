@@ -2,8 +2,8 @@ package com.rk.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
@@ -12,7 +12,7 @@ import java.io.IOException;
  * Created by Qin_Yikai on 2018-10-02.
  */
 public class JsonUtils {
-    private static final Logger logger = LoggerFactory.getLogger(JsonUtils.class);
+    private static final Logger logger = LogManager.getLogger(JsonUtils.class);
 
     public static String ConvertObjectToJson(Object object) throws JsonProcessingException {
         if (object == null) {
