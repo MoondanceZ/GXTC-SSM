@@ -53,13 +53,4 @@
         <property name="basePackage" value="com.rk.dao"/>
     </bean>
 
-    <!--注入redisDao-->
-    <!--<bean id="redisDao" class="com.nnngu.dao.cache.RedisDao">
-        &lt;!&ndash;构造方法注入值&ndash;&gt;
-        &lt;!&ndash;这里的IP地址是我安装了redis的虚拟机的IP地址&ndash;&gt;
-        &lt;!&ndash;如果redis安装在本地，请把这里的IP地址改为本地IP地址&ndash;&gt;
-        <constructor-arg index="0" value="172.16.157.129"/>
-        <constructor-arg index="1" value="6379"/>
-    </bean>-->
-
 </beans>
