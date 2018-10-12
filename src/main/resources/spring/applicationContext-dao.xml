@@ -75,7 +75,7 @@
         </property>
     </bean>
     <bean id="logFilter" class="com.alibaba.druid.filter.logging.Log4jFilter">
-        <property name="statementExecutableSqlLogEnable" value="false" />
+        <property name="statementExecutableSqlLogEnable" value="true" />
     </bean>
 
     <!--配置sqlSessionFactory对象-->
