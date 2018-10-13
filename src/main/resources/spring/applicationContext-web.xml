@@ -75,6 +75,13 @@
         <property name="maxUploadSize" value="5242880"></property>
     </bean>
 
+    <!--输入参数忽略大小写-->
+    <bean id="caseInsensitiveRequestFilterProxy" class="org.springframework.web.filter.DelegatingFilterProxy">
+        <property name="targetBeanName" value="caseInsensitiveRequestFilter"/>
+    </bean>
+    <bean id="caseInsensitiveRequestFilter"
+          class="com.rk.common.filter.CaseInsensitiveRequestParameterNameFilter">
+    </bean>
 
     <!--配置JSP 显示ViewResolver-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -95,13 +102,13 @@
         </bean>-->
 
     <!--扫描web相关的controller-->
-<!--    <context:component-scan base-package="com.rk.controller"/>-->
+    <!--    <context:component-scan base-package="com.rk.controller"/>-->
     <context:component-scan base-package="com.rk.controller" use-default-filters="false">
-       <!-- base-package 如果多个，用“,”分隔 -->
-       <context:include-filter type="annotation"
-                               expression="org.springframework.stereotype.Controller"/>
-       <!--控制器增强，使一个Contoller成为全局的异常处理类，类中用@ExceptionHandler方法注解的方法可以处理所有Controller发生的异常-->
-       <context:include-filter type="annotation"
-                               expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
-   </context:component-scan>
+        <!-- base-package 如果多个，用“,”分隔 -->
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+        <!--控制器增强，使一个Contoller成为全局的异常处理类，类中用@ExceptionHandler方法注解的方法可以处理所有Controller发生的异常-->
+        <context:include-filter type="annotation"
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
 </beans>
