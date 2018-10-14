@@ -1,5 +1,6 @@
 package com.rk.common.config;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
@@ -7,6 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 /**
  * Created by Qin_Yikai on 2018-10-13.
  */
+@Configuration
 public class SpringWebConfig  extends WebMvcConfigurationSupport {
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
