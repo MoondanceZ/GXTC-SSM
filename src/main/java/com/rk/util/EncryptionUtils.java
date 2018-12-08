@@ -240,18 +240,4 @@ public final class EncryptionUtils {
     public static String decryptBASE64(String source) {
         return new String(Base64.getDecoder().decode(source.getBytes()));
     }
-
-    private static SecretKeySpec getKey(String strKey) {
-        byte[] arrBTmp = strKey.getBytes();
-        byte[] arrB = new byte[16]; // 创建一个空的16位字节数组（默认值为0）
-
-        for (int i = 0; i < arrBTmp.length && i < arrB.length; i++) {
-            arrB[i] = arrBTmp[i];
-        }
-
-        SecretKeySpec skeySpec = new SecretKeySpec(arrB, "AES");
-
-        return skeySpec;
-    }
-
 }
