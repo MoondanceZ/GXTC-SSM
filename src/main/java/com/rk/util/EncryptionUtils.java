@@ -1,5 +1,7 @@
 package com.rk.util;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.util.StringUtils;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -7,8 +9,8 @@ import sun.misc.BASE64Encoder;
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.Base64;
 
@@ -17,8 +19,8 @@ import java.util.Base64;
  */
 @SuppressWarnings("restriction")
 public final class EncryptionUtils {
-
-    public static final String AES_ENCRYPT_KEY = "MOONDANCEZ";
+    private static final Logger logger = LogManager.getLogger(EncryptionUtils.class);
+    private static final String AES_ENCRYPT_KEY = "MOONDANCEZ";
 
     /**
      * MD5加密
@@ -64,27 +66,17 @@ public final class EncryptionUtils {
         try {
             Cipher cipher = getCipher(Cipher.ENCRYPT_MODE);
             //8.获取加密内容的字节数组(这里要设置为utf-8)不然内容中如果有中文和英文混合中文就会解密为乱码
-            byte[] byte_encode = source.getBytes("utf-8");
+            byte[] byte_encode = source.getBytes(StandardCharsets.UTF_8);
             //9.根据密码器的初始化方式--加密：将数据加密
             byte[] byte_AES = cipher.doFinal(byte_encode);
             //10.将加密后的数据转换为字符串
             //这里用Base64Encoder中会找不到包
             //解决办法：
             //在项目的Build path中先移除JRE System Library，再添加库JRE System Library，重新编译后就一切正常了。
-            String AES_encode = new BASE64Encoder().encode(byte_AES);
             //11.将字符串返回
-            return AES_encode;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
+            return new BASE64Encoder().encode(byte_AES);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
 
@@ -97,7 +89,7 @@ public final class EncryptionUtils {
         KeyGenerator keygen = KeyGenerator.getInstance("AES");
         //2.根据AES_ENCRYPT_KEY规则初始化密钥生成器
         //生成一个128位的随机源,根据传入的字节数组
-        SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG" );
+        SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
         secureRandom.setSeed(AES_ENCRYPT_KEY.getBytes());
         keygen.init(128, secureRandom);
         //3.产生原始对称密钥
@@ -132,19 +124,9 @@ public final class EncryptionUtils {
              * 解密
              */
             byte[] byte_decode = cipher.doFinal(byte_content);
-            String AES_decode = new String(byte_decode, "utf-8");
-            return AES_decode;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        } catch (BadPaddingException e) {
+            return new String(byte_decode, StandardCharsets.UTF_8);
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IOException | IllegalBlockSizeException | BadPaddingException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         }
 
