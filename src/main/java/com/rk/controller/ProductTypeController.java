@@ -27,8 +27,7 @@ public class ProductTypeController extends BaseController  {
     @RequestMapping(value = "/pageList", method = RequestMethod.GET)
     @ResponseBody
     public LayPage<List<ProductType>> ProductType(PageRequest pageRequest) {
-        LayPage<List<ProductType>> productTypes = productTypeService.getPageList(pageRequest);
-        return productTypes;
+        return productTypeService.getPageList(pageRequest);
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
@@ -36,7 +35,7 @@ public class ProductTypeController extends BaseController  {
         if (id != null) {
             ProductType productType = productTypeService.getByPrimaryKey(id);
             if (productType == null)
-                throw new DataNotFoundException();
+                throw new DataNotFoundException("产品类型不存在");
             model.addAttribute("productType", productType);
         } else {
             model.addAttribute("productType", new ProductType());

@@ -22,7 +22,7 @@
                 <select name="status">
                     <option value>产品状态</option>
                     <option value="1">在售</option>
-                    <option value="2">下架</option>
+                    <option value="0">下架</option>
                 </select>
             </div>
             <input type="text" name="originPlace" placeholder="输入产品产地" autocomplete="off" class="layui-input">
