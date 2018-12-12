@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by Qin_Yikai on 2018-10-09.
@@ -25,16 +26,15 @@ public class AjaxUtils {
      */
     public static boolean isAjaxRequest(WebRequest webRequest) {
         String requestedWith = webRequest.getHeader("X-Requested-With");
-        return requestedWith != null ? "XMLHttpRequest".equalsIgnoreCase(requestedWith) : false;
+        return "XMLHttpRequest".equalsIgnoreCase(requestedWith);
     }
 
     public static boolean isAjaxRequest(HttpServletRequest httpRequest) {
         String requestedWith = httpRequest.getHeader("X-Requested-With");
-        return requestedWith != null ? "XMLHttpRequest".equalsIgnoreCase(requestedWith) : false;
+        return "XMLHttpRequest".equalsIgnoreCase(requestedWith);
     }
 
     public static void writeJson(Object value, HttpServletResponse response) {
-
         try {
             /*JsonGenerator jsonGenerator = null;
             jsonGenerator = mapper.getFactory().createGenerator(response.getOutputStream(), JsonEncoding.UTF8);
@@ -47,7 +47,7 @@ public class AjaxUtils {
 
             String userJson = JsonUtils.ConvertObjectToJson(value);
             OutputStream out = response.getOutputStream();
-            out.write(userJson.getBytes("UTF-8"));
+            out.write(userJson.getBytes(StandardCharsets.UTF_8));
             out.close();
         } catch (IOException e) {
             logger.error("writeJson error", e);

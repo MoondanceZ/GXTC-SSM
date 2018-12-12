@@ -1,6 +1,5 @@
 package com.rk.common.cache;
 
-import com.rk.common.cache.Impl.RedisCacheImpl;
 import com.rk.util.JsonUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -13,7 +12,7 @@ import java.util.List;
  * Created by Qin_Yikai on 2018-10-10.
  */
 public class RedisCache implements Cache {
-    private static final Logger logger = LogManager.getLogger(RedisCacheImpl.class);
+    private static final Logger logger = LogManager.getLogger(MybatisRedisCache.class);
     /*
         @Autowired
         private JedisPool jedisPool;*/
