@@ -1,0 +1,114 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rk.dao.CustomerMapper">
+    <cache eviction="LRU" type="com.rk.common.cache.MybatisRedisCache" />
+    <resultMap id="BaseResultMap" type="com.rk.entity.Customer">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result property="uid" column="uid" javaType="String" jdbcType="VARCHAR"/>
+        <result property="showId" column="showId" javaType="String" jdbcType="VARCHAR"/>
+        <result property="account" column="account" javaType="String" jdbcType="VARCHAR"/>
+        <result property="password" column="password" javaType="String" jdbcType="VARCHAR"/>
+        <result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>
+        <result property="point" column="point" javaType="Integer" jdbcType="INT"/>
+        <result property="level" column="level" javaType="Short" jdbcType="SMALLINT"/>
+        <result property="balance" column="balance" javaType="Double" jdbcType="DECIMAL"/>
+        <result property="consumptionAmount" column="consumptionAmount" javaType="Double" jdbcType="DECIMAL"/>
+        <result property="headImg" column="headImg" javaType="String" jdbcType="VARCHAR"/>
+        <result property="email" column="email" javaType="String" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" javaType="String" jdbcType="VARCHAR"/>
+        <result property="birthday" column="birthday" javaType="Date" jdbcType="DATE"/>
+        <result property="joinTime" column="joinTime" javaType="Date" jdbcType="DATETIME"/>
+        <result property="lastLoginTime" column="lastLoginTime" javaType="Date" jdbcType="DATETIME"/>
+    </resultMap>
+    <select id="getByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM customer WHERE id = #{id}
+    </select>
+
+    <sql id="pageWhere">
+        <where>
+            <if test="queryString != null and queryString != ''">
+                AND xxxx LIKE CONCAT('%', #{queryString}, '%')
+            </if>
+        </where>
+    </sql>
+
+    <select id="getPageList" resultMap="BaseResultMap">
+        <bind name="offest" value="(page-1)*limit"></bind>
+        SELECT * FROM product
+        <include refid="pageWhere"></include>
+        ORDER BY id LIMIT #{offest}, #{limit}
+    </select>
+
+    <select id="getPageListTotalCount" resultType="int">
+        SELECT count(*) FROM product
+        <include refid="pageWhere"></include>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO customer (
+            uid,
+            showId,
+            account,
+            password,
+            name,
+            point,
+            level,
+            balance,
+            consumptionAmount,
+            headImg,
+            email,
+            phone,
+            birthday,
+            joinTime,
+            lastLoginTime
+        )
+        VALUES
+        (
+            #{uid},
+            #{showId},
+            #{account},
+            #{password},
+            #{name},
+            #{point},
+            #{level},
+            #{balance},
+            #{consumptionAmount},
+            #{headImg},
+            #{email},
+            #{phone},
+            #{birthday},
+            #{joinTime},
+            #{lastLoginTime}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE customer
+        <set>
+            uid = #{uid},
+            showId = #{showId},
+            account = #{account},
+            password = #{password},
+            name = #{name},
+            point = #{point},
+            level = #{level},
+            balance = #{balance},
+            consumptionAmount = #{consumptionAmount},
+            headImg = #{headImg},
+            email = #{email},
+            phone = #{phone},
+            birthday = #{birthday},
+            joinTime = #{joinTime},
+            lastLoginTime = #{lastLoginTime}
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM customer WHERE id IN
+        <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

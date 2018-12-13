@@ -1,6 +1,5 @@
 package com.rk.dao;
 
-import com.rk.dto.request.PageRequest;
 import com.rk.entity.ProductType;
 import org.apache.ibatis.annotations.Param;
 

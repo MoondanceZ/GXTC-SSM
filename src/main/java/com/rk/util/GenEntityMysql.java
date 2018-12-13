@@ -1,9 +1,7 @@
 package com.rk.util;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,6 +11,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Created by Qin_Yikai on 2018-09-20.
@@ -20,8 +19,11 @@ import java.util.Map;
 public class GenEntityMysql {
 
     private String packageOutPath = "com.rk.entity";//指定实体生成所在包的路径
+    private String serviceOutPutPath = "com.rk.service";
+    private String serviceInterfaceOutPutPath = "com.rk.service.interfaces";
+    private String daoOutPutPath = "com.rk.dao";
     private String authorName = "Qin_Yikai";//作者名字
-    private String tablename = "product";//表名
+    private String tablename = "customer";//表名
     private String[] colnames; // 列名数组
     private String[] colTypes; //列名类型数组
     private int[] colSizes; //列名大小数组
@@ -30,15 +32,28 @@ public class GenEntityMysql {
     private boolean f_sql = false; // 是否需要导入包java.sql.*
 
     //数据库连接
-    private static final String URL = "jdbc:mysql://localhost:3306/gxtc?useUnicode=true&characterEncoding=utf-8&useSSL=false";
-    private static final String NAME = "root";
-    private static final String PASS = "123456";
-    private static final String DRIVER = "com.mysql.jdbc.Driver";
+    private static String URL = "jdbc:mysql://localhost:3306/gxtc?useUnicode=true&characterEncoding=utf-8&useSSL=false";
+    private static String NAME = "root";
+    private static String PASS = "123456";
+    private static String DRIVER = "com.mysql.jdbc.Driver";
 
     /*
      * 构造函数
      */
-    public GenEntityMysql() {
+    public GenEntityMysql() throws IOException {
+        //配置链接
+        File directory = new File("");
+        Properties props = new Properties();
+        InputStreamReader reader = new InputStreamReader(new FileInputStream(directory.getAbsolutePath() + "/src/main/resources/jdbc.properties"), "utf-8");
+        //InputStream resourceAsStream = GenEntityMysql.class.getResourceAsStream(directory.getAbsolutePath() + "/src/main/resources/jdbc.properties");
+        props.load(reader);
+        reader.close();
+
+        GenEntityMysql.URL = props.getProperty("jdbc.url");
+        GenEntityMysql.DRIVER = props.getProperty("jdbc.driver");
+        GenEntityMysql.PASS = props.getProperty("jdbc.password");
+        GenEntityMysql.NAME = props.getProperty("jdbc.user");
+
         //创建连接
         Connection con = null;
         //查要生成实体类的表
@@ -87,19 +102,11 @@ public class GenEntityMysql {
 //            System.out.println(comment);
             String content = parse(colnames, colTypes, colSizes);
 
-            try {
-                File directory = new File("");
-                String outputPath = directory.getAbsolutePath() + "\\src\\main\\java\\" + this.packageOutPath.replace(".", "\\") + "\\";
-                File file = new File(outputPath);
-                file.mkdirs();
-                FileWriter fw = new FileWriter(outputPath + initcap(tabnameToHump(tablename)) + ".java");
-                PrintWriter pw = new PrintWriter(fw);
-                pw.println(content);
-                pw.flush();
-                pw.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            /*writeToFile(content, 1);
+            genService();
+            genServiceInterface();
+            genDao();*/
+            genDaoXml();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,6 +116,47 @@ public class GenEntityMysql {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void writeToFile(String content, int pathType) {
+        try {
+            File directory = new File("");
+            String initcapTabName = initcap(tabnameToHump(tablename));
+            String pathTemp = "";
+            String fileName = "";
+            switch (pathType) {
+                case 1:
+                    pathTemp = "/src/main/java/" + this.packageOutPath.replace(".", "/") + "/";
+                    fileName = initcapTabName + ".java";
+                    break;
+                case 2:
+                    pathTemp = "/src/main/java/" + this.serviceInterfaceOutPutPath.replace(".", "/") + "/";
+                    fileName = initcapTabName + "Service.java";
+                    break;
+                case 3:
+                    pathTemp = "/src/main/java/" + this.serviceOutPutPath.replace(".", "/") + "/";
+                    fileName = initcapTabName + "ServiceImpl.java";
+                    break;
+                case 4:
+                    pathTemp = "/src/main/java/" + this.daoOutPutPath.replace(".", "/") + "/";
+                    fileName = initcapTabName + "Mapper.java";
+                    break;
+                case 5:
+                    pathTemp = "/src/main/resources/com.rk.dao/";
+                    fileName = initcapTabName + "Mapper.xml";
+                    break;
+            }
+            String outputPath = directory.getAbsolutePath() + pathTemp;
+            File file = new File(outputPath);
+            file.mkdirs();
+            FileWriter fw = new FileWriter(outputPath + fileName);
+            PrintWriter pw = new PrintWriter(fw);
+            pw.println(content);
+            pw.flush();
+            pw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -131,15 +179,10 @@ public class GenEntityMysql {
         if (f_sql) {
             sb.append("import java.sql.*;\r\n");
         }
-        //注释部分
-        sb.append("\r\n");
-        sb.append("/**\r\n");
-        sb.append(" * " + tablename + " 实体类\r\n");
-        sb.append(" * " + new Date() + " " + this.authorName + "\r\n");
-        sb.append(" */ \r\n");
+        processClassComment(sb);
         //实体部分
         sb.append("\r\n");
-        sb.append("public class " + initcap(tabnameToHump(tablename)) + " {\r\n");
+        sb.append("public class " + initcap(tabnameToHump(tablename)) + " extends BaseEntity<Long> {\r\n");
         processAllAttrs(sb);//属性
         processAllMethod(sb);//get set方法
         sb.append("}\r\n");
@@ -155,6 +198,8 @@ public class GenEntityMysql {
     private void processAllAttrs(StringBuffer sb) {
 
         for (int i = 0; i < colnames.length; i++) {
+            if (colnames[i].equalsIgnoreCase("id"))
+                continue;
             sb.append("\r\n");
             sb.append("   /**\r\n");
             sb.append("     * " + comment.get(colnames[i]) + "\r\n");
@@ -172,6 +217,8 @@ public class GenEntityMysql {
     private void processAllMethod(StringBuffer sb) {
 
         for (int i = 0; i < colnames.length; i++) {
+            if (colnames[i].equalsIgnoreCase("id"))
+                continue;
             sb.append("\tpublic " + sqlType2JavaType(colTypes[i]) + " get" + initcap(colnameToHump(colnames[i])) + "(){\r\n");
             sb.append("\t\treturn " + colnameToHump(colnames[i]) + ";\r\n");
             sb.append("\t}\r\n");
@@ -197,7 +244,7 @@ public class GenEntityMysql {
                 tf[i] = initcap(tf[i]);
                 newColName = newColName + tf[i];
             }
-        }else{
+        } else {
             newColName = colnames;
         }
         return newColName;
@@ -239,32 +286,197 @@ public class GenEntityMysql {
     private String sqlType2JavaType(String sqlType) {
 
         if (sqlType.equalsIgnoreCase("bit")) {
-            return "boolean";
+            return "Boolean";
         } else if (sqlType.equalsIgnoreCase("tinyint")) {
-            return "byte";
+            return "Byte";
         } else if (sqlType.equalsIgnoreCase("smallint")) {
-            return "short";
+            return "Short";
         } else if (sqlType.equalsIgnoreCase("int")) {
-            return "int";
+            return "Integer";
         } else if (sqlType.equalsIgnoreCase("bigint")) {
-            return "long";
+            return "Long";
         } else if (sqlType.equalsIgnoreCase("float")) {
-            return "float";
+            return "Float";
         } else if (sqlType.equalsIgnoreCase("decimal") || sqlType.equalsIgnoreCase("numeric")
                 || sqlType.equalsIgnoreCase("real") || sqlType.equalsIgnoreCase("money")
                 || sqlType.equalsIgnoreCase("smallmoney")) {
-            return "double";
+            return "Double";
         } else if (sqlType.equalsIgnoreCase("varchar") || sqlType.equalsIgnoreCase("char")
                 || sqlType.equalsIgnoreCase("nvarchar") || sqlType.equalsIgnoreCase("nchar")
                 || sqlType.equalsIgnoreCase("text")) {
             return "String";
-        } else if (sqlType.equalsIgnoreCase("datetime")) {
+        } else if (sqlType.equalsIgnoreCase("datetime") || sqlType.equalsIgnoreCase("date")) {
             return "Date";
         } else if (sqlType.equalsIgnoreCase("image")) {
-            return "Blod";
+            return "Blob";
         }
 
         return null;
+    }
+
+    private void genServiceInterface() {
+        try {
+            String initcapTabName = initcap(tabnameToHump(tablename));
+            StringBuffer sb = new StringBuffer();
+            sb.append("package " + serviceInterfaceOutPutPath + ";\r\n");
+            sb.append("\r\n");
+            sb.append("import " + packageOutPath + "." + initcapTabName + ";\r\n");
+            sb.append("\r\n");
+            processClassComment(sb);
+
+            //实体部分
+            sb.append("\r\n");
+            sb.append("public interface " + initcapTabName + "Service  extends BaseService<" + initcapTabName + ", Long> {\r\n");
+            sb.append("}\r\n");
+
+            writeToFile(sb.toString(), 2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void genService() {
+        try {
+            String initcapTabName = initcap(tabnameToHump(tablename));
+
+            StringBuffer sb = new StringBuffer();
+            sb.append("package " + serviceOutPutPath + ";\r\n");
+            sb.append("\r\n");
+            sb.append("import com.rk.dao." + initcapTabName + "Mapper;\r\n");
+            sb.append("import " + packageOutPath + "." + initcapTabName + ";\r\n");
+            sb.append("import " + serviceInterfaceOutPutPath + "." + initcapTabName + "Service;\r\n");
+            sb.append("import org.springframework.beans.factory.annotation.Autowired;\r\n");
+            sb.append("import org.springframework.stereotype.Service;\r\n");
+            sb.append("\r\n");
+            processClassComment(sb);
+            //实体部分
+            sb.append("\r\n");
+            sb.append("@Service\r\n");
+            sb.append("public class " + initcapTabName + "ServiceImpl extends BaseServiceImpl<" + initcapTabName + ", Long> implements " + initcapTabName + "Service {\r\n");
+
+            sb.append("\t@Autowired\r\n");
+            sb.append("\tprivate " + initcapTabName + "Mapper " + colnameToHump(tablename) + "Mapper;\r\n");
+            sb.append("}\r\n");
+
+            writeToFile(sb.toString(), 3);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void genDao() {
+        try {
+            String initcapTabName = initcap(tabnameToHump(tablename));
+
+            StringBuffer sb = new StringBuffer();
+            sb.append("package " + daoOutPutPath + ";\r\n");
+            sb.append("\r\n");
+            sb.append("import " + packageOutPath + "." + initcapTabName + ";\r\n");
+            sb.append("\r\n");
+            processClassComment(sb);
+            //实体部分
+            sb.append("\r\n");
+            sb.append("public interface " + initcapTabName + "Mapper extends BaseMapper<" + initcapTabName + ", Long> {\r\n");
+            sb.append("}\r\n");
+
+            writeToFile(sb.toString(), 4);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void genDaoXml() {
+        try {
+            String initcapTabName = initcap(tabnameToHump(tablename));
+            StringBuffer sb = new StringBuffer();
+            StringBuffer sbInsert = new StringBuffer();
+            StringBuffer sbValues = new StringBuffer();
+            StringBuffer sbUpdate = new StringBuffer();
+            sb.append("<!DOCTYPE mapper PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\"\n" +
+                    "        \"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">\n");
+            sb.append("<mapper namespace=\"com.rk.dao." + initcapTabName + "Mapper\">\n");
+            sb.append("    <cache eviction=\"LRU\" type=\"com.rk.common.cache.MybatisRedisCache\" />\n");
+            sb.append("    <resultMap id=\"BaseResultMap\" type=\"com.rk.entity." + initcapTabName + "\">\n");
+
+            for (int i = 0; i < colnames.length; i++) {
+                String colname = colnameToHump(colnames[i]);
+                if (colnames[i].equalsIgnoreCase("id")) {
+                    sb.append("        <id column=\"id\" property=\"id\" jdbcType=\"" + colTypes[i] + "\"/>\n");
+                } else {
+                    sb.append("        <result property=\"" + colname + "\" column=\"" + colnames[i] + "\" javaType=\"" + sqlType2JavaType(colTypes[i]) + "\" jdbcType=\"" + colTypes[i].toUpperCase() + "\"/>\n");
+                    if (i == colnames.length - 1) {
+                        sbInsert.append("            " + colnames[i] + "\n");
+                        sbValues.append("            #{" + colname + "}\n");
+                        sbUpdate.append("            " + colnames[i] + " = #{" + colname + "}\n");
+                    } else {
+                        sbInsert.append("            " + colnames[i] + ",\n");
+                        sbValues.append("            #{" + colname + "},\n");
+                        sbUpdate.append("            " + colnames[i] + " = #{" + colname + "},\n");
+                    }
+
+                }
+            }
+            sb.append("    </resultMap>\n");
+            sb.append("    <select id=\"getByPrimaryKey\" resultMap=\"BaseResultMap\">\n" +
+                    "        SELECT * FROM " + tablename + " WHERE id = #{id}\n" +
+                    "    </select>\n\n");
+
+            sb.append("    <sql id=\"pageWhere\">\n" +
+                    "        <where>\n" +
+                    "            <if test=\"queryString != null and queryString != ''\">\n" +
+                    "                AND xxxx LIKE CONCAT('%', #{queryString}, '%')\n" +
+                    "            </if>\n" +
+                    "        </where>\n" +
+                    "    </sql>\n\n");
+
+            sb.append("    <select id=\"getPageList\" resultMap=\"BaseResultMap\">\n" +
+                    "        <bind name=\"offest\" value=\"(page-1)*limit\"></bind>\n" +
+                    "        SELECT * FROM product\n" +
+                    "        <include refid=\"pageWhere\"></include>\n" +
+                    "        ORDER BY id LIMIT #{offest}, #{limit}\n" +
+                    "    </select>\n\n");
+
+            sb.append("    <select id=\"getPageListTotalCount\" resultType=\"int\">\n" +
+                    "        SELECT count(*) FROM product\n" +
+                    "        <include refid=\"pageWhere\"></include>\n" +
+                    "    </select>\n\n");
+
+            //insert
+            sb.append("    <insert id=\"insert\">\n" +
+                    "        INSERT INTO " + tablename + " (\n");
+            sb.append(sbInsert);
+            sb.append("        )\n" +
+                    "        VALUES\n" +
+                    "        (\n");
+            sb.append(sbValues);
+            sb.append("        )\n" +
+                    "    </insert>\n\n");
+            sb.append("    <update id=\"update\">\n" +
+                    "        UPDATE " + tablename + "\n" +
+                    "        <set>\n");
+            sb.append(sbUpdate);
+            sb.append("        </set>\n" +
+                    "        WHERE\n" +
+                    "        id = #{id}\n" +
+                    "    </update>\n\n");
+            sb.append("    <delete id=\"delete\">\n" +
+                    "        DELETE FROM " + tablename + " WHERE id IN\n" +
+                    "        <foreach collection=\"array\" item=\"item\" index=\"index\" open=\"(\" separator=\",\" close=\")\">\n" +
+                    "            #{item}\n" +
+                    "        </foreach>\n" +
+                    "    </delete>\n");
+            sb.append("</mapper>");
+            writeToFile(sb.toString(), 5);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void processClassComment(StringBuffer sb) {
+        //注释部分
+        sb.append("/**\r\n");
+        sb.append(" * " + new Date() + " " + this.authorName + "\r\n");
+        sb.append(" */ \r\n");
     }
 
     /**
@@ -272,8 +484,7 @@ public class GenEntityMysql {
      *
      * @param args
      */
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws IOException {
         new GenEntityMysql();
     }
 
