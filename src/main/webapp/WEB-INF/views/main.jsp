@@ -55,7 +55,7 @@
                 </a>
                 <ul class="sub-menu">
                     <li>
-                        <a _href="/chen_menber/Index">
+                        <a _href="/admin/customer">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>用户列表</cite>
                         </a>

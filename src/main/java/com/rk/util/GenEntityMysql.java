@@ -1,13 +1,10 @@
 package com.rk.util;
 
 
+import org.apache.ibatis.type.JdbcType;
+
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -102,10 +99,10 @@ public class GenEntityMysql {
 //            System.out.println(comment);
             String content = parse(colnames, colTypes, colSizes);
 
-            /*writeToFile(content, 1);
+            writeToFile(content, 1);
             genService();
             genServiceInterface();
-            genDao();*/
+            genDao();
             genDaoXml();
 
         } catch (SQLException e) {
@@ -314,6 +311,48 @@ public class GenEntityMysql {
         return null;
     }
 
+    private String sqlType2JdbcType(String sqlType) {
+        if (sqlType.equalsIgnoreCase("bit")) {
+            return "BOOLEAN";
+        } else if (sqlType.equalsIgnoreCase("tinyint")) {
+            return "TINYINT";
+        } else if (sqlType.equalsIgnoreCase("smallint")) {
+            return "SMALLINT";
+        } else if (sqlType.equalsIgnoreCase("int")) {
+            return "INTEGER";
+        } else if (sqlType.equalsIgnoreCase("bigint")) {
+            return "BIGINT";
+        } else if (sqlType.equalsIgnoreCase("float")) {
+            return "FLOAT";
+        } else if (sqlType.equalsIgnoreCase("decimal")) {
+            return "DECIMAL";
+        } else if (sqlType.equalsIgnoreCase("numeric")) {
+            return "NUMERIC";
+        } else if (sqlType.equalsIgnoreCase("real")) {
+            return "REAL";
+        } else if (sqlType.equalsIgnoreCase("money") || sqlType.equalsIgnoreCase("smallmoney")) {
+            return "DECIMAL";
+        } else if (sqlType.equalsIgnoreCase("varchar")) {
+            return "VARCHAR";
+        } else if (sqlType.equalsIgnoreCase("char")) {
+            return "CHAR";
+        } else if (sqlType.equalsIgnoreCase("nvarchar")) {
+            return "NVARCHAR";
+        } else if (sqlType.equalsIgnoreCase("nchar")) {
+            return "NCHAR";
+        } else if (sqlType.equalsIgnoreCase("text")) {
+            return "VARCHAR";
+        } else if (sqlType.equalsIgnoreCase("datetime")) {
+            return "TIMESTAMP";
+        } else if (sqlType.equalsIgnoreCase("date")) {
+            return "Date";
+        } else if (sqlType.equalsIgnoreCase("image")) {
+            return "BLOB";
+        }
+
+        return null;
+    }
+
     private void genServiceInterface() {
         try {
             String initcapTabName = initcap(tabnameToHump(tablename));
@@ -403,7 +442,7 @@ public class GenEntityMysql {
                 if (colnames[i].equalsIgnoreCase("id")) {
                     sb.append("        <id column=\"id\" property=\"id\" jdbcType=\"" + colTypes[i] + "\"/>\n");
                 } else {
-                    sb.append("        <result property=\"" + colname + "\" column=\"" + colnames[i] + "\" javaType=\"" + sqlType2JavaType(colTypes[i]) + "\" jdbcType=\"" + colTypes[i].toUpperCase() + "\"/>\n");
+                    sb.append("        <result property=\"" + colname + "\" column=\"" + colnames[i] + "\" javaType=\"" + sqlType2JavaType(colTypes[i]) + "\" jdbcType=\"" + sqlType2JdbcType(colTypes[i]).toUpperCase() + "\"/>\n");
                     if (i == colnames.length - 1) {
                         sbInsert.append("            " + colnames[i] + "\n");
                         sbValues.append("            #{" + colname + "}\n");
@@ -431,7 +470,7 @@ public class GenEntityMysql {
 
             sb.append("    <select id=\"getPageList\" resultMap=\"BaseResultMap\">\n" +
                     "        <bind name=\"offest\" value=\"(page-1)*limit\"></bind>\n" +
-                    "        SELECT * FROM product\n" +
+                    "        SELECT * FROM " + tablename + "\n" +
                     "        <include refid=\"pageWhere\"></include>\n" +
                     "        ORDER BY id LIMIT #{offest}, #{limit}\n" +
                     "    </select>\n\n");

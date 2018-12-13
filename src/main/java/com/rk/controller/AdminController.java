@@ -29,4 +29,9 @@ public class AdminController extends BaseController {
     public String ProductType() {
         return "admin/productType";
     }
+
+    @RequestMapping("/customer")
+    public String Customer() {
+        return "admin/customer";
+    }
 }

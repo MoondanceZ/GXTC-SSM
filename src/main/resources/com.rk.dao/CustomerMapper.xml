@@ -1,7 +1,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rk.dao.CustomerMapper">
-    <cache eviction="LRU" type="com.rk.common.cache.MybatisRedisCache" />
+    <cache eviction="LRU" type="com.rk.common.cache.MybatisRedisCache"/>
     <resultMap id="BaseResultMap" type="com.rk.entity.Customer">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result property="uid" column="uid" javaType="String" jdbcType="VARCHAR"/>
@@ -9,7 +9,7 @@
         <result property="account" column="account" javaType="String" jdbcType="VARCHAR"/>
         <result property="password" column="password" javaType="String" jdbcType="VARCHAR"/>
         <result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>
-        <result property="point" column="point" javaType="Integer" jdbcType="INT"/>
+        <result property="point" column="point" javaType="Integer" jdbcType="INTEGER"/>
         <result property="level" column="level" javaType="Short" jdbcType="SMALLINT"/>
         <result property="balance" column="balance" javaType="Double" jdbcType="DECIMAL"/>
         <result property="consumptionAmount" column="consumptionAmount" javaType="Double" jdbcType="DECIMAL"/>
@@ -17,8 +17,9 @@
         <result property="email" column="email" javaType="String" jdbcType="VARCHAR"/>
         <result property="phone" column="phone" javaType="String" jdbcType="VARCHAR"/>
         <result property="birthday" column="birthday" javaType="Date" jdbcType="DATE"/>
-        <result property="joinTime" column="joinTime" javaType="Date" jdbcType="DATETIME"/>
-        <result property="lastLoginTime" column="lastLoginTime" javaType="Date" jdbcType="DATETIME"/>
+        <result property="joinTime" column="joinTime" javaType="Date" jdbcType="TIMESTAMP"/>
+        <result property="lastLoginTime" column="lastLoginTime" javaType="Date" jdbcType="TIMESTAMP"/>
+        <result property="status" column="status" javaType="Short" jdbcType="SMALLINT"/>
     </resultMap>
     <select id="getByPrimaryKey" resultMap="BaseResultMap">
         SELECT * FROM customer WHERE id = #{id}
@@ -34,7 +35,7 @@
 
     <select id="getPageList" resultMap="BaseResultMap">
         <bind name="offest" value="(page-1)*limit"></bind>
-        SELECT * FROM product
+        SELECT * FROM customer
         <include refid="pageWhere"></include>
         ORDER BY id LIMIT #{offest}, #{limit}
     </select>
@@ -60,7 +61,8 @@
             phone,
             birthday,
             joinTime,
-            lastLoginTime
+            lastLoginTime,
+            status
         )
         VALUES
         (
@@ -78,7 +80,8 @@
             #{phone},
             #{birthday},
             #{joinTime},
-            #{lastLoginTime}
+            #{lastLoginTime},
+            #{status}
         )
     </insert>
 
@@ -99,7 +102,8 @@
             phone = #{phone},
             birthday = #{birthday},
             joinTime = #{joinTime},
-            lastLoginTime = #{lastLoginTime}
+            lastLoginTime = #{lastLoginTime},
+            status = #{status}
         </set>
         WHERE
         id = #{id}
@@ -111,4 +115,18 @@
             #{item}
         </foreach>
     </delete>
+
+    <update id="disabled">
+        UPDATE customer SET status = 0 WHERE id IN
+        <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="enabled">
+        UPDATE customer SET status = 1 WHERE id IN
+        <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 </mapper>

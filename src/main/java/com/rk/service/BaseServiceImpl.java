@@ -61,7 +61,6 @@ public class BaseServiceImpl<T extends BaseEntity, K> implements BaseService<T, 
             if (baseMapper.insert(tObj) > 0)
                 return ReturnResult.Success("提交成功");
         }
-
         return ReturnResult.Error("提交失败");
     }
 }

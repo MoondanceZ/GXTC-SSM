@@ -2,7 +2,7 @@ package com.rk.entity;
 
 import java.util.Date;
 /**
- * Thu Dec 13 17:21:59 CST 2018 Qin_Yikai
+ * Thu Dec 13 19:56:20 CST 2018 Qin_Yikai
  */ 
 
 public class Customer extends BaseEntity<Long> {
@@ -81,6 +81,11 @@ public class Customer extends BaseEntity<Long> {
      * lastLoginTime
      */ 
 	private Date lastLoginTime;
+
+   /**
+     * -1: 删除，0: 禁用， 1: 正常
+     */ 
+	private Short status;
 	public String getUid(){
 		return uid;
 	}
@@ -199,6 +204,14 @@ public class Customer extends BaseEntity<Long> {
 
 	public void setLastLoginTime(Date lastLoginTime){
 		this.lastLoginTime = lastLoginTime;
+	}
+
+	public Short getStatus(){
+		return status;
+	}
+
+	public void setStatus(Short status){
+		this.status = status;
 	}
 
 }
