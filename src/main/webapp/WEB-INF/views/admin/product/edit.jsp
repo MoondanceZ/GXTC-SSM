@@ -128,6 +128,17 @@
 
         <div class="layui-form-item">
             <div class="layui-inline">
+                <label class="layui-form-label">购买数量</label>
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="text" name="limitCount" lay-verify="number" lay-vertype="tips" value="${product.limitCount}"
+                           placeholder="购买数量" autocomplete="off"
+                           class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
                 <label class="layui-form-label">产品类型</label>
                 <div class="layui-input-inline">
                     <select name="typeId" lay-verify="required" lay-vertype="tips">

@@ -66,6 +66,7 @@
             price,
             oldPrice,
             count,
+            limitCount,
             typeId,
             createDate,
             status
@@ -81,6 +82,7 @@
             #{price},
             #{oldPrice},
             #{count},
+            #{limitCount},
             #{typeId},
             #{createDate},
             #{status}
@@ -105,6 +107,7 @@
             price = #{price},
             oldPrice = #{oldPrice},
             count = #{count},
+            limitCount = #{limitCount},
             typeId = #{typeId},
             modifyDate = #{modifyDate},
             status = #{status}

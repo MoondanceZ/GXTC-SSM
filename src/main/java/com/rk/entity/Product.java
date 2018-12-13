@@ -72,6 +72,13 @@ public class Product extends BaseEntity<Long> {
     private Integer count;
 
     /**
+     * 购买数量
+     */
+    @Max(value = Integer.MAX_VALUE, message = "数量不能超出" + Integer.MAX_VALUE)
+    @Min(value = 0, message = "数量需大于等于0。")
+    private Integer limitCount;
+
+    /**
      * 商品类型
      */
     private int typeId;
@@ -172,6 +179,10 @@ public class Product extends BaseEntity<Long> {
     public void setCount(Integer count) {
         this.count = count;
     }
+
+    public Integer getLimitCount() { return limitCount; }
+
+    public void setLimitCount(Integer limitCount) { this.limitCount = limitCount; }
 
     public int getTypeId() {
         return typeId;
