@@ -11,7 +11,8 @@ import java.util.List;
  * Created by Qin_Yikai on 2018-10-10.
  */
 public interface BaseService<T extends BaseEntity, K> {
-    ReturnResult delete(K[] keys);
+    ReturnResult delete(K... keys);
+    ReturnResult logicalDelete(K...keys);
     ReturnResult insert(T tObj);
     T getByPrimaryKey(K key);
     LayPage<List<T>> getPageList(PageRequest pageRequest);

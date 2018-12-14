@@ -1,7 +1,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rk.dao.CustomerMapper">
-    <cache eviction="LRU" type="com.rk.common.cache.MybatisRedisCache"/>
+    <cache eviction="LRU" type="com.rk.common.cache.MybatisRedisCache" />
     <resultMap id="BaseResultMap" type="com.rk.entity.Customer">
         <id column="id" property="id" jdbcType="BIGINT"/>
         <result property="uid" column="uid" javaType="String" jdbcType="VARCHAR"/>
@@ -110,23 +110,30 @@
     </update>
 
     <delete id="delete">
-        DELETE FROM customer WHERE id IN
-        <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
-            #{item}
-        </foreach>
+        <choose>
+            <when test="null != array and array.length > 1">
+                DELETE FROM customer WHERE id IN
+                <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                DELETE FROM customer WHERE id = #{array[0]}
+            </otherwise>
+        </choose>
     </delete>
 
-    <update id="disabled">
-        UPDATE customer SET status = 0 WHERE id IN
-        <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
-            #{item}
-        </foreach>
-    </update>
-
-    <update id="enabled">
-        UPDATE customer SET status = 1 WHERE id IN
-        <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
-            #{item}
-        </foreach>
+    <update id="logicalDelete">
+        <choose>
+            <when test="null != array and array.length > 1">
+                UPDATE customer SET status = -1 WHERE id IN
+                <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                UPDATE customer SET status = -1 WHERE id = #{array[0]}
+            </otherwise>
+        </choose>
     </update>
 </mapper>

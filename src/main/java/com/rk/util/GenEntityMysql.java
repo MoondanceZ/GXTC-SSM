@@ -499,11 +499,31 @@ public class GenEntityMysql {
                     "        id = #{id}\n" +
                     "    </update>\n\n");
             sb.append("    <delete id=\"delete\">\n" +
-                    "        DELETE FROM " + tablename + " WHERE id IN\n" +
-                    "        <foreach collection=\"array\" item=\"item\" index=\"index\" open=\"(\" separator=\",\" close=\")\">\n" +
-                    "            #{item}\n" +
-                    "        </foreach>\n" +
-                    "    </delete>\n");
+                    "        <choose>\n" +
+                    "            <when test=\"null != array and array.length > 1\">\n" +
+                    "                DELETE FROM " + tablename + " WHERE id IN\n" +
+                    "                <foreach collection=\"array\" item=\"item\" index=\"index\" open=\"(\" separator=\",\" close=\")\">\n" +
+                    "                    #{item}\n" +
+                    "                </foreach>\n" +
+                    "            </when>\n" +
+                    "            <otherwise>\n" +
+                    "                DELETE FROM " + tablename + " WHERE id = #{array[0]}\n" +
+                    "            </otherwise>\n" +
+                    "        </choose>\n" +
+                    "    </delete>\n\n");
+            sb.append("    <update id=\"logicalDelete\">\n" +
+                    "        <choose>\n" +
+                    "            <when test=\"null != array and array.length > 1\">\n" +
+                    "                UPDATE " + tablename + " SET status = -1 WHERE id IN\n" +
+                    "                <foreach collection=\"array\" item=\"item\" index=\"index\" open=\"(\" separator=\",\" close=\")\">\n" +
+                    "                    #{item}\n" +
+                    "                </foreach>\n" +
+                    "            </when>\n" +
+                    "            <otherwise>\n" +
+                    "                UPDATE " + tablename + " SET status = -1 WHERE id = #{array[0]}\n" +
+                    "            </otherwise>\n" +
+                    "        </choose>\n" +
+                    "    </update>\n");
             sb.append("</mapper>");
             writeToFile(sb.toString(), 5);
         } catch (Exception e) {

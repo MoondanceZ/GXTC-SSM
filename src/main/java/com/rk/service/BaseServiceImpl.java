@@ -10,7 +10,9 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Qin_Yikai on 2018-10-10.
@@ -22,11 +24,22 @@ public class BaseServiceImpl<T extends BaseEntity, K> implements BaseService<T, 
     protected BaseMapper<T, K> baseMapper;
 
     @Override
-    public ReturnResult delete(K[] keys) {
+    public ReturnResult delete(K... keys) {
         if (keys == null || keys.length == 0)
             return ReturnResult.Error("没有提供需要删除的Id");
 
         if (baseMapper.delete(keys) > 0)
+            return ReturnResult.Success("删除成功");
+        else
+            return ReturnResult.Error("删除失败");
+    }
+
+    @Override
+    public ReturnResult logicalDelete(K...keys){
+        if (keys == null || keys.length == 0)
+            return ReturnResult.Error("没有提供需要删除的Id");
+
+        if (baseMapper.logicalDelete(keys) > 0)
             return ReturnResult.Success("删除成功");
         else
             return ReturnResult.Error("删除失败");

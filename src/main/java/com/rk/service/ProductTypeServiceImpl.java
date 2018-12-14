@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,17 +25,13 @@ public class ProductTypeServiceImpl extends BaseServiceImpl<ProductType, Integer
     private ProductService productService;
 
     //重写父类删除方法
-    public ReturnResult delete(Integer[] keys) {
+    public ReturnResult delete(Integer... keys) {
         if (ArrayUtils.isEmpty(keys))
             return ReturnResult.Error("没有提供需要删除的Id");
 
         Integer[] typeIds = productService.getByTypeIds(keys);
         if (ArrayUtils.isEmpty(typeIds)) {
-            if (baseMapper.delete(keys) > 0) {
-                return ReturnResult.Success("删除成功");
-            } else {
-                return ReturnResult.Error("删除成功");
-            }
+            return delete(keys);
         }
 
         List<Integer> unDelKeys = new ArrayList<>();
@@ -52,6 +49,7 @@ public class ProductTypeServiceImpl extends BaseServiceImpl<ProductType, Integer
         if (unDelKeys.size() == keys.length) {
             return ReturnResult.Error("删除失败, 选中的记录已被使用");
         }
+
         if (baseMapper.delete(delKeysAry) > 0)
             return ReturnResult.Success("成功删除" + delKeysAry.length + "条记录, Id 为 "
                     + unDelKeys.toString() + "的记录已被使用, 不能删除");
@@ -62,7 +60,7 @@ public class ProductTypeServiceImpl extends BaseServiceImpl<ProductType, Integer
     //重写父类方法
     public ReturnResult updateOrAdd(ProductType productType) {
         ProductType dbProductType = productTypeMapper.getProductTypeByNameOrCode(productType.getTypeName(), productType.getTypeCode());
-        if (dbProductType != null && dbProductType.getId() != productType.getId()) {
+        if (dbProductType != null && !dbProductType.getId().equals(productType.getId())) {
             if (dbProductType.getTypeName().equals(productType.getTypeName())) {
                 return ReturnResult.Error("类型名称已存在");
             } else {

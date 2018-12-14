@@ -7,6 +7,7 @@ package com.rk.dao;
 import com.rk.dto.request.PageRequest;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * BaseMapper
@@ -19,9 +20,9 @@ public interface BaseMapper<T, K> {
 
     int update(T tObj);
 
-    int delete(K kek);
+    int delete(K...keys);
 
-    int delete(K[] keys);
+    int logicalDelete(K...keys);
 
     List<T> getPageList(PageRequest pageRequest);
 

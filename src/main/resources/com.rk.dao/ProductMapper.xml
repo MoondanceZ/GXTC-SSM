@@ -2,10 +2,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rk.dao.ProductMapper">
     <!--使用redis做为二级缓存-->
-    <cache eviction="LRU" type="com.rk.common.cache.MybatisRedisCache" />
+    <cache eviction="LRU" type="com.rk.common.cache.MybatisRedisCache"/>
     <resultMap id="BaseResultMap" type="com.rk.entity.Product">
         <id column="id" property="id" jdbcType="BIGINT"/>
-        <result column="typeId" property="typeId" jdbcType="INTEGER" />
+        <result column="typeId" property="typeId" jdbcType="INTEGER"/>
         <!--<result property="name" column="name" javaType="String" jdbcType="VARCHAR"/>-->
         <!--<result property="number" column="number" javaType="Integer" jdbcType="VARCHAR"/>-->
         <!--<result property="startTime" column="start_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>-->
@@ -118,12 +118,32 @@
     </update>
 
     <delete id="delete">
-        DELETE FROM product WHERE id IN
-        <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
-            #{item}
-        </foreach>
+        <choose>
+            <when test="null != array and array.length > 1">
+                DELETE FROM product WHERE id IN
+                <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                DELETE FROM product WHERE id = #{array[0]}
+            </otherwise>
+        </choose>
     </delete>
 
+    <update id="logicalDelete">
+        <choose>
+            <when test="null != array and array.length > 1">
+                UPDATE product SET status = -1 WHERE id IN
+                <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                UPDATE product SET status = -1 WHERE id = #{array[0]}
+            </otherwise>
+        </choose>
+    </update>
 
     <select id="getByTypeIds" resultType="java.lang.Integer">
         SELECT typeId FROM product WHERE <![CDATA[status <> -1]]> AND typeId IN
