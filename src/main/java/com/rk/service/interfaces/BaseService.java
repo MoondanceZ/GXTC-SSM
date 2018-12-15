@@ -1,7 +1,7 @@
 package com.rk.service.interfaces;
 
-import com.rk.dto.LayPage;
-import com.rk.dto.ReturnResult;
+import com.rk.dto.response.LayPage;
+import com.rk.dto.response.ReturnResult;
 import com.rk.dto.request.PageRequest;
 import com.rk.entity.BaseEntity;
 

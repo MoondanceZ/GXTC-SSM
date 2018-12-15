@@ -1,8 +1,8 @@
 package com.rk.controller;
 
 import com.rk.common.exception.DataNotFoundException;
-import com.rk.dto.LayPage;
-import com.rk.dto.ReturnResult;
+import com.rk.dto.response.LayPage;
+import com.rk.dto.response.ReturnResult;
 import com.rk.dto.request.PageRequest;
 import com.rk.entity.ProductType;
 import com.rk.service.interfaces.ProductTypeService;
@@ -26,7 +26,7 @@ public class ProductTypeController extends BaseController  {
 
     @RequestMapping(value = "/pageList", method = RequestMethod.GET)
     @ResponseBody
-    public LayPage<List<ProductType>> ProductType(PageRequest pageRequest) {
+    public LayPage<List<ProductType>> PageList(PageRequest pageRequest) {
         return productTypeService.getPageList(pageRequest);
     }
 

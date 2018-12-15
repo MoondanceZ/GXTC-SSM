@@ -1,7 +1,7 @@
 package com.rk.controller;
 
-import com.rk.dto.LayPage;
-import com.rk.dto.ReturnResult;
+import com.rk.dto.response.LayPage;
+import com.rk.dto.response.ReturnResult;
 import com.rk.dto.request.CustomerPageRequest;
 import com.rk.entity.Customer;
 import com.rk.service.interfaces.CustomerService;
@@ -22,7 +22,7 @@ public class CustomerController {
 
     @RequestMapping(value = "/pageList", method = RequestMethod.GET)
     @ResponseBody
-    public LayPage<List<Customer>> ProductType(CustomerPageRequest pageRequest) {
+    public LayPage<List<Customer>> PageList(CustomerPageRequest pageRequest) {
         return customerService.getPageList(pageRequest);
     }
 

@@ -1,8 +1,8 @@
 package com.rk.service;
 
 import com.rk.dao.BaseMapper;
-import com.rk.dto.LayPage;
-import com.rk.dto.ReturnResult;
+import com.rk.dto.response.LayPage;
+import com.rk.dto.response.ReturnResult;
 import com.rk.dto.request.PageRequest;
 import com.rk.entity.BaseEntity;
 import com.rk.service.interfaces.BaseService;
@@ -10,9 +10,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Qin_Yikai on 2018-10-10.

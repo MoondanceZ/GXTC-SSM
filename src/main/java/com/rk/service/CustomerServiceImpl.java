@@ -1,7 +1,7 @@
 package com.rk.service;
 
 import com.rk.dao.CustomerMapper;
-import com.rk.dto.ReturnResult;
+import com.rk.dto.response.ReturnResult;
 import com.rk.entity.Customer;
 import com.rk.service.interfaces.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;

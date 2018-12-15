@@ -1,7 +1,7 @@
 package com.rk.service;
 
 import com.rk.dao.ProductTypeMapper;
-import com.rk.dto.ReturnResult;
+import com.rk.dto.response.ReturnResult;
 import com.rk.entity.ProductType;
 import com.rk.service.interfaces.ProductService;
 import com.rk.service.interfaces.ProductTypeService;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**

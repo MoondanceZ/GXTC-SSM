@@ -474,7 +474,7 @@ public class GenEntityMysql {
                     "    </select>\n\n");
 
             sb.append("    <select id=\"getPageListTotalCount\" resultType=\"int\">\n" +
-                    "        SELECT count(*) FROM product\n" +
+                    "        SELECT count(*) FROM " + tablename + "\n" +
                     "        <include refid=\"pageWhere\"></include>\n" +
                     "    </select>\n\n");
 

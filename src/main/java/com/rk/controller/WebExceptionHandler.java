@@ -2,7 +2,7 @@ package com.rk.controller;
 
 import com.rk.common.exception.GxtcException;
 import com.rk.common.exception.DataNotFoundException;
-import com.rk.dto.ReturnResult;
+import com.rk.dto.response.ReturnResult;
 import com.rk.util.AjaxUtils;
 import com.rk.util.ValidatorHelper;
 import org.apache.log4j.LogManager;

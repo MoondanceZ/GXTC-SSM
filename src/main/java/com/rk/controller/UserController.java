@@ -1,6 +1,6 @@
 package com.rk.controller;
 
-import com.rk.dto.ReturnResult;
+import com.rk.dto.response.ReturnResult;
 import com.rk.dto.request.SignInRequest;
 import com.rk.entity.UserInfo;
 import com.rk.service.interfaces.UserInfoService;

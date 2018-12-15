@@ -3,7 +3,7 @@ package com.rk.common.filter;
 import com.rk.common.exception.GxtcException;
 import com.rk.common.exception.DataNotFoundException;
 import com.rk.controller.FileController;
-import com.rk.dto.ReturnResult;
+import com.rk.dto.response.ReturnResult;
 import com.rk.util.AjaxUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;

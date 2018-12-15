@@ -48,11 +48,11 @@
     </select>
 
     <select id="getPageListTotalCount" resultType="int">
-        SELECT count(*) FROM product
+        SELECT count(*) FROM customer
         <include refid="pageWhere"></include>
     </select>
 
-    <insert id="insert">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO customer (
             uid,
             showId,

@@ -1,6 +1,5 @@
 package com.rk.dao;
 
-import com.rk.dto.ReturnResult;
 import com.rk.entity.Customer;
 
 /**

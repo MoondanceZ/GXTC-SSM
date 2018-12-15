@@ -1,6 +1,6 @@
 package com.rk.util;
 
-import com.rk.dto.ReturnResult;
+import com.rk.dto.response.ReturnResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
