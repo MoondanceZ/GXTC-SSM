@@ -5,10 +5,8 @@ import org.apache.ibatis.type.JdbcType;
 
 import java.io.*;
 import java.sql.*;
+import java.util.*;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * Created by Qin_Yikai on 2018-09-20.
@@ -20,7 +18,7 @@ public class GenEntityMysql {
     private String serviceInterfaceOutPutPath = "com.rk.service.interfaces";
     private String daoOutPutPath = "com.rk.dao";
     private String authorName = "Qin_Yikai";//作者名字
-    private String tablename = "customer";//表名
+    private String tablename = "shoppingCart";//表名
     private String[] colnames; // 列名数组
     private String[] colTypes; //列名类型数组
     private int[] colSizes; //列名大小数组
@@ -511,19 +509,21 @@ public class GenEntityMysql {
                     "            </otherwise>\n" +
                     "        </choose>\n" +
                     "    </delete>\n\n");
-            sb.append("    <update id=\"logicalDelete\">\n" +
-                    "        <choose>\n" +
-                    "            <when test=\"null != array and array.length > 1\">\n" +
-                    "                UPDATE " + tablename + " SET status = -1 WHERE id IN\n" +
-                    "                <foreach collection=\"array\" item=\"item\" index=\"index\" open=\"(\" separator=\",\" close=\")\">\n" +
-                    "                    #{item}\n" +
-                    "                </foreach>\n" +
-                    "            </when>\n" +
-                    "            <otherwise>\n" +
-                    "                UPDATE " + tablename + " SET status = -1 WHERE id = #{array[0]}\n" +
-                    "            </otherwise>\n" +
-                    "        </choose>\n" +
-                    "    </update>\n");
+            if (Arrays.asList(colnames).contains("status")) {
+                sb.append("    <update id=\"logicalDelete\">\n" +
+                        "        <choose>\n" +
+                        "            <when test=\"null != array and array.length > 1\">\n" +
+                        "                UPDATE " + tablename + " SET status = -1 WHERE id IN\n" +
+                        "                <foreach collection=\"array\" item=\"item\" index=\"index\" open=\"(\" separator=\",\" close=\")\">\n" +
+                        "                    #{item}\n" +
+                        "                </foreach>\n" +
+                        "            </when>\n" +
+                        "            <otherwise>\n" +
+                        "                UPDATE " + tablename + " SET status = -1 WHERE id = #{array[0]}\n" +
+                        "            </otherwise>\n" +
+                        "        </choose>\n" +
+                        "    </update>\n");
+            }
             sb.append("</mapper>");
             writeToFile(sb.toString(), 5);
         } catch (Exception e) {

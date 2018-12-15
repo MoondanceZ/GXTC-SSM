@@ -33,7 +33,7 @@
                     <option value="0">禁用</option>
                 </select>
             </div>
-            <input type="text" name="queryString" placeholder="输入用户名称、邮箱或手机" autocomplete="off" class="layui-input">
+            <input type="text" name="queryString" placeholder="输入用户名称或手机" autocomplete="off" class="layui-input">
             <button class="layui-btn" lay-submit lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>

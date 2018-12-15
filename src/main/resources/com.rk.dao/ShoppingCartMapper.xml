@@ -1,0 +1,78 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rk.dao.ShoppingCartMapper">
+    <cache eviction="LRU" type="com.rk.common.cache.MybatisRedisCache" />
+    <resultMap id="BaseResultMap" type="com.rk.entity.ShoppingCart">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result property="customerId" column="customerId" javaType="Long" jdbcType="BIGINT"/>
+        <result property="productId" column="productId" javaType="Long" jdbcType="BIGINT"/>
+        <result property="count" column="count" javaType="Integer" jdbcType="INTEGER"/>
+        <result property="createDate" column="createDate" javaType="Date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <select id="getByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * FROM shoppingCart WHERE id = #{id}
+    </select>
+
+    <sql id="pageWhere">
+        <where>
+            <if test="queryString != null and queryString != ''">
+                AND customerId LIKE CONCAT('%', #{queryString}, '%')
+            </if>
+        </where>
+    </sql>
+
+    <select id="getPageList" resultMap="BaseResultMap">
+        <bind name="offest" value="(page-1)*limit"></bind>
+        SELECT * FROM shoppingCart
+        <include refid="pageWhere"></include>
+        ORDER BY id LIMIT #{offest}, #{limit}
+    </select>
+
+    <select id="getPageListTotalCount" resultType="int">
+        SELECT count(*) FROM product
+        <include refid="pageWhere"></include>
+    </select>
+
+    <insert id="insert">
+        INSERT INTO shoppingCart (
+            customerId,
+            productId,
+            count,
+            createDate
+        )
+        VALUES
+        (
+            #{customerId},
+            #{productId},
+            #{count},
+            #{createDate}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE shoppingCart
+        <set>
+            customerId = #{customerId},
+            productId = #{productId},
+            count = #{count},
+            createDate = #{createDate}
+        </set>
+        WHERE
+        id = #{id}
+    </update>
+
+    <delete id="delete">
+        <choose>
+            <when test="null != array and array.length > 1">
+                DELETE FROM shoppingCart WHERE id IN
+                <foreach collection="array" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                DELETE FROM shoppingCart WHERE id = #{array[0]}
+            </otherwise>
+        </choose>
+    </delete>
+
+</mapper>
