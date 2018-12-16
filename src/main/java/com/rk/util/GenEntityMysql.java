@@ -27,10 +27,10 @@ public class GenEntityMysql {
     private boolean f_sql = false; // 是否需要导入包java.sql.*
 
     //数据库连接
-    private static String URL = "jdbc:mysql://localhost:3306/gxtc?useUnicode=true&characterEncoding=utf-8&useSSL=false";
-    private static String NAME = "root";
-    private static String PASS = "123456";
-    private static String DRIVER = "com.mysql.jdbc.Driver";
+    private static String URL;
+    private static String NAME;
+    private static String PASS;
+    private static String DRIVER;
 
     /*
      * 构造函数
@@ -179,6 +179,7 @@ public class GenEntityMysql {
         sb.append("\r\n");
         sb.append("public class " + initcap(tabnameToHump(tablename)) + " extends BaseEntity<Long> {\r\n");
         processAllAttrs(sb);//属性
+        sb.append("\r\n");
         processAllMethod(sb);//get set方法
         sb.append("}\r\n");
 

@@ -1,62 +1,73 @@
 package com.rk.entity;
 
 import java.util.Date;
+
 /**
  * Sat Dec 15 17:05:46 CST 2018 Qin_Yikai
- */ 
+ */
 
 public class ShoppingCart extends BaseEntity<Long> {
 
-   /**
+    /**
      * customerId
-     */ 
-	private Long customerId;
+     */
+    private Long customerId;
 
-   /**
+    /**
      * productId
-     */ 
-	private Long productId;
+     */
+    private Long productId;
 
-   /**
+    /**
      * count
-     */ 
-	private Integer count;
+     */
+    private Integer count;
 
-   /**
+    /**
      * createDate
-     */ 
-	private Date createDate;
-	public Long getCustomerId(){
-		return customerId;
-	}
+     */
+    private Date createDate;
 
-	public void setCustomerId(Long customerId){
-		this.customerId = customerId;
-	}
+    private Product product;
 
-	public Long getProductId(){
-		return productId;
-	}
+    public Long getCustomerId() {
+        return customerId;
+    }
 
-	public void setProductId(Long productId){
-		this.productId = productId;
-	}
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
+    }
 
-	public Integer getCount(){
-		return count;
-	}
+    public Long getProductId() {
+        return productId;
+    }
 
-	public void setCount(Integer count){
-		this.count = count;
-	}
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
 
-	public Date getCreateDate(){
-		return createDate;
-	}
+    public Integer getCount() {
+        return count;
+    }
 
-	public void setCreateDate(Date createDate){
-		this.createDate = createDate;
-	}
+    public void setCount(Integer count) {
+        this.count = count;
+    }
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
 }
 

@@ -8,9 +8,14 @@
         <result property="productId" column="productId" javaType="Long" jdbcType="BIGINT"/>
         <result property="count" column="count" javaType="Integer" jdbcType="INTEGER"/>
         <result property="createDate" column="createDate" javaType="Date" jdbcType="TIMESTAMP"/>
+        <association property="product" javaType="com.rk.entity.Product">
+            <id column="id" property="id"></id>
+            <result column="name" property="name"></result>
+        </association>
     </resultMap>
     <select id="getByPrimaryKey" resultMap="BaseResultMap">
-        SELECT * FROM shoppingCart WHERE id = #{id}
+        SELECT shoppingCart.*, product.name FROM shoppingCart, product
+        WHERE shoppingCart.id = #{id} and shoppingCart.productId = product.id
     </select>
 
     <sql id="pageWhere">
