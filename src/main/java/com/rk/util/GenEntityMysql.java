@@ -25,6 +25,7 @@ public class GenEntityMysql {
     private Map comment;     //字段注释
     private boolean f_util = false; // 是否需要导入包java.util.*
     private boolean f_sql = false; // 是否需要导入包java.sql.*
+    private String[] searchCols = {"name"};
 
     //数据库连接
     private static String URL;
@@ -459,14 +460,15 @@ public class GenEntityMysql {
                     "        SELECT * FROM " + tablename + " WHERE id = #{id}\n" +
                     "    </select>\n\n");
 
-            sb.append("    <sql id=\"pageWhere\">\n" +
-                    "        <where>\n" +
-                    "            <if test=\"queryString != null and queryString != ''\">\n" +
-                    "                AND xxxx LIKE CONCAT('%', #{queryString}, '%')\n" +
-                    "            </if>\n" +
-                    "        </where>\n" +
-                    "    </sql>\n\n");
-
+            if (searchCols != null && searchCols.length > 0) {
+                sb.append("    <sql id=\"pageWhere\">\n" +
+                        "        <where>\n" +
+                        "            <if test=\"queryString != null and queryString != ''\">\n" +
+                        "                AND xxxx LIKE CONCAT('%', #{queryString}, '%')\n" +
+                        "            </if>\n" +
+                        "        </where>\n" +
+                        "    </sql>\n\n");
+            }
             sb.append("    <select id=\"getPageList\" resultMap=\"BaseResultMap\">\n" +
                     "        <bind name=\"offest\" value=\"(page-1)*limit\"></bind>\n" +
                     "        SELECT * FROM " + tablename + "\n" +
