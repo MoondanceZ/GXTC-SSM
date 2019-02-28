@@ -27,7 +27,7 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/user/signin", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody()
-    public ReturnResult<UserInfo> SignIn(@RequestBody SignInRequest request, HttpSession session) {
+    public ReturnResult SignIn(@RequestBody SignInRequest request, HttpSession session) {
         UserInfo userInfo = userInfoService.getUser(request.getAccount());
         //密码校验
         if (userInfo != null && userInfo.getPassword().equals(EncryptionUtils.encryptAES(request.getPassword()))) {
