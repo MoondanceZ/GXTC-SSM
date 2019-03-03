@@ -18,7 +18,7 @@
     <form class="layui-form" id="editForm" action="" enctype="multipart/form-data">
         <input type="hidden" name="id" value="${product.id}">
         <div class="layui-form-item">
-            <label class="layui-form-label">产品名称</label>
+            <label class="layui-form-label"><span class="x-red">*</span>产品名称</label>
             <div class="layui-input-block">
                 <input type="text" name="name" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
                        placeholder="请输入类型名称"
@@ -95,7 +95,7 @@
 
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">产品价格</label>
+                <label class="layui-form-label"><span class="x-red">*</span>产品价格</label>
                 <div class="layui-input-inline" style="width: 100px;">
                     <input type="text" name="price" lay-verify="notempty|price" lay-vertype="tips" value="${product.price}"
                            placeholder="￥产品价格" autocomplete="off"
@@ -106,7 +106,7 @@
 
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">产品原价</label>
+                <label class="layui-form-label"><span class="x-red">*</span>产品原价</label>
                 <div class="layui-input-inline" style="width: 100px;">
                     <input type="text" name="oldPrice" lay-verify="price" lay-vertype="tips" value="${product.oldPrice}"
                            placeholder="￥产品原价"
@@ -116,8 +116,17 @@
         </div>
 
         <div class="layui-form-item">
+            <label class="layui-form-label">统一售价</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="unifiedPrice"
+                       value="${product.unifiedPrice}" ${product.unifiedPrice == true ? "checked" : ""} lay-skin="switch"
+                       lay-text="ON|OFF" lay-filter="unifiedPrice">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">数量</label>
+                <label class="layui-form-label"><span class="x-red">*</span>数量</label>
                 <div class="layui-input-inline" style="width: 100px;">
                     <input type="text" name="count" lay-verify="notempty|number" lay-vertype="tips" value="${product.count}"
                            placeholder="数量" autocomplete="off"
@@ -139,7 +148,7 @@
 
         <div class="layui-form-item">
             <div class="layui-inline">
-                <label class="layui-form-label">产品类型</label>
+                <label class="layui-form-label"><span class="x-red">*</span>产品类型</label>
                 <div class="layui-input-inline">
                     <select name="typeId" lay-verify="required" lay-vertype="tips">
                         <option value>请选择类型</option>
@@ -260,6 +269,14 @@
                     $('input[name=status]').val(1);
                 } else {
                     $('input[name=status]').val(0);
+                }
+            });
+
+            form.on('switch(unifiedPrice)', function (data) {
+                if (this.checked) {
+                    $('input[name=unifiedPrice]').val(true);
+                } else {
+                    $('input[name=unifiedPrice]').val(false);
                 }
             });
 

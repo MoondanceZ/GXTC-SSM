@@ -13,10 +13,23 @@
         <!--<result property="createTIme" column="create_time" javaType="java.time.LocalDateTime" jdbcType="TIMESTAMP"/>-->
         <association property="productType" column="typeId" javaType="com.rk.entity.ProductType"
                      select="com.rk.dao.ProductTypeMapper.getByPrimaryKey"></association>
+        <!-- 一对多关联映射：collection -->
+        <collection property="productItems" column="id" select="getProductItems" ofType="com.rk.entity.ProductItem" javaType="java.util.ArrayList">
+            <id property="id" column="id" />
+            <result property="itemName" column="itemName" />
+            <result property="itemCode" column="itemCode" />
+            <result property="itemInfo" column="itemInfo" />
+            <result property="image" column="image" />
+            <result property="productId" column="productId" />
+        </collection>
     </resultMap>
 
     <select id="getByPrimaryKey" resultMap="BaseResultMap">
         SELECT * FROM product WHERE id = #{id}
+    </select>
+    
+    <select id="getProductItems" resultType="com.rk.entity.ProductItem">
+        SELECT * FROM product_item WHERE productId = #{id}
     </select>
 
     <sql id="pageWhere">

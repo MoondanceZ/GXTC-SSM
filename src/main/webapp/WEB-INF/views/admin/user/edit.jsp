@@ -16,7 +16,7 @@
     <form class="layui-form" id="editPtForm" action="" lay-filter="pt">
         <input type="hidden" name="id" value="${userInfo.id}">
         <div class="layui-form-item">
-            <label class="layui-form-label">名称</label>
+            <label class="layui-form-label"><span class="x-red">*</span>名称</label>
             <div class="layui-input-block">
                 <input type="text" name="name" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
                        placeholder="请输入类型名称" maxlength="12"
@@ -25,7 +25,7 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">密码</label>
+            <label class="layui-form-label"><span class="x-red">*</span>密码</label>
             <div class="layui-input-block">
                 <input type="text" name="password" lay-verify="notempty|pass" lay-vertype="tips" autocomplete="off"
                        placeholder="请输入密码" maxlength="12" minlength="6"

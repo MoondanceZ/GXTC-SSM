@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
 import java.util.Date;
+import java.util.List;
 
 /**
  * product 实体类
@@ -15,7 +16,9 @@ import java.util.Date;
  */
 @JsonIgnoreProperties(value = {"handler"})
 public class Product extends BaseEntity<Long> {
-
+    public Product(){
+        setUnifiedPrice(true);
+    }
     /**
      * name
      */
@@ -65,6 +68,11 @@ public class Product extends BaseEntity<Long> {
     private Double oldPrice;
 
     /**
+     * 是否统一售价
+     */
+    private Boolean unifiedPrice;
+
+    /**
      * 数量
      */
     @Max(value = Integer.MAX_VALUE, message = "数量不能超出" + Integer.MAX_VALUE)
@@ -107,6 +115,11 @@ public class Product extends BaseEntity<Long> {
      * productType
      */
     private ProductType productType;
+
+    /**
+     * productItems
+     */
+    private List<ProductItem> productItems;
 
     public String getName() {
         return name;
@@ -230,6 +243,22 @@ public class Product extends BaseEntity<Long> {
 
     public void setProductType(ProductType productType) {
         this.productType = productType;
+    }
+
+    public List<ProductItem> getProductItems() {
+        return productItems;
+    }
+
+    public void setProductItems(List<ProductItem> productItems) {
+        this.productItems = productItems;
+    }
+
+    public Boolean getUnifiedPrice() {
+        return unifiedPrice;
+    }
+
+    public void setUnifiedPrice(Boolean unifiedPrice) {
+        unifiedPrice = unifiedPrice;
     }
 }
 

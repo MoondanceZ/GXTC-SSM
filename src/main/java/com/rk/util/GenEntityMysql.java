@@ -18,7 +18,7 @@ public class GenEntityMysql {
     private String serviceInterfaceOutPutPath = "com.rk.service.interfaces";
     private String daoOutPutPath = "com.rk.dao";
     private String authorName = "Qin_Yikai";//作者名字
-    private String tablename = "shoppingCart";//表名
+    private String tablename = "product_item";//表名
     private String[] colnames; // 列名数组
     private String[] colTypes; //列名类型数组
     private int[] colSizes; //列名大小数组
@@ -99,10 +99,10 @@ public class GenEntityMysql {
             String content = parse(colnames, colTypes, colSizes);
 
             writeToFile(content, 1);
-            genService();
-            genServiceInterface();
-            genDao();
-            genDaoXml();
+//            genService();
+//            genServiceInterface();
+//            genDao();
+//            genDaoXml();
 
         } catch (SQLException e) {
             e.printStackTrace();

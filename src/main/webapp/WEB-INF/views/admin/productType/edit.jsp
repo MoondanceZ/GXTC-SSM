@@ -17,7 +17,7 @@
         <input type="hidden" name="id" value="${productType.id}">
         <input type="hidden" name="parentTypeId" value="${productType.parentTypeId}">
         <div class="layui-form-item">
-            <label class="layui-form-label">类型名称</label>
+            <label class="layui-form-label"><span class="x-red">*</span>类型名称</label>
             <div class="layui-input-block">
                 <input type="text" name="typeName" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
                        placeholder="请输入类型名称"
@@ -26,7 +26,7 @@
         </div>
 
         <div class="layui-form-item">
-            <label class="layui-form-label">类型代码</label>
+            <label class="layui-form-label"><span class="x-red">*</span>类型代码</label>
             <div class="layui-input-block">
                 <input type="text" name="typeCode" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
                        placeholder="请输入类型代码"

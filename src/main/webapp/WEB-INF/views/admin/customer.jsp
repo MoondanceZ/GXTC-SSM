@@ -68,7 +68,7 @@
  <%--           <button class="layui-btn layui-btn-sm" lay-event="addNew"><i class="layui-icon layui-icon-add-circle"></i>
                 添加
             </button>--%>
-            <button class="layui-btn layui-btn-sm" lay-event="delChecked"><i class="layui-icon layui-icon-delete"></i>删除
+            <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="delChecked"><i class="layui-icon layui-icon-delete"></i>删除
             </button>
         </div>
     </script>
