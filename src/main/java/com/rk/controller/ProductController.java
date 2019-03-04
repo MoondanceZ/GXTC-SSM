@@ -1,5 +1,6 @@
 package com.rk.controller;
 
+import com.rk.common.enums.ProductStatus;
 import com.rk.common.exception.DataNotFoundException;
 import com.rk.dto.response.LayPage;
 import com.rk.dto.response.ReturnResult;
@@ -51,6 +52,7 @@ public class ProductController extends BaseController {
         }
 
         model.addAttribute("enableTypes", productTypeService.getEnableTypes());
+        //model.addAttribute("productStatus", ProductStatus.ToList());
         return "admin/product/edit";
     }
 
