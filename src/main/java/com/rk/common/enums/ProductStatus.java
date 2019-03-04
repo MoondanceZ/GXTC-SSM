@@ -36,9 +36,12 @@ public enum ProductStatus {
 
     public static List<SelectItem> ToList() {
         List<SelectItem> selectItems = new ArrayList<>();
-        selectItems.add(new SelectItem(ProductStatus.DELETED.getCode(), ProductStatus.DELETED.getDesc()));
+        for (ProductStatus status : ProductStatus.values()) {
+            selectItems.add(new SelectItem(status.getCode(), status.getDesc()));
+        }
+        /*selectItems.add(new SelectItem(ProductStatus.DELETED.getCode(), ProductStatus.DELETED.getDesc()));
         selectItems.add(new SelectItem(ProductStatus.DISABLED.getCode(), ProductStatus.DISABLED.getDesc()));
-        selectItems.add(new SelectItem(ProductStatus.ENABLED.getCode(), ProductStatus.ENABLED.getDesc()));
+        selectItems.add(new SelectItem(ProductStatus.ENABLED.getCode(), ProductStatus.ENABLED.getDesc()));*/
         return selectItems;
     }
 }
