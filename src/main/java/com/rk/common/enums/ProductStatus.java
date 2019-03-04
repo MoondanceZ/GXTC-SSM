@@ -34,7 +34,7 @@ public enum ProductStatus {
         this.desc = desc;
     }
 
-    public static List<SelectItem> ToList() {
+    public static List<SelectItem> toList() {
         List<SelectItem> selectItems = new ArrayList<>();
         for (ProductStatus status : ProductStatus.values()) {
             selectItems.add(new SelectItem(status.getCode(), status.getDesc()));
