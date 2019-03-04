@@ -95,6 +95,9 @@ public class ProductController extends BaseController {
         else
             product.setCreateDate(new Date());
 
+        if(product.getUnifiedPrice() == null)
+            product.setUnifiedPrice(false);
+
         return productService.updateOrAdd(product);
     }
 

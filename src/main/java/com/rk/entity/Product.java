@@ -16,9 +16,6 @@ import java.util.List;
  */
 @JsonIgnoreProperties(value = {"handler"})
 public class Product extends BaseEntity<Long> {
-    public Product(){
-        setUnifiedPrice(true);
-    }
     /**
      * name
      */
@@ -258,7 +255,7 @@ public class Product extends BaseEntity<Long> {
     }
 
     public void setUnifiedPrice(Boolean unifiedPrice) {
-        unifiedPrice = unifiedPrice;
+        this.unifiedPrice = unifiedPrice;
     }
 }
 
