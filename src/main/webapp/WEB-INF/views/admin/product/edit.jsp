@@ -97,7 +97,8 @@
             <div class="layui-inline">
                 <label class="layui-form-label"><span class="x-red">*</span>产品价格</label>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="price" lay-verify="notempty|price" lay-vertype="tips" value="${product.price}"
+                    <input type="text" name="price" lay-verify="notempty|price" lay-vertype="tips"
+                           value="${product.price}"
                            placeholder="￥产品价格" autocomplete="off"
                            class="layui-input">
                 </div>
@@ -119,7 +120,8 @@
             <label class="layui-form-label">统一售价</label>
             <div class="layui-input-block">
                 <input type="checkbox" name="unifiedPrice"
-                       value="${product.unifiedPrice}" ${product.unifiedPrice == true ? "checked" : ""} lay-skin="switch"
+                       value="${product.unifiedPrice}" ${product.unifiedPrice == true ? "checked" : ""}
+                       lay-skin="switch"
                        lay-text="ON|OFF" lay-filter="unifiedPrice">
             </div>
         </div>
@@ -128,7 +130,8 @@
             <div class="layui-inline">
                 <label class="layui-form-label"><span class="x-red">*</span>数量</label>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="count" lay-verify="notempty|number" lay-vertype="tips" value="${product.count}"
+                    <input type="text" name="count" lay-verify="notempty|number" lay-vertype="tips"
+                           value="${product.count}"
                            placeholder="数量" autocomplete="off"
                            class="layui-input">
                 </div>
@@ -139,7 +142,8 @@
             <div class="layui-inline">
                 <label class="layui-form-label">购买数量</label>
                 <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" name="limitCount" lay-verify="number" lay-vertype="tips" value="${product.limitCount}"
+                    <input type="text" name="limitCount" lay-verify="number" lay-vertype="tips"
+                           value="${product.limitCount}"
                            placeholder="购买数量" autocomplete="off"
                            class="layui-input">
                 </div>
@@ -170,10 +174,61 @@
             </div>
         </div>
 
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">产品规格</label>
+            <div class="layui-input-block">
+                <table class="layui-table item-table">
+                    <thead>
+                    <tr>
+                        <td style="display: none">id</td>
+                        <td>图片</td>
+                        <td>规格</td>
+                        <td>名称</td>
+                        <td>价格</td>
+                        <td>操作</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="item" items="${product.productItems}">
+                        <tr>
+                            <td style="display: none;">
+                                <input type="text" name="itemId" value="${item.id}">
+                            </td>
+                            <td>
+                                <input type="text" name="itemImage" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
+                                       placeholder="请输入类型名称"
+                                       class="layui-input" value="${item.image}">
+                            </td>
+                            <td>
+                                <input type="text" name="itemCode" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
+                                       placeholder="请输入规格代码"
+                                       class="layui-input" value="${item.itemCode}">
+                            </td>
+                            <td>
+                                <input type="text" name="itemName" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
+                                       placeholder="请输入规格名称"
+                                       class="layui-input" value="${item.itemName}">
+                            </td>
+                            <td>
+                                <input type="text" name="itemPrice" lay-verify="price" lay-vertype="tips" autocomplete="off"
+                                       placeholder="请输入规格价格"
+                                       class="layui-input" value="${item.price}">
+                            </td>
+                            <td>
+                                <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</button>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+                <button class="layui-btn layui-btn-primary" id="add-item">添加规格</button>
+            </div>
+        </div>
+
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn" lay-submit lay-filter="submit">立即提交</button>
-                <button type="reset" id="cancel" class="layui-btn layui-btn-primary">重置</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
             </div>
         </div>
     </form>
@@ -205,11 +260,10 @@
                 //fillDescAfterUploadImage : K.undef(self.fillDescAfterUploadImage, false),
             });
             return editor;
-        };
-
+        }
         layui.use(['form', 'upload'], function () {
             var form = layui.form
-                , upload = layui.upload
+                , upload = layui.upload;
             //自定义验证规则
             form.verify({
                 notempty: function (value, obj) {
@@ -326,6 +380,41 @@
                         $('#img-file-3').attr('src', result); //图片链接（base64）
                     });
                 }
+            });
+
+            $('#add-item').click(function(e){
+                e.preventDefault();
+                let tr = '<tr>\n' +
+                    '                            <td style="display: none;">\n' +
+                    '                                <input type="text" name="itemId">\n' +
+                    '                            </td>\n' +
+                    '                            <td>\n' +
+                    '                                <input type="text" name="itemImage" lay-verify="notempty" lay-vertype="tips" autocomplete="off"\n' +
+                    '                                       placeholder="请输入类型名称"\n' +
+                    '                                       class="layui-input">\n' +
+                    '                            </td>\n' +
+                    '                            <td>\n' +
+                    '                                <input type="text" name="itemCode" lay-verify="notempty" lay-vertype="tips" autocomplete="off"\n' +
+                    '                                       placeholder="请输入规格代码"\n' +
+                    '                                       class="layui-input">\n' +
+                    '                            </td>\n' +
+                    '                            <td>\n' +
+                    '                                <input type="text" name="itemName" lay-verify="notempty" lay-vertype="tips" autocomplete="off"\n' +
+                    '                                       placeholder="请输入规格名称"\n' +
+                    '                                       class="layui-input">\n' +
+                    '                            </td>\n' +
+                    '                            <td>\n' +
+                    '                                <input type="text" name="itemPrice" lay-verify="price" lay-vertype="tips" autocomplete="off"\n' +
+                    '                                       placeholder="请输入规格价格"\n' +
+                    '                                       class="layui-input">\n' +
+                    '                            </td>\n' +
+                    '                        </tr>';
+                if($('.item-table tbody tr').length === 0){
+                    $('.item-table tbody').html(tr);
+                }else {
+                    $('.item-table tbody tr').after(tr);
+                }
+                return false;
             });
         });
 
