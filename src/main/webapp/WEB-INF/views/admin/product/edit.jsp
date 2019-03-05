@@ -1,3 +1,4 @@
+<%--<jsp:useBean id="JsonUtils" scope="request" class="com.rk.util.JsonUtils"/>--%>
 <%--
   Created by IntelliJ IDEA.
   User: Qin_Yikai
@@ -6,6 +7,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%--<%@ page import="com.rk.util.JsonUtils" %>--%>
 <html>
 <head>
     <%@ include file="../../common/tag.jsp" %>
@@ -189,39 +191,43 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="item" items="${product.productItems}">
+                    <c:forEach var="(item, index)" items="${product.productItems}">
                         <tr>
                             <td style="display: none;">
                                 <input type="text" name="itemId" value="${item.id}">
                             </td>
                             <td>
-                                <input type="text" name="itemImage" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
-                                       placeholder="请输入类型名称"
-                                       class="layui-input" value="${item.image}">
+                                <img class="layui-upload-img" id="item-img-file-${index}" src="/upload/images/${item.image2}">
+                                <button type="button" class="layui-btn" id="btnItemFile${index}">上传图片</button>
                             </td>
                             <td>
-                                <input type="text" name="itemCode" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
+                                <input type="text" name="itemCode" lay-verify="notempty" lay-vertype="tips"
+                                       autocomplete="off"
                                        placeholder="请输入规格代码"
                                        class="layui-input" value="${item.itemCode}">
                             </td>
                             <td>
-                                <input type="text" name="itemName" lay-verify="notempty" lay-vertype="tips" autocomplete="off"
+                                <input type="text" name="itemName" lay-verify="notempty" lay-vertype="tips"
+                                       autocomplete="off"
                                        placeholder="请输入规格名称"
                                        class="layui-input" value="${item.itemName}">
                             </td>
                             <td>
-                                <input type="text" name="itemPrice" lay-verify="price" lay-vertype="tips" autocomplete="off"
+                                <input type="text" name="itemPrice" lay-verify="price" lay-vertype="tips"
+                                       autocomplete="off"
                                        placeholder="请输入规格价格"
                                        class="layui-input" value="${item.price}">
                             </td>
                             <td>
-                                <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</button>
+                                <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">
+                                    删除
+                                </button>
                             </td>
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
-                <button class="layui-btn layui-btn-primary" id="add-item">添加规格</button>
+                <button type="button" class="layui-btn layui-btn-primary" id="add-item">添加规格</button>
             </div>
         </div>
 
@@ -261,9 +267,12 @@
             });
             return editor;
         }
-        layui.use(['form', 'upload'], function () {
+
+        layui.use(['form', 'upload', 'table'], function () {
             var form = layui.form
+                , table = layui.table
                 , upload = layui.upload;
+
             //自定义验证规则
             form.verify({
                 notempty: function (value, obj) {
@@ -382,37 +391,42 @@
                 }
             });
 
-            $('#add-item').click(function(e){
+            $('#add-item').click(function (e) {
                 e.preventDefault();
-                let tr = '<tr>\n' +
-                    '                            <td style="display: none;">\n' +
-                    '                                <input type="text" name="itemId">\n' +
+                var tr = ' <td style="display: none;">\n' +
+                    '                                <input type="text" name="itemId" value="${item.id}">\n' +
                     '                            </td>\n' +
                     '                            <td>\n' +
-                    '                                <input type="text" name="itemImage" lay-verify="notempty" lay-vertype="tips" autocomplete="off"\n' +
-                    '                                       placeholder="请输入类型名称"\n' +
-                    '                                       class="layui-input">\n' +
+                    '                                <img class="layui-upload-img" id="item-img-file-${index}" src="/upload/images/${item.image2}">\n' +
+                    '                                <button type="button" class="layui-btn" id="btnItemFile${index}">上传图片</button>\n' +
                     '                            </td>\n' +
                     '                            <td>\n' +
-                    '                                <input type="text" name="itemCode" lay-verify="notempty" lay-vertype="tips" autocomplete="off"\n' +
+                    '                                <input type="text" name="itemCode" lay-verify="notempty" lay-vertype="tips"\n' +
+                    '                                       autocomplete="off"\n' +
                     '                                       placeholder="请输入规格代码"\n' +
                     '                                       class="layui-input">\n' +
                     '                            </td>\n' +
                     '                            <td>\n' +
-                    '                                <input type="text" name="itemName" lay-verify="notempty" lay-vertype="tips" autocomplete="off"\n' +
+                    '                                <input type="text" name="itemName" lay-verify="notempty" lay-vertype="tips"\n' +
+                    '                                       autocomplete="off"\n' +
                     '                                       placeholder="请输入规格名称"\n' +
                     '                                       class="layui-input">\n' +
                     '                            </td>\n' +
                     '                            <td>\n' +
-                    '                                <input type="text" name="itemPrice" lay-verify="price" lay-vertype="tips" autocomplete="off"\n' +
+                    '                                <input type="text" name="itemPrice" lay-verify="price" lay-vertype="tips"\n' +
+                    '                                       autocomplete="off"\n' +
                     '                                       placeholder="请输入规格价格"\n' +
                     '                                       class="layui-input">\n' +
                     '                            </td>\n' +
-                    '                        </tr>';
-                if($('.item-table tbody tr').length === 0){
+                    '                            <td>\n' +
+                    '                                <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">\n' +
+                    '                                    删除\n' +
+                    '                                </button>\n' +
+                    '                            </td>'
+                if ($('.item-table tbody tr').length === 0) {
                     $('.item-table tbody').html(tr);
-                }else {
-                    $('.item-table tbody tr').after(tr);
+                } else {
+                    $('.item-table tbody tr:last').after(tr);
                 }
                 return false;
             });
