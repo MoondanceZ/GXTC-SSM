@@ -352,7 +352,7 @@
                 descriptionEditor.sync();
                 var formData = new FormData($('#editForm')[0]);
                 var itemData = genItemTableData();
-                formData.append('productItems', itemData);
+                formData.append('productItem[]', itemData);
                 var loadIndex = layer.load(0);
                 genItemTableData();
                 $.ajax({
@@ -435,6 +435,7 @@
             upload.render({
                 elem: '#btnFile3'
                 , auto: false
+                , url: '/file/uploadImage'
                 , accept: 'images'
                 , field: 'imgFile3'
                 , acceptMime: 'image/*'
@@ -444,6 +445,15 @@
                     obj.preview(function (index, file, result) {
                         $('#img-file-3').attr('src', result); //图片链接（base64）
                     });
+                }
+                , before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                    layer.load(); //上传loading
+                }
+                , done: function(res, index, upload){ //上传后的回调
+                    layer.closeAll('loading'); //关闭loading
+                }
+                , error: function(index, upload){
+                    layer.closeAll('loading'); //关闭loading
                 }
             });
 
