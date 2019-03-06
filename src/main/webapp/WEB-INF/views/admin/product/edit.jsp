@@ -191,29 +191,62 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="(item, index)" items="${product.productItems}">
+                    <c:forEach var="item" items="${product.productItems}" varStatus="status">
                         <tr>
                             <td style="display: none;">
-                                <input type="text" name="itemId" value="${item.id}">
+                                <input type="text" data-type="itemId" value="${item.id}">
                             </td>
                             <td>
-                                <img class="layui-upload-img" id="item-img-file-${index}" src="/upload/images/${item.image2}">
-                                <button type="button" class="layui-btn" id="btnItemFile${index}">上传图片</button>
+                                <c:choose>
+                                    <c:when test="${item.image != null }">
+                                        <img class="layui-upload-img" id="item-img-file-${(status.index+1)}"
+                                             src="/upload/images/${item.image}">
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img class="layui-upload-img" id="item-img-file-${(status.index+1)}">
+                                    </c:otherwise>
+                                </c:choose>
+                                <button type="button" class="layui-btn" id="btnItemFile${(status.index+1)}">上传图片
+                                </button>
+
+                                <script>
+                                    layui.use(['upload'], function () {
+                                        var upload = layui.upload;
+                                        var elem = '#btnItemFile' + ${status.index+1};
+                                        var imgElem = '#item-img-file-' + ${status.index+1};
+                                        upload.render({
+                                            elem: elem
+                                            , auto: false
+                                            , accept: 'images'
+                                            , field: 'itemImgFile'
+                                            , acceptMime: 'image/*'
+                                            , size: '5120'
+                                            , choose: function (obj) {
+                                                //预读本地文件示例，不支持ie8
+                                                obj.preview(function (index, file, result) {
+                                                    debugger;
+                                                    $(imgElem).attr('src', result); //图片链接（base64）
+                                                });
+                                            }
+                                        });
+                                    })
+                                </script>
+
                             </td>
                             <td>
-                                <input type="text" name="itemCode" lay-verify="notempty" lay-vertype="tips"
+                                <input type="text" data-type="itemCode" lay-verify="notempty" lay-vertype="tips"
                                        autocomplete="off"
                                        placeholder="请输入规格代码"
                                        class="layui-input" value="${item.itemCode}">
                             </td>
                             <td>
-                                <input type="text" name="itemName" lay-verify="notempty" lay-vertype="tips"
+                                <input type="text" data-type="itemName" lay-verify="notempty" lay-vertype="tips"
                                        autocomplete="off"
                                        placeholder="请输入规格名称"
                                        class="layui-input" value="${item.itemName}">
                             </td>
                             <td>
-                                <input type="text" name="itemPrice" lay-verify="price" lay-vertype="tips"
+                                <input type="text" data-type="itemPrice" lay-verify="price" lay-vertype="tips"
                                        autocomplete="off"
                                        placeholder="请输入规格价格"
                                        class="layui-input" value="${item.price}">
@@ -276,14 +309,18 @@
             //自定义验证规则
             form.verify({
                 notempty: function (value, obj) {
-                    var vname = $(obj).parent().prev().text();
+                    var vname = $(obj).data('lable');
+                    if (vname === 'undefined') vname = $(obj).parent().prev().text();
+
                     if (value.match(/^\s*$/)) {
                         return vname + '不能为空';
                     }
                 },
                 price: function (value, obj) {
                     if (!value.match(/^\s*$/) && !/(^[1-9]\d*$)|(^[1-9]\d*[.][0-9]{1,2}$)/.test(value)) {
-                        var vname = $(obj).parent().prev().text();
+                        var vname = $(obj).data('lable');
+                        if (vname === 'undefined') vname = $(obj).parent().prev().text();
+
                         return vname + '只能输入数字, 小数点后只能保留2位小数'
                     }
                 }
@@ -293,12 +330,31 @@
                  }*/
             });
 
+            function genItemTableData(){
+                var data = [];
+                $('.item-table tbody tr').each(function () {
+                    var $this = $(this);
+                    var $tds = $this.find('td');
+                    var productItem = {
+                        id: $($tds[0]).children('input').val() == '' ? null : $($tds[0]).children('input').val(),
+                        itemCode: $($tds[2]).children('input').val() == '' ? null : $($tds[2]).children('input').val(),
+                        itemName: $($tds[3]).children('input').val() == '' ? null : $($tds[3]).children('input').val(),
+                        price: $($tds[4]).children('input').val() == '' ? null : $($tds[4]).children('input').val()
+                    }
+                    data.push(productItem);
+                })
+                return data;
+            }
+
             //监听提交
             form.on('submit(submit)', function (data) {
                 //console.log(descriptionEditor.html());
                 descriptionEditor.sync();
                 var formData = new FormData($('#editForm')[0]);
+                var itemData = genItemTableData();
+                formData.append('productItems', itemData);
                 var loadIndex = layer.load(0);
+                genItemTableData();
                 $.ajax({
                     type: "POST",
                     url: "/product/save",
@@ -393,27 +449,28 @@
 
             $('#add-item').click(function (e) {
                 e.preventDefault();
-                var tr = ' <td style="display: none;">\n' +
-                    '                                <input type="text" name="itemId" value="${item.id}">\n' +
+                var trLength = $('.item-table tbody tr').length;
+                var tr = '<tr> <td style="display: none;">\n' +
+                    '                                <input type="text" data-type="itemId">\n' +
                     '                            </td>\n' +
                     '                            <td>\n' +
-                    '                                <img class="layui-upload-img" id="item-img-file-${index}" src="/upload/images/${item.image2}">\n' +
-                    '                                <button type="button" class="layui-btn" id="btnItemFile${index}">上传图片</button>\n' +
+                    '                                <img class="layui-upload-img" id="item-img-file-' + (trLength + 1) + '">\n' +
+                    '                                <button type="button" class="layui-btn" id="btnItemFile' + (trLength + 1) + '">上传图片</button>\n' +
                     '                            </td>\n' +
                     '                            <td>\n' +
-                    '                                <input type="text" name="itemCode" lay-verify="notempty" lay-vertype="tips"\n' +
+                    '                                <input data-lable="规格代码" type="text" data-type="itemCode" lay-verify="notempty" lay-vertype="tips"\n' +
                     '                                       autocomplete="off"\n' +
                     '                                       placeholder="请输入规格代码"\n' +
                     '                                       class="layui-input">\n' +
                     '                            </td>\n' +
                     '                            <td>\n' +
-                    '                                <input type="text" name="itemName" lay-verify="notempty" lay-vertype="tips"\n' +
+                    '                                <input data-lable="规格名称" type="text" data-type="itemName" lay-verify="notempty" lay-vertype="tips"\n' +
                     '                                       autocomplete="off"\n' +
                     '                                       placeholder="请输入规格名称"\n' +
                     '                                       class="layui-input">\n' +
                     '                            </td>\n' +
                     '                            <td>\n' +
-                    '                                <input type="text" name="itemPrice" lay-verify="price" lay-vertype="tips"\n' +
+                    '                                <input data-lable="规格价格" type="text" data-type="itemPrice" lay-verify="price" lay-vertype="tips"\n' +
                     '                                       autocomplete="off"\n' +
                     '                                       placeholder="请输入规格价格"\n' +
                     '                                       class="layui-input">\n' +
@@ -422,12 +479,27 @@
                     '                                <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">\n' +
                     '                                    删除\n' +
                     '                                </button>\n' +
-                    '                            </td>'
-                if ($('.item-table tbody tr').length === 0) {
+                    '                            </td></tr>'
+                if (trLength === 0) {
                     $('.item-table tbody').html(tr);
                 } else {
                     $('.item-table tbody tr:last').after(tr);
                 }
+
+                upload.render({
+                    elem: '#btnItemFile' + (trLength + 1)
+                    , auto: false
+                    , accept: 'images'
+                    , field: 'itemImgFile'
+                    , acceptMime: 'image/*'
+                    , size: '5120'
+                    , choose: function (obj) {
+                        //预读本地文件示例，不支持ie8
+                        obj.preview(function (index, file, result) {
+                            $('#item-img-file-' + (trLength + 1)).attr('src', result); //图片链接（base64）
+                        });
+                    }
+                });
                 return false;
             });
         });

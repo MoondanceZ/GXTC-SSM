@@ -38,6 +38,8 @@ public class MybatisRedisCache implements Cache {
             throw new IllegalArgumentException("mybatis redis cache need an id.");
         }
         this.id = id;
+        //每次启动需要清除掉之前的缓存
+        this.clear();
     }
 
 
