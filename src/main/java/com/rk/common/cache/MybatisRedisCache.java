@@ -1,6 +1,8 @@
 package com.rk.common.cache;
 
+import java.io.*;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -12,6 +14,8 @@ import org.springframework.data.redis.connection.jedis.JedisConnection;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.JedisShardInfo;
 
 /**
  * 使用第三方内存数据库Redis作为二级缓存
@@ -39,7 +43,47 @@ public class MybatisRedisCache implements Cache {
         }
         this.id = id;
         //每次启动需要清除掉之前的缓存
+        if (MybatisRedisCache.jedisConnectionFactory == null) {
+            JedisConnectionFactory factory = getJedisConnectionFactory();
+            setJedisConnectionFactory(factory);
+        }
         this.clear();
+    }
+
+    private JedisConnectionFactory getJedisConnectionFactory() {
+        try {
+            InputStream in = MybatisRedisCache.class.getClassLoader().getResourceAsStream("redis.properties");
+            Properties props = new Properties();
+            props.load(in);
+            in.close();
+
+            JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
+            jedisPoolConfig.setMaxIdle(Integer.valueOf(props.getProperty("redis.maxIdle")));
+            jedisPoolConfig.setMaxTotal(Integer.valueOf(props.getProperty("redis.maxActive")));
+            jedisPoolConfig.setMaxWaitMillis(Integer.valueOf(props.getProperty("redis.maxWait")));
+            jedisPoolConfig.setTestOnBorrow(Boolean.valueOf(props.getProperty("redis.testOnBorrow")));
+
+            JedisShardInfo jedisShardInfo = new JedisShardInfo(props.getProperty("redis.host"), Integer.valueOf(props.getProperty("redis.port")));
+            jedisShardInfo.setPassword(props.getProperty("redis.pass"));
+
+            JedisConnectionFactory factory = new JedisConnectionFactory();
+            factory.setHostName(props.getProperty("redis.host"));
+            factory.setPort(Integer.valueOf(props.getProperty("redis.port")));
+            factory.setPassword(props.getProperty("redis.pass"));
+            factory.setDatabase(Integer.valueOf(props.getProperty("redis.database4mybatis")));
+            factory.setPoolConfig(jedisPoolConfig);
+            factory.setShardInfo(jedisShardInfo);
+
+            return factory;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 
