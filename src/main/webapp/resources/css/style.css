@@ -12,7 +12,7 @@
 }
 
 .layui-form-switch {
-     margin-top: 8px;
+    margin-top: 8px;
 }
 
 .edit-div {
@@ -27,6 +27,27 @@
     margin: 0 10px 10px 0;
 }
 
-.layui-upload-list img {
+.product-img-list {
     margin-left: 110px;
+    border: 1px solid #c0c0c0;
+    /*height: 112px;*/
+}
+
+.product-img-list .imgDiv {
+    display: inline-block;
+    position: relative;
+}
+
+.product-img-list .imgDiv a.delete:hover, .product-img-list .imgDiv a.delete:focus {
+    color: red;
+}
+
+.product-img-list .imgDiv a.delete {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.product-img-list .imgDiv img {
+    margin: 10px;
 }

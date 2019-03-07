@@ -56,41 +56,10 @@ public class ProductController extends BaseController {
         return "admin/product/edit";
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/save", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseBody()
-    public ReturnResult Save(HttpServletRequest request, @Valid Product product,
-                             @RequestParam(value = "imgFile1", required = false) MultipartFile imgFile1,
-                             @RequestParam(value = "imgFile2", required = false) MultipartFile imgFile2,
-                             @RequestParam(value = "imgFile3", required = false) MultipartFile imgFile3)
+    public ReturnResult Save(HttpServletRequest request, @RequestBody @Valid  Product product)
             throws IOException {
-
-        //采用这种校验方式是因为前段为 multipart/form-data 方式提交时, 添加 @Valid 会报400错误, 暂时无法解决
-        //ReturnResult validateResult = ValidatorHelper.validate(product);
-        //if (validateResult != null) return validateResult;
-
-        if (!imgFile1.isEmpty()) {
-            String imgFile1Name = FileUtils.saveImage(request, imgFile1);
-            if (imgFile1Name != null) {
-                String[] nameStrings = imgFile1Name.split("/");
-                product.setImage1(nameStrings[nameStrings.length - 1]);
-            }
-        }
-
-        if (!imgFile2.isEmpty()) {
-            String imgFile2Name = FileUtils.saveImage(request, imgFile2);
-            if (imgFile2Name != null) {
-                String[] nameStrings = imgFile2Name.split("/");
-                product.setImage2(nameStrings[nameStrings.length - 1]);
-            }
-        }
-
-        if (!imgFile3.isEmpty()) {
-            String imgFile3Name = FileUtils.saveImage(request, imgFile3);
-            if (imgFile3Name != null) {
-                String[] nameStrings = imgFile3Name.split("/");
-                product.setImage3(nameStrings[nameStrings.length - 1]);
-            }
-        }
 
         if (product.getId() != null)
             product.setModifyDate(new Date());

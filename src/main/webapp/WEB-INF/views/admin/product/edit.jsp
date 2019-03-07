@@ -30,56 +30,31 @@
 
         <div class="layui-form-item">
             <div class="layui-upload">
-                <label class="layui-form-label">封面一</label>
-                <button type="button" class="layui-btn" id="btnFile1">上传图片</button>
-                <div class="layui-upload-list">
-                    <%--<c:choose>
-                        <c:when test="${product.image1 != null }">
-                            <img class="layui-upload-img" id="img-file-1" src="/upload/images/${product.image1}">
-                        </c:when>
-                        <c:otherwise>
-                            <img class="layui-upload-img" id="img-file-1">
-                        </c:otherwise>
-                    </c:choose>--%>
-                    <div class="layui-upload-list" id="img-list"></div>
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="layui-form-item">
-            <div class="layui-upload">
-                <label class="layui-form-label">封面二</label>
-                <button type="button" class="layui-btn" id="btnFile2">上传图片</button>
-                <div class="layui-upload-list">
+                <label class="layui-form-label">产品图库</label>
+                <button type="button" class="layui-btn layui-btn-normal" id="btnChooseImg">选择图片</button>
+                <div class="layui-upload-list product-img-list" id="img-list">
                     <c:choose>
-                        <c:when test="${product.image2 != null }">
-                            <img class="layui-upload-img" id="img-file-2" src="/upload/images/${product.image2}">
+                        <c:when test="${product.image != null }">
+                            <c:set var="imgList" value="${fn:split(product.image, ',')}"></c:set>
+                            <c:forEach var="item" items="${imgList}" varStatus="status">
+                                <div class="imgDiv">
+                                    <img src="/upload/image/${item}" alt="${item}" class="layui-upload-img">
+                                    <a href="javascript:;" class="delete">
+                                        <i class="layui-icon layui-icon-delete"
+                                           style="font-size: 20px; color: red;"></i>
+                                    </a>
+                                </div>
+                            </c:forEach>
                         </c:when>
                         <c:otherwise>
-                            <img class="layui-upload-img" id="img-file-2">
+                            <div class="blankImgDiv" style="height: 112px;width: 0px;display: inline-block"></div>
                         </c:otherwise>
                     </c:choose>
+                    <input type="hidden" name="image" id="image" value="${product.image}">
                 </div>
-            </div>
-        </div>
 
-        <div class="layui-form-item">
-            <div class="layui-upload">
-                <label class="layui-form-label">封面三</label>
-                <button type="button" class="layui-btn" id="btnFile3">上传图片</button>
-                <div class="layui-upload-list">
-                    <c:choose>
-                        <c:when test="${product.image3 != null }">
-                            <img class="layui-upload-img" id="img-file-3" src="/upload/images/${product.image3}">
-                        </c:when>
-                        <c:otherwise>
-                            <img class="layui-upload-img" id="img-file-3">
-                        </c:otherwise>
-                    </c:choose>
-                </div>
             </div>
+
         </div>
 
         <div class="layui-form-item">
@@ -221,7 +196,7 @@
                                             elem: elem
                                             , auto: false
                                             , accept: 'images'
-                                            , field: 'itemImgFile'
+                                            //, field: 'itemImgFile'
                                             , acceptMime: 'image/*'
                                             , size: '5120'
                                             , choose: function (obj) {
@@ -333,7 +308,7 @@
                  }*/
             });
 
-            function genItemTableData(){
+            function genItemTableData() {
                 var data = [];
                 $('.item-table tbody tr').each(function () {
                     var $this = $(this);
@@ -353,18 +328,17 @@
             form.on('submit(submit)', function (data) {
                 //console.log(descriptionEditor.html());
                 descriptionEditor.sync();
-                var formData = new FormData($('#editForm')[0]);
                 var itemData = genItemTableData();
-                formData.append('productItem[]', itemData);
+                data.field.productItems = itemData;
+                var formData = JSON.stringify(data.field);
                 var loadIndex = layer.load(0);
                 genItemTableData();
                 $.ajax({
                     type: "POST",
                     url: "/product/save",
                     data: formData,
-                    //dataType: 'json',
-                    processData: false,  //必须false才会避开jQuery对 formdata 的默认处理
-                    contentType: false,  //必须false才会自动加上正确的Content-Type
+                    dataType: "json",
+                    contentType: "application/json",
                     success: function (data) {
                         layer.close(loadIndex);
                         if (data.success) {
@@ -402,82 +376,67 @@
                 }
             });
 
-//多图片上传
+            var files = [];
+            //多图片上传
             upload.render({
-                elem: '#btnFile1'
+                elem: '#btnChooseImg'
                 , url: '/file/uploadImage'
                 , auto: true
                 , accept: 'images'
                 , field: 'imgFile'
                 , acceptMime: 'image/*'
                 , multiple: true
-                , before: function (obj) {
+                , choose: function (obj) {
+                    console.log(obj)
                     //预读本地文件示例，不支持ie8
                     obj.preview(function (index, file, result) {
-                        console.log(result);
-                        $('#img-list').append('<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img">')
+                        var imgDiv = '<div class="imgDiv">\n' +
+                            '                            <img src="' + result + '" alt="' + file.name + '" class="layui-upload-img"/>\n' +
+                            '                            <a href="javascript:;" class="delete">\n' +
+                            '                                <i class="layui-icon layui-icon-delete" style="font-size: 20px; color: red;"></i>  \n' +
+                            '                            </a>\n' +
+                            '                        </div>';
+                        $('#img-list .blankImgDiv').remove();
+                        $('#img-list').append(imgDiv);
                     });
                 }
-                , done: function (res) {
-                    //上传完毕
-                }
-            });
-            //普通图片上传
-            upload.render({
-                elem: '#img-file-1'
-                , auto: false
-                , accept: 'images'
-                , field: 'imgFile1'
-                , acceptMime: 'image/*'
-                , size: '5120'
-                //,exts : 'jpg|png|gif|bmp|jpeg'
-                , choose: function (obj) {
-                    //预读本地文件，如果是多文件，则会遍历。(不支持ie8/9)
-                    obj.preview(function (index, file, result) {
-                        $('#img-file-1').attr('src', result); //图片链接（base64）
-                    });
-                }
-            });
-
-            upload.render({
-                elem: '#btnFile2'
-                , auto: false
-                , accept: 'images'
-                , field: 'imgFile2'
-                , acceptMime: 'image/*'
-                , size: '5120'
-                , choose: function (obj) {
-                    //预读本地文件示例，不支持ie8
-                    obj.preview(function (index, file, result) {
-                        $('#img-file-2').attr('src', result); //图片链接（base64）
-                    });
-                }
-            });
-
-            upload.render({
-                elem: '#btnFile3'
-                , auto: false
-                , url: '/file/uploadImage'
-                , accept: 'images'
-                , field: 'imgFile3'
-                , acceptMime: 'image/*'
-                , size: '5120'
-                , choose: function (obj) {
-                    //预读本地文件示例，不支持ie8
-                    obj.preview(function (index, file, result) {
-                        $('#img-file-3').attr('src', result); //图片链接（base64）
-                    });
-                }
-                , before: function(obj){ //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                , before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
                     layer.load(); //上传loading
                 }
-                , done: function(res, index, upload){ //上传后的回调
+                , done: function (res, index, upload) { //上传后的回调
+                    console.log(index);
+                    console.log(upload);
+                    console.log(this);
                     layer.closeAll('loading'); //关闭loading
+                    if (res.error == 0) {
+                        var img = $('#image').val();
+                        if (!img) {
+                            $('#image').val(res.url);
+                        } else {
+                            $('#image').val(img + ',' + res.url);
+                        }
+                    }else{
+                        layer.msg(res.message);
+                    }
                 }
-                , error: function(index, upload){
+                , error: function (index, upload) {
                     layer.closeAll('loading'); //关闭loading
                 }
             });
+
+
+            //图片删除
+            $(document).on('click', '.delete', function () {
+                $(this).parent().remove();
+                if ($('#img-list .imgDiv').length == 0) {
+                    $('#img-list').append('<div class="blankImgDiv" style="height: 112px;width: 0px;display: inline-block"></div>');
+                }
+            });
+
+            function getImages() {
+                var images = [];
+                $('#img-list .imgDiv')
+            }
 
             $('#add-item').click(function (e) {
                 e.preventDefault();
@@ -522,7 +481,7 @@
                     elem: '#btnItemFile' + (trLength + 1)
                     , auto: false
                     , accept: 'images'
-                    , field: 'itemImgFile'
+                    //, field: 'itemImgFile'
                     , acceptMime: 'image/*'
                     , size: '5120'
                     , choose: function (obj) {
@@ -537,7 +496,6 @@
         });
 
     });
-
 </script>
 </body>
 </html>
