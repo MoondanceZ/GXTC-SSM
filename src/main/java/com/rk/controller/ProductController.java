@@ -1,6 +1,5 @@
 package com.rk.controller;
 
-import com.rk.common.enums.ProductStatus;
 import com.rk.common.exception.DataNotFoundException;
 import com.rk.dto.response.LayPage;
 import com.rk.dto.response.ReturnResult;
@@ -8,12 +7,10 @@ import com.rk.dto.request.ProductPageRequest;
 import com.rk.entity.Product;
 import com.rk.service.interfaces.ProductService;
 import com.rk.service.interfaces.ProductTypeService;
-import com.rk.util.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;

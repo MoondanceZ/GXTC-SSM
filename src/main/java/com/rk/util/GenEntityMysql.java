@@ -98,11 +98,11 @@ public class GenEntityMysql {
 //            System.out.println(comment);
             String content = parse(colnames, colTypes, colSizes);
 
-            writeToFile(content, 1);
-//            genService();
-//            genServiceInterface();
-//            genDao();
-//            genDaoXml();
+            //writeToFile(content, 1);
+            //genService();
+            //genServiceInterface();
+            genDao();
+            genDaoXml();
 
         } catch (SQLException e) {
             e.printStackTrace();
