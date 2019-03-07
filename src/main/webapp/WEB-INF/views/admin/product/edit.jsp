@@ -33,16 +33,19 @@
                 <label class="layui-form-label">封面一</label>
                 <button type="button" class="layui-btn" id="btnFile1">上传图片</button>
                 <div class="layui-upload-list">
-                    <c:choose>
+                    <%--<c:choose>
                         <c:when test="${product.image1 != null }">
                             <img class="layui-upload-img" id="img-file-1" src="/upload/images/${product.image1}">
                         </c:when>
                         <c:otherwise>
                             <img class="layui-upload-img" id="img-file-1">
                         </c:otherwise>
-                    </c:choose>
+                    </c:choose>--%>
+                    <div class="layui-upload-list" id="img-list"></div>
                 </div>
+
             </div>
+
         </div>
 
         <div class="layui-form-item">
@@ -399,10 +402,29 @@
                 }
             });
 
-
-            //普通图片上传
+//多图片上传
             upload.render({
                 elem: '#btnFile1'
+                , url: '/file/uploadImage'
+                , auto: true
+                , accept: 'images'
+                , field: 'imgFile'
+                , acceptMime: 'image/*'
+                , multiple: true
+                , before: function (obj) {
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function (index, file, result) {
+                        console.log(result);
+                        $('#img-list').append('<img src="' + result + '" alt="' + file.name + '" class="layui-upload-img">')
+                    });
+                }
+                , done: function (res) {
+                    //上传完毕
+                }
+            });
+            //普通图片上传
+            upload.render({
+                elem: '#img-file-1'
                 , auto: false
                 , accept: 'images'
                 , field: 'imgFile1'
