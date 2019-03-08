@@ -173,18 +173,20 @@
                             <td style="display: none;">
                                 <input type="text" data-type="itemId" value="${item.id}">
                             </td>
-                            <td>
+                            <td width="110px">
                                 <c:choose>
                                     <c:when test="${item.image != null }">
-                                        <img class="layui-upload-img" data-image="${item.image}" id="item-img-file-${(status.index+1)}"
-                                             src="${item.image}">
+                                        <div class="item-img" id="btnItemFile${(status.index+1)}">
+                                            <img class="layui-upload-img" data-image="${item.image}" id="item-img-file-${(status.index+1)}" src="${item.image}">
+                                        </div>
                                     </c:when>
                                     <c:otherwise>
-                                        <img class="layui-upload-img" id="item-img-file-${(status.index+1)}">
+                                        <div class="item-img" id="btnItemFile${(status.index+1)}">
+                                            <img class="layui-upload-img blank-add" id="item-img-file-${(status.index+1)}">
+                                            <i class="layui-icon layui-icon-add-1" style="font-size: 40px;"></i>
+                                        </div>
                                     </c:otherwise>
                                 </c:choose>
-                                <button type="button" class="layui-btn" id="btnItemFile${(status.index+1)}">上传图片
-                                </button>
 
                                 <script>
                                     layui.use(['upload'], function () {
@@ -202,6 +204,7 @@
                                             , choose: function (obj) {
                                                 //预读本地文件示例，不支持ie8
                                                 obj.preview(function (index, file, result) {
+                                                    $(imgElem).next().hide();
                                                     $(imgElem).attr('src', result).attr('data-index', index); //图片链接（base64）
                                                 });
                                             }
@@ -211,12 +214,14 @@
                                             , done: function (res, index, upload) { //上传后的回调
                                                 layer.closeAll('loading'); //关闭loading
                                                 if (res.error !== 0) {
+                                                    $('img[data-index='+index+']').next().show();
                                                     layer.msg(res.message);
                                                 }else {
                                                     $('img[data-index='+index+']').attr('data-image', res.url);
                                                 }
                                             }
                                             , error: function (index, upload) {
+                                                $('img[data-index='+index+']').next().show();
                                                 layer.closeAll('loading'); //关闭loading
                                             }
                                         });
@@ -335,7 +340,7 @@
                     var $tds = $this.find('td');
                     var productItem = {
                         id: $($tds[0]).children('input').val() == '' ? null : $($tds[0]).children('input').val(),
-                        image: $($tds[1]).children('img').data('image') == '' ? null : $($tds[1]).children('img').data('image'),
+                        image: $($tds[1]).children().children('img').data('image') == '' ? null : $($tds[1]).children().children('img').data('image'),
                         itemCode: $($tds[2]).children('input').val() == '' ? null : $($tds[2]).children('input').val(),
                         itemName: $($tds[3]).children('input').val() == '' ? null : $($tds[3]).children('input').val(),
                         price: $($tds[4]).children('input').val() == '' ? null : $($tds[4]).children('input').val()
@@ -396,6 +401,7 @@
             form.on('switch(unifiedPrice)', function (data) {
                 if (this.checked) {
                     $('input[name=unifiedPrice]').val(true);
+                    $('table.item-table input[data-type=itemPrice]').val($('input[name=price]').val());
                 } else {
                     $('input[name=unifiedPrice]').val(false);
                 }
@@ -467,13 +473,15 @@
 
             $('#add-item').click(function (e) {
                 e.preventDefault();
+                var isUnifiedPrice =  $('input[name=unifiedPrice]').val();
+                var price = isUnifiedPrice === 'true' ? $('input[name=price]').val() : '';
                 var trLength = $('.item-table tbody tr').length;
                 var tr = '<tr> <td style="display: none;">\n' +
                     '                                <input type="text" data-type="itemId">\n' +
                     '                            </td>\n' +
-                    '                            <td>\n' +
-                    '                                <img class="layui-upload-img" id="item-img-file-' + (trLength + 1) + '">\n' +
-                    '                                <button type="button" class="layui-btn" id="btnItemFile' + (trLength + 1) + '">上传图片</button>\n' +
+                    '                            <td width="110px">\n' +
+                    '                                <div class="item-img" id="btnItemFile' + (trLength + 1) + '"> <img class="layui-upload-img blank-add" id="item-img-file-' + (trLength + 1) + '">\n' +
+                    '                                <i class="layui-icon layui-icon-add-1" style="font-size: 40px;"></i></div>\n' +
                     '                            </td>\n' +
                     '                            <td>\n' +
                     '                                <input data-lable="规格代码" type="text" data-type="itemCode" lay-verify="notempty" lay-vertype="tips"\n' +
@@ -491,10 +499,10 @@
                     '                                <input data-lable="规格价格" type="text" data-type="itemPrice" lay-verify="price" lay-vertype="tips"\n' +
                     '                                       autocomplete="off"\n' +
                     '                                       placeholder="请输入规格价格"\n' +
-                    '                                       class="layui-input">\n' +
+                    '                                       class="layui-input"' + (price === '' ? '' : 'value='+price ) +'>\n' +
                     '                            </td>\n' +
                     '                            <td>\n' +
-                    '                                <button type="button" class="layui-btn layui-btn-danger layui-btn-xs item-del" lay-event="del">\n' +
+                    '                                <button type="button" class="layui-btn layui-btn-danger layui-btn-xs product-item-del" lay-event="del">\n' +
                     '                                    删除\n' +
                     '                                </button>\n' +
                     '                            </td></tr>'
@@ -504,15 +512,9 @@
                     $('.item-table tbody tr:last').after(tr);
                 }
 
-                /*$('#item-table').on('click', 'button.product-item-del', function () {
-                   $(this).parent().parent().remove();
+                /*$(document).on('click', '.product-item-del', function () {
+                    $(this).parent().parent().remove();
                 });*/
-                table.init('item-table', { //转化静态表格
-                    //height: 'full-500'
-                });
-                table.on('tool(item-table)', function (obj) {
-                    debugger;
-                });
 
                 upload.render({
                     elem: '#btnItemFile' + (trLength + 1)
@@ -525,6 +527,7 @@
                     , choose: function (obj) {
                         //预读本地文件示例，不支持ie8
                         obj.preview(function (index, file, result) {
+                            $('#item-img-file-' + (trLength + 1)).next().hide();
                             $('#item-img-file-' + (trLength + 1)).attr('src', result).attr('data-index', index); //图片链接（base64）
                         });
                     }
@@ -534,12 +537,14 @@
                     , done: function (res, index, upload) { //上传后的回调
                         layer.closeAll('loading'); //关闭loading
                         if (res.error !== 0) {
+                            $('img[data-index='+index+']').next().show();
                             layer.msg(res.message);
                         }else {
                             $('img[data-index='+index+']').attr('data-image', res.url);
                         }
                     }
                     , error: function (index, upload) {
+                        $('img[data-index='+index+']').next().show();
                         layer.closeAll('loading'); //关闭loading
                     }
                 });
@@ -548,6 +553,12 @@
         });
 
     });
+
+    $(function(){
+        $('body').on('click','.product-item-del',function(){
+            $(this).parent().parent().remove();
+        });
+    })
 </script>
 </body>
 </html>
