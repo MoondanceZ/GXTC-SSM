@@ -71,9 +71,7 @@
     <insert id="insert">
         INSERT INTO product (
             name,
-            image1,
-            image2,
-            image3,
+            image,
             originPlace,
             description,
             price,
@@ -87,9 +85,7 @@
         VALUES
         (
             #{name},
-            #{image1},
-            #{image2},
-            #{image3},
+            #{image},
             #{originPlace},
             #{description},
             #{price},
@@ -106,14 +102,8 @@
         UPDATE product
         <set>
             name = #{name},
-            <if test="image1 != null">
-                image1 = #{image1},
-            </if>
-            <if test="image2 != null">
-                image2 = #{image2},
-            </if>
-            <if test="image3 != null">
-                image3 = #{image3},
+            <if test="image != null">
+                image = #{image},
             </if>
             originPlace = #{originPlace},
             description = #{description},

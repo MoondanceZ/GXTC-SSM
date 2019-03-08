@@ -38,10 +38,10 @@
                             <c:set var="imgList" value="${fn:split(product.image, ',')}"></c:set>
                             <c:forEach var="item" items="${imgList}" varStatus="status">
                                 <div class="imgDiv">
-                                    <img src="/upload/image/${item}" alt="${item}" class="layui-upload-img">
+                                    <img src="${item}" alt="${item.replace("/upload/image/", "")}" data-index="${item}" class="layui-upload-img">
                                     <a href="javascript:;" class="delete">
-                                        <i class="layui-icon layui-icon-delete"
-                                           style="font-size: 20px; color: red;"></i>
+                                        <i class="layui-icon layui-icon-close"
+                                           style="font-size: 20px; color: red;font-weight: 900;"></i>
                                     </a>
                                 </div>
                             </c:forEach>
@@ -50,7 +50,6 @@
                             <div class="blankImgDiv" style="height: 112px;width: 0px;display: inline-block"></div>
                         </c:otherwise>
                     </c:choose>
-                    <input type="hidden" name="image" id="image" value="${product.image}">
                 </div>
 
             </div>
@@ -157,7 +156,7 @@
         <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">产品规格</label>
             <div class="layui-input-block">
-                <table class="layui-table item-table">
+                <table class="layui-table item-table" id="item-table" lay-filter="item-table">
                     <thead>
                     <tr>
                         <td style="display: none">id</td>
@@ -177,8 +176,8 @@
                             <td>
                                 <c:choose>
                                     <c:when test="${item.image != null }">
-                                        <img class="layui-upload-img" id="item-img-file-${(status.index+1)}"
-                                             src="/upload/images/${item.image}">
+                                        <img class="layui-upload-img" data-image="${item.image}" id="item-img-file-${(status.index+1)}"
+                                             src="${item.image}">
                                     </c:when>
                                     <c:otherwise>
                                         <img class="layui-upload-img" id="item-img-file-${(status.index+1)}">
@@ -194,17 +193,31 @@
                                         var imgElem = '#item-img-file-' + ${status.index+1};
                                         upload.render({
                                             elem: elem
-                                            , auto: false
+                                            , url: '/file/uploadImage'
+                                            , auto: true
                                             , accept: 'images'
-                                            //, field: 'itemImgFile'
+                                            , field: 'imgFile'
                                             , acceptMime: 'image/*'
-                                            , size: '5120'
+                                            , multiple: false
                                             , choose: function (obj) {
                                                 //预读本地文件示例，不支持ie8
                                                 obj.preview(function (index, file, result) {
-                                                    debugger;
-                                                    $(imgElem).attr('src', result); //图片链接（base64）
+                                                    $(imgElem).attr('src', result).attr('data-index', index); //图片链接（base64）
                                                 });
+                                            }
+                                            , before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                                                layer.load(); //上传loading
+                                            }
+                                            , done: function (res, index, upload) { //上传后的回调
+                                                layer.closeAll('loading'); //关闭loading
+                                                if (res.error !== 0) {
+                                                    layer.msg(res.message);
+                                                }else {
+                                                    $('img[data-index='+index+']').attr('data-image', res.url);
+                                                }
+                                            }
+                                            , error: function (index, upload) {
+                                                layer.closeAll('loading'); //关闭loading
                                             }
                                         });
                                     })
@@ -230,7 +243,8 @@
                                        class="layui-input" value="${item.price}">
                             </td>
                             <td>
-                                <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">
+                                <button type="button" class="layui-btn layui-btn-danger layui-btn-xs product-item-del"
+                                        lay-event="item-del">
                                     删除
                                 </button>
                             </td>
@@ -279,6 +293,12 @@
             return editor;
         }
 
+        var files = [];
+        $('.imgDiv img').each(function(){
+            var fileIndex = $(this).data('index');
+            files.push({index:fileIndex,url:fileIndex,result:null,name:fileIndex});
+        });
+
         layui.use(['form', 'upload', 'table'], function () {
             var form = layui.form
                 , table = layui.table
@@ -315,10 +335,11 @@
                     var $tds = $this.find('td');
                     var productItem = {
                         id: $($tds[0]).children('input').val() == '' ? null : $($tds[0]).children('input').val(),
+                        image: $($tds[1]).children('img').data('image') == '' ? null : $($tds[1]).children('img').data('image'),
                         itemCode: $($tds[2]).children('input').val() == '' ? null : $($tds[2]).children('input').val(),
                         itemName: $($tds[3]).children('input').val() == '' ? null : $($tds[3]).children('input').val(),
                         price: $($tds[4]).children('input').val() == '' ? null : $($tds[4]).children('input').val()
-                    }
+                    };
                     data.push(productItem);
                 })
                 return data;
@@ -329,10 +350,14 @@
                 //console.log(descriptionEditor.html());
                 descriptionEditor.sync();
                 var itemData = genItemTableData();
+                var image = [];
+                files.forEach(function (item) {
+                    image.push(item.url)
+                });
                 data.field.productItems = itemData;
+                data.field.image = image.join(',');
                 var formData = JSON.stringify(data.field);
                 var loadIndex = layer.load(0);
-                genItemTableData();
                 $.ajax({
                     type: "POST",
                     url: "/product/save",
@@ -376,7 +401,6 @@
                 }
             });
 
-            var files = [];
             //多图片上传
             upload.render({
                 elem: '#btnChooseImg'
@@ -387,26 +411,15 @@
                 , acceptMime: 'image/*'
                 , multiple: true
                 , choose: function (obj) {
-                    console.log(obj)
                     //预读本地文件示例，不支持ie8
                     obj.preview(function (index, file, result) {
-                        var imgDiv = '<div class="imgDiv">\n' +
-                            '                            <img src="' + result + '" alt="' + file.name + '" class="layui-upload-img"/>\n' +
-                            '                            <a href="javascript:;" class="delete">\n' +
-                            '                                <i class="layui-icon layui-icon-delete" style="font-size: 20px; color: red;"></i>  \n' +
-                            '                            </a>\n' +
-                            '                        </div>';
-                        $('#img-list .blankImgDiv').remove();
-                        $('#img-list').append(imgDiv);
+                        files.push({index:index,url:null,result:result,name:file.name});
                     });
                 }
                 , before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
                     layer.load(); //上传loading
                 }
                 , done: function (res, index, upload) { //上传后的回调
-                    console.log(index);
-                    console.log(upload);
-                    console.log(this);
                     layer.closeAll('loading'); //关闭loading
                     if (res.error == 0) {
                         var img = $('#image').val();
@@ -415,28 +428,42 @@
                         } else {
                             $('#image').val(img + ',' + res.url);
                         }
+
+                        var file = files.find(m=>m.index === index);
+                        file.url = res.url;
+                        var imgDiv = '<div class="imgDiv">\n' +
+                            '                            <img src="' + file.result + '" alt="' + file.name + '"  data-index="' + file.index + '" class="layui-upload-img"/>\n' +
+                            '                            <a href="javascript:;" class="delete">\n' +
+                            '                                <i class="layui-icon layui-icon-close" style="font-size: 20px; color: red;font-weight: 900;"></i>  \n' +
+                            '                            </a>\n' +
+                            '                        </div>';
+                        $('#img-list .blankImgDiv').remove();
+                        $('#img-list').append(imgDiv);
                     }else{
+                        var fileIndex = files.findIndex(m=>m.index === index);
+                        files.splice(fileIndex, 1);
                         layer.msg(res.message);
                     }
                 }
                 , error: function (index, upload) {
+                    var fileIndex = files.findIndex(m=>m.index === index);
+                    files.splice(fileIndex, 1);
                     layer.closeAll('loading'); //关闭loading
                 }
             });
 
 
             //图片删除
-            $(document).on('click', '.delete', function () {
+            $('#img-list').on('click', '.delete', function () {
+                var img = $(this).prev();
+                var index = $(img).data('index');
+                var fileIndex = files.findIndex(m=>m.index == index);
+                files.splice(fileIndex, 1);
                 $(this).parent().remove();
                 if ($('#img-list .imgDiv').length == 0) {
                     $('#img-list').append('<div class="blankImgDiv" style="height: 112px;width: 0px;display: inline-block"></div>');
                 }
             });
-
-            function getImages() {
-                var images = [];
-                $('#img-list .imgDiv')
-            }
 
             $('#add-item').click(function (e) {
                 e.preventDefault();
@@ -467,7 +494,7 @@
                     '                                       class="layui-input">\n' +
                     '                            </td>\n' +
                     '                            <td>\n' +
-                    '                                <button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">\n' +
+                    '                                <button type="button" class="layui-btn layui-btn-danger layui-btn-xs item-del" lay-event="del">\n' +
                     '                                    删除\n' +
                     '                                </button>\n' +
                     '                            </td></tr>'
@@ -477,18 +504,43 @@
                     $('.item-table tbody tr:last').after(tr);
                 }
 
+                /*$('#item-table').on('click', 'button.product-item-del', function () {
+                   $(this).parent().parent().remove();
+                });*/
+                table.init('item-table', { //转化静态表格
+                    //height: 'full-500'
+                });
+                table.on('tool(item-table)', function (obj) {
+                    debugger;
+                });
+
                 upload.render({
                     elem: '#btnItemFile' + (trLength + 1)
-                    , auto: false
+                    , url: '/file/uploadImage'
+                    , auto: true
                     , accept: 'images'
-                    //, field: 'itemImgFile'
+                    , field: 'imgFile'
                     , acceptMime: 'image/*'
-                    , size: '5120'
+                    , multiple: false
                     , choose: function (obj) {
                         //预读本地文件示例，不支持ie8
                         obj.preview(function (index, file, result) {
-                            $('#item-img-file-' + (trLength + 1)).attr('src', result); //图片链接（base64）
+                            $('#item-img-file-' + (trLength + 1)).attr('src', result).attr('data-index', index); //图片链接（base64）
                         });
+                    }
+                    , before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致，可参见上文。
+                        layer.load(); //上传loading
+                    }
+                    , done: function (res, index, upload) { //上传后的回调
+                        layer.closeAll('loading'); //关闭loading
+                        if (res.error !== 0) {
+                            layer.msg(res.message);
+                        }else {
+                            $('img[data-index='+index+']').attr('data-image', res.url);
+                        }
+                    }
+                    , error: function (index, upload) {
+                        layer.closeAll('loading'); //关闭loading
                     }
                 });
                 return false;
