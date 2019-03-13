@@ -99,10 +99,10 @@ public class GenEntityMysql {
             String content = parse(colnames, colTypes, colSizes);
 
             //writeToFile(content, 1);
-            //genService();
-            //genServiceInterface();
-            genDao();
-            genDaoXml();
+            genService();
+            genServiceInterface();
+            //genDao();
+            //genDaoXml();
 
         } catch (SQLException e) {
             e.printStackTrace();

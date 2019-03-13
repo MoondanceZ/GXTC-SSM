@@ -15,6 +15,10 @@
         SELECT * FROM product_item WHERE id = #{id}
     </select>
 
+    <select id="getByProductId" resultMap="BaseResultMap">
+        SELECT * FROM product_item WHERE productId = #{productId}
+    </select>
+
     <sql id="pageWhere">
         <where>
             <!--<if test="queryString != null and queryString != ''">
